@@ -1,0 +1,11 @@
+<nav>
+	<ul class="flex flex-row">
+		{{#foreach navigation}}
+			<li class="px-6">
+				<a class="font-work-sans text-slate-600 text-xl {{^if current}}hover:text-brand-400{{/if}}"
+					href="{{url absolute=" true"}}">{{label}}</a>
+				<div class="{{#if current}}border-b-2 border-b-brand-400 w-1/2 pt-1{{/if}}" />
+			</li>
+		{{/foreach}}
+	</ul>
+</nav>
