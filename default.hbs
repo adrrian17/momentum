@@ -6,31 +6,21 @@
 	<meta name='viewport' content='width=device-width, initial-scale=1' />
 	<link rel='stylesheet' type='text/css' href='{{asset "built/screen.css"}}' />
 	<title>{{meta_title}}</title>
-	<link rel="preconnect" href="https://fonts.googleapis.com" />
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
-	<link href="https://fonts.googleapis.com/css2?family=Merriweather&family=Work+Sans:wght@400;500;700&display=swap"
-		rel="stylesheet" />
+	<link rel='preconnect' href='https://fonts.googleapis.com' />
+	<link rel='preconnect' href='https://fonts.gstatic.com' crossOrigin />
+	<link href='https://fonts.googleapis.com/css2?family=Merriweather&family=Work+Sans:wght@400;500;700&display=swap'
+		rel='stylesheet' />
 	{{ghost_head}}
 </head>
 
 <body class='{{body_class}} bg-slate-50'>
-	<header class="flex items-center justify-center h-16 bg-slate-50">
+	<header class='flex items-center justify-center h-16 bg-slate-50'>
 		{{navigation}}
 	</header>
-	<main class='gh-main'>
+	<main>
 		{{{body}}}
-		{{! All content gets inserted here, index.hbs, post.hbs, etc }}
 	</main>
 	<footer class='gh-foot'>
-		<div class='gh-container'>
-			<div class='gh-foot-menu'>
-				{{navigation}}
-			</div>
-			<div class='gh-foot-meta'>
-				Published with
-				<a href='https://ghost.org' target='_blank' rel='noopener'>Ghost</a>
-			</div>
-		</div>
 	</footer>
 	{{! <foot> }}
 	<script src='{{asset " built/jquery-3.4.1.min.js"}}'></script>
