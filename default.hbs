@@ -1,58 +1,60 @@
 <html lang='{{@site.locale}}'>
 
-<head>
-	<meta charset='utf-8' />
-	<meta http-equiv='X-UA-Compatible' content='IE=edge' />
-	<meta name='viewport' content='width=device-width, initial-scale=1' />
-	<link rel='stylesheet' type='text/css' href='{{asset "built/screen.css"}}' />
-	<title>{{meta_title}}</title>
-	<link rel='preconnect' href='https://fonts.googleapis.com' />
-	<link rel='preconnect' href='https://fonts.gstatic.com' crossOrigin />
-	<link href='https://fonts.googleapis.com/css2?family=Merriweather&family=Work+Sans:wght@400;500;700&display=swap'
-		rel='stylesheet' />
-	{{ghost_head}}
-</head>
+	<head>
+		<meta charset='utf-8' />
+		<meta http-equiv='X-UA-Compatible' content='IE=edge' />
+		<meta name='viewport' content='width=device-width, initial-scale=1' />
+		<link
+			rel='stylesheet'
+			type='text/css'
+			href='{{asset "built/screen.css"}}'
+		/>
+		<title>{{meta_title}}</title>
+		<link rel='preconnect' href='https://fonts.googleapis.com' />
+		<link rel='preconnect' href='https://fonts.gstatic.com' crossOrigin />
+		<link
+			href='https://fonts.googleapis.com/css2?family=Merriweather&family=Work+Sans:wght@400;500;700&display=swap'
+			rel='stylesheet'
+		/>
+		{{ghost_head}}
+	</head>
 
-<body class='{{body_class}} bg-slate-50'>
-	<header class='flex items-center justify-center h-16 bg-slate-50'>
-		{{navigation}}
-	</header>
-	<main>
-		{{{body}}}
-	</main>
-	<footer class='gh-foot'>
-	</footer>
-	{{! <foot> }}
-	<script src='{{asset " built/jquery-3.4.1.min.js"}}'></script>
-	{{#if pagination.pages}}
+	<body class='{{body_class}} bg-neutral-50'>
+		<header class='flex items-center justify-center h-16 bg-slate-50'>
+			{{navigation}}
+		</header>
+		<main>
+			{{{body}}}
+		</main>
+		<footer class='gh-foot'>
+		</footer>
+		{{! <foot> }}
+		<script src='{{asset " built/jquery-3.4.1.min.js"}}'></script>
+		{{#if pagination.pages}}
+			<script>
+				var maxPages = parseInt("{{pagination.pages}}");
+			</script>
+			<script src='{{asset " built/infinitescroll.js"}}'></script>
+		{{/if}}
 		<script>
-			var maxPages = parseInt("{{pagination.pages}}");
+			$(document).ready(function () { // Mobile Menu Trigger
+			$(".gh-burger").click(function () { $("body").toggleClass("gh-head-open");
+			}); });
 		</script>
-		<script src='{{asset " built/infinitescroll.js"}}'></script>
-	{{/if}}
-	<script>
-		$(document).ready(function () { // Mobile Menu Trigger
-			$(".gh-burger").click(function () {
-				$("body").toggleClass("gh-head-open");
-			});
-		});
-	</script>
-	{{#is 'post, page'}}
-		<script src='{{asset " built/jquery.fitvids.js"}}'></script>
-		<script>
-			var images = document.querySelectorAll(".kg-gallery-image img");
-			images.forEach(function (image) {
-				var container =
-					image.closest(".kg-gallery-image"); var width =
-						image.attributes.width.value; var height =
-							image.attributes.height.value; var ratio = width / height;
-				container.style.flex = ratio + " 1 0%";
-			}); $(document).ready(function
+		{{#is 'post, page'}}
+			<script src='{{asset " built/jquery.fitvids.js"}}'></script>
+			<script>
+				var images = document.querySelectorAll(".kg-gallery-image img");
+				images.forEach(function (image) { var container =
+				image.closest(".kg-gallery-image"); var width =
+				image.attributes.width.value; var height =
+				image.attributes.height.value; var ratio = width / height;
+				container.style.flex = ratio + " 1 0%"; }); $(document).ready(function
 				() { var $postContent = $(".gh-content"); $postContent.fitVids(); });
-		</script>
-	{{/is}}
-	{{ghost_foot}}
-	{{! Outputs important scripts - should always be included before closing body tag }}
-</body>
+			</script>
+		{{/is}}
+		{{ghost_foot}}
+		{{! Outputs important scripts - should always be included before closing body tag }}
+	</body>
 
 </html>

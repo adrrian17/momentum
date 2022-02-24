@@ -1,7 +1,14 @@
 {{!< default}}
 {{> "intro"}}
-<!-- <div class="max-w-screen-sm mx-auto">
-    {{#foreach posts}}
+<div class="max-w-xl mx-auto mt-14">
+    <div>
+        <h2 class="font-work-sans text-xl font-bold text-slate-800">Recientes ⏰</h2>
+        <div class="border-2 w-12 rounded-full border-brand-400" />
+    </div>
+    {{#foreach posts limit="5"}}
         {{> "card"}}
     {{/foreach}}
-</div> -->
+    <div class="flex justify-center mt-10">
+        <a href="#" class="text-slate-400 font-semibold hover:text-slate-800">Ver más posts</a>
+    </div>
+</div>
