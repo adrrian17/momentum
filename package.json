@@ -59,11 +59,13 @@
 		"custom": {
 			"intro_header": {
 				"type": "text",
-				"default": "Hola, me llamo Adrian (Sin Acento)"
+				"default": "Hola, me llamo Adrian (Sin Acento)",
+				"group": "homepage"
 			},
 			"intro_text": {
 				"type": "text",
-				"default": "Soy barista, escritor y programador. En mis ratos libres escribo guiones para cómic, y ocasionalmente, hago proyectos de programación."
+				"default": "Soy barista, escritor y programador. En mis ratos libres escribo guiones para cómic, y ocasionalmente, hago proyectos de programación.",
+				"group": "homepage"
 			}
 		},
 		"posts_per_page": 15,
