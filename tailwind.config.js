@@ -9,6 +9,7 @@ module.exports = {
 		extend: {
 			fontFamily: {
 				'work-sans': ['"Work Sans"'],
+				merriweather: ['"Merriweather"'],
 			},
 			colors: {
 				brand: {
@@ -26,5 +27,5 @@ module.exports = {
 			},
 		},
 	},
-	plugins: [],
+	plugins: [require('@tailwindcss/typography')],
 };
