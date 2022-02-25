@@ -8,7 +8,8 @@
     {{#foreach posts limit="5"}}
         {{> "card"}}
     {{/foreach}}
-    <div class="flex justify-center mt-10">
-        <a href="#" class="text-slate-400 font-semibold hover:text-slate-800">Ver más posts</a>
-    </div>
+    <a href="#" class="group flex justify-center items-center mt-10">
+        <p class="text-slate-400 font-semibold group-hover:text-slate-800 mr-2">Ver más posts</p>
+        {{> "icons/arrow-circle-right"}}
+    </a>
 </div>
