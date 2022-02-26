@@ -1,7 +1,7 @@
 {{!< default}}
 {{#post}}
     <article class="prose prose-xl max-w-2xl mx-auto mt-14  {{post_class}}">
-        <header>
+        <header class="gh-canvas gh-canvas">
             <h1 class="text-3xl font-bold font-work-sans">{{title}}</h1>
             <span class="font-work-sans text-slate-400">
                 <time datetime="{{date format=" YYYY-MM-DD"}}">
@@ -10,23 +10,23 @@
             </span>
         </header>
         <div
-            class="font-merriweather prose-a:text-brand-500 prose-blockquote:border-l-brand-500 prose-blockquote:text-slate-400">
+            class="gh-content gh-canvas font-merriweather prose-a:text-brand-500 prose-blockquote:border-l-brand-500 prose-blockquote:text-slate-400 ">
             {{content}}
         </div>
     </article>
     <aside class="flex items-center justify-between max-w-2xl mx-auto mt-12">
         {{^next_post}}
-            <div />
+            <div class="flex-1" />
         {{/next_post}}
         {{#next_post}}
-            <a href="{{url}}" class="group flex flex-row items-center">
+            <a href="{{url}}" class="group flex flex-1 flex-row items-center">
                 {{> "icons/arrow-circle-left"}}
-                <h4 class="flex-1 text-lg font-work-sans text-slate-400 group-hover:text-slate-800 ml-2">{{title}}</h4>
+                <h4 class="text-lg font-work-sans text-slate-400 group-hover:text-slate-800 ml-2">{{title}}</h4>
             </a>
         {{/next_post}}
         {{#prev_post}}
-            <a href="{{url}}" class="group flex flex-row items-center justify-end">
-                <h4 class="flex-1 text-lg font-work-sans text-slate-400 group-hover:text-slate-800 mr-2">{{title}}</h4>
+            <a href="{{url}}" class="group flex flex-1 flex-row items-center justify-end">
+                <h4 class="text-lg font-work-sans text-slate-400 group-hover:text-slate-800 mr-2">{{title}}</h4>
                 {{> "icons/arrow-circle-right"}}
             </a>
         {{/prev_post}}
