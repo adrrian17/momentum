@@ -1,0 +1,47 @@
+.kg-card {
+	@apply my-12;
+}
+
+.kg-bookmark-container {
+	@apply font-work-sans my-4;
+}
+
+a.kg-bookmark-container {
+	@apply flex flex-row border rounded-md;
+}
+
+.kg-bookmark-content {
+	@apply w-2/3 p-4;
+}
+
+.kg-bookmark-title {
+	@apply text-lg font-bold;
+}
+
+.kg-bookmark-description {
+	@apply mt-2 overflow-hidden;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+}
+
+.kg-bookmark-metadata {
+	@apply flex flex-row items-center mt-2 overflow-hidden text-ellipsis;
+}
+
+.kg-bookmark-icon {
+	@apply h-6 w-6 mr-2;
+}
+
+.kg-bookmark-publisher::before {
+	content: '•';
+	margin: 0 0.5em;
+}
+
+.kg-bookmark-thumbnail {
+	@apply flex w-1/3 h-auto;
+}
+
+.kg-bookmark-thumbnail img {
+	@apply object-cover rounded-r-md rounded-br-md;
+}
