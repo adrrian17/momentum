@@ -1,0 +1,20 @@
+{{!< default}}
+{{#post}}
+    <div class="flex flex-col max-w-lg mx-auto mt-14">
+        <div class="flex flex-col items-center mb-8">
+            <div class="mb-6">
+                <h1 class="font-work-sans text-3xl font-bold text-slate-800">{{title}} 🗃</h1>
+            </div>
+            <p>
+                {{#get "posts"}}
+                    {{t "Todos los ({total}) posts en orden cronológico." total=pagination.total}}
+                {{/get}}
+            </p>
+        </div>
+        {{#get "posts" limit="all" order="published_at desc"}}
+            {{#foreach posts visibility="all"}}
+                {{> "card"}}
+            {{/foreach}}
+        {{/get}}
+    </div>
+{{/post}}
