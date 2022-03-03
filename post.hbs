@@ -1,15 +1,15 @@
 {{!< default}}
 {{#post}}
-    <article class="prose prose-xl max-w-2xl mx-auto mt-14  {{post_class}}">
-        <header class="gh-canvas gh-canvas">
-            <h1 class="text-3xl font-bold font-work-sans">{{title}}</h1>
+    <article class="max-w-2xl mx-auto mt-14 {{post_class}}">
+        <header>
+            <h1 class="text-3xl font-bold font-work-sans mb-2">{{title}}</h1>
             <span class="font-work-sans text-slate-400">
                 <time datetime="{{date format=" YYYY-MM-DD"}}">
                     {{date format="D MMM YYYY"}}
                 </time>
             </span>
         </header>
-        <div class="font-merriweather">
+        <div class="post-content">
             {{content}}
         </div>
     </article>
