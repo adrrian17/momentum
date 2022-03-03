@@ -3,7 +3,7 @@
 <div class="max-w-xl mx-auto mt-14">
     <div>
         <h2 class="font-work-sans text-xl font-bold text-slate-800">Recientes ⏰</h2>
-        <div class="border-2 w-12 rounded-full border-brand-400" />
+        <div class="border-2 w-12 rounded-full border-brand-400 mt-1" />
     </div>
     {{#foreach posts limit="5"}}
         {{> "card"}}
@@ -12,4 +12,16 @@
         <p class="text-slate-400 font-semibold group-hover:text-slate-800 mr-2">Ver más posts</p>
         {{> "icons/arrow-circle-right"}}
     </a>
+    <div class="flex flex-row mt-14">
+        <a href="/herramientas" class="flex flex-1 group justify-center p-6 mr-5 border-4 border-brand-400 rounded-xl 
+                hover:shadow-md hover:bg-brand-400">
+            <div>
+                <h2 class="font-work-sans text-xl font-bold text-slate-800 group-hover:text-white">Herramientas 🛠</h2>
+            </div>
+        </a>
+        <a href="/guiones" class="flex flex-1 group justify-center p-6 ml-5 border-4 border-brand-400 rounded-xl 
+            hover:shadow-md hover:bg-brand-400">
+            <h2 class="font-work-sans text-xl font-bold text-slate-800 group-hover:text-white">Guiones 📝</h2>
+        </a>
+    </div>
 </div>
