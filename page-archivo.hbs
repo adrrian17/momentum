@@ -11,7 +11,7 @@
                 {{/get}}
             </p>
         </div>
-        {{#get "posts" limit="all" order="published_at desc"}}
+        {{#get "posts" limit="all" order="published_at desc" filter="tags:-comic"}}
             {{#foreach posts visibility="all"}}
                 {{> "card"}}
             {{/foreach}}
