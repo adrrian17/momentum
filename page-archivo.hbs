@@ -6,7 +6,7 @@
                 <h1 class="font-work-sans text-3xl font-bold text-slate-800">{{title}} 🗃</h1>
             </div>
             <p>
-                {{#get "posts"}}
+                {{#get "posts" filter="tags:-comic"}}
                     {{t "Todos los ({total}) posts en orden cronológico." total=pagination.total}}
                 {{/get}}
             </p>
