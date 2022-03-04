@@ -5,9 +5,11 @@
         <h2 class="font-work-sans text-xl font-bold text-slate-800">Recientes ⏰</h2>
         <div class="border-2 w-12 rounded-full border-brand-400 mt-1"></div>
     </div>
-    {{#foreach posts limit="5"}}
-        {{> "card"}}
-    {{/foreach}}
+    {{#get "posts" limit="all" order="published_at desc" filter="tag:-[comic,guiones]"}}
+        {{#foreach posts visibility="all"}}
+            {{> "card"}}
+        {{/foreach}}
+    {{/get}}
     <a href="/archivo" class="group flex justify-center items-center mt-10">
         <p class="text-slate-400 font-semibold group-hover:text-slate-800 mr-2">Ver más posts</p>
         {{> "icons/arrow-circle-right"}}
