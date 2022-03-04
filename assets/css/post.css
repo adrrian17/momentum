@@ -3,7 +3,7 @@
 }
 
 .post-content p {
-	@apply my-6 text-lg leading-relaxed text-justify;
+	@apply my-6 text-lg leading-relaxed;
 }
 
 .post-content h2 {
