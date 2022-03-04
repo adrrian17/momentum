@@ -25,3 +25,7 @@
 .post-content blockquote {
 	@apply my-6 py-1 px-6 border-l-4 border-l-brand-500 text-xl leading-relaxed;
 }
+
+.post-content hr {
+	@apply my-12;
+}
