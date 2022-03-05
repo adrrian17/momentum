@@ -45,3 +45,19 @@ a.kg-bookmark-container {
 .kg-bookmark-thumbnail img {
 	@apply object-cover rounded-r-md rounded-br-md;
 }
+
+.kg-file-card-container {
+	@apply shadow-md;
+}
+
+.kg-file-card-icon:before {
+	background: none !important;
+}
+
+.kg-file-card-icon {
+	@apply bg-brand-400 rounded-sm;
+}
+
+.kg-file-card-icon svg {
+	color: #fff !important;
+}
