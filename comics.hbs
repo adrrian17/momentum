@@ -1,18 +1,20 @@
 {{!< default}}
-<div class="flex flex-col max-w-lg mx-auto mt-14">
-    <div class="flex flex-col items-center">
-        <div class="mb-6">
-            <h1 class="font-work-sans text-3xl font-bold text-slate-800">Cómics 📚</h1>
+{{#page}}
+    <div class="flex flex-col max-w-lg mx-auto mt-14">
+        <div class="flex flex-col items-center">
+            <div class="">
+                <h1 class=" font-work-sans text-3xl font-bold text-slate-800">{{title}}</h1>
+            </div>
+            <div class="my-6 text-lg font-work-sans">
+                {{content}}
+            </div>
         </div>
-        <p class="font-work-sans text-lg text-slate-800">
-            Todos los cómics que he escrito y publicado.
-        </p>
+        <div>
+            {{#get "posts" limit="all" order="published_at desc" filter="tag:comic" include="tags"}}
+                {{#foreach posts}}
+                    {{> "comic-card"}}
+                {{/foreach}}
+            {{/get}}
+        </div>
     </div>
-    <div>
-        {{#get "posts" limit="all" order="published_at desc" filter="tag:comic" include="tags"}}
-            {{#foreach posts}}
-                {{> "comic-card"}}
-            {{/foreach}}
-        {{/get}}
-    </div>
-</div>
+{{/page}}
