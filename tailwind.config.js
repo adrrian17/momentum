@@ -4,6 +4,7 @@ module.exports = {
 		'./**/*.hbs',
 		'./assets/css/*.css',
 		'./assets/css/**/*.css',
+		'./node_modules/flowbite/**/*.js',
 	],
 	theme: {
 		extend: {
@@ -27,5 +28,5 @@ module.exports = {
 			},
 		},
 	},
-	plugins: [],
+	plugins: [require('flowbite/plugin')],
 };
