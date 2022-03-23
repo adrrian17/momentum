@@ -1,6 +1,6 @@
 {{!< default}}
 {{#post}}
-    <article class="max-w-prose mx-auto mt-14 {{post_class}}">
+    <article class="max-w-prose mx-4 md:mx-auto mt-14 {{post_class}}">
         <header>
             <h1 class="text-3xl font-bold font-work-sans mb-2">{{title}}</h1>
             <span class="font-work-sans text-slate-400">
@@ -13,7 +13,7 @@
             {{content}}
         </div>
     </article>
-    <aside class="flex items-center justify-between max-w-2xl mx-auto mt-12">
+    <aside class="hidden md:flex items-center justify-between max-w-2xl mx-4 md:mx-auto mt-12">
         {{^next_post}}
             <div class="flex-1" />
         {{/next_post}}
