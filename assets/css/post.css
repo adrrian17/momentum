@@ -19,7 +19,7 @@
 }
 
 .post-content p a {
-	@apply text-brand-500 underline;
+	@apply text-brand-500 underline decoration-2;
 }
 
 .post-content blockquote {
