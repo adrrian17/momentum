@@ -1,15 +1,15 @@
 <article class="my-12 pb-12 border-b-2 border-b-slate-200">
-    <div class="mb-6">
-        <div class="flex justify-between">
+    <div class="flex flex-row mb-6">
+        <div class="flex flex-col flex-1 items-start">
             <a href="{{url}}">
                 <h2 class="font-bold font-work-sans text-2xl">{{title}}</h2>
             </a>
-            <div class="rounded-full bg-brand-500 p-1.5 text-white text-sm font-work-sans">{{tags}}</div>
-        </div>
-        <div class="flex items-center space-x-2">
             <span class="font-work-sans">
                 <time datetime="{{date format=" YYYY-MM-DD"}}">{{date format="D MMM YYYY"}}</time>
             </span>
+        </div>
+        <div>
+            <div class="rounded-full bg-brand-500 p-1.5 text-white text-sm font-work-sans">{{tags}}</div>
         </div>
     </div>
     <div class="comic-cover w-full">
