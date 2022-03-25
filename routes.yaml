@@ -1,0 +1,26 @@
+routes:
+  /archivo/:
+    template: archivo
+    data: page.archivo
+  /comics/:
+    template: comics
+    data: page.comics
+  /guiones/:
+    template: guiones
+    data: page.guiones
+  /herramientas/:
+    template: herramientas
+    data: page.herramientas
+
+collections:
+  /:
+    permalink: /{slug}/
+    template: index
+    filter: tag:-comic
+  /comics/:
+    permalink: /comics/{slug}/
+    filter: tag:comic
+
+taxonomies:
+  tag: /tag/{slug}/
+  # author: /author/{slug}/
