@@ -34,7 +34,7 @@
 		"url": "https://github.com/adrrian17/momentum.git"
 	},
 	"bugs": "https://github.com/adrrian17/momentum/issues",
-	"contributors": "https://github.com/adrrian17/momentum/graphs/contributors",
+	"contributors": [],
 	"devDependencies": {
 		"@tailwindcss/typography": "^0.5.2",
 		"autoprefixer": "10.4.2",
