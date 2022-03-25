@@ -61,3 +61,7 @@ a.kg-bookmark-container {
 .kg-file-card-icon svg {
 	color: #fff !important;
 }
+
+.kg-header-card.kg-size-small {
+	@apply py-0 bg-slate-100 rounded-md !important;
+}
