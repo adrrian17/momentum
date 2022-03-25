@@ -64,4 +64,13 @@ a.kg-bookmark-container {
 
 .kg-header-card.kg-size-small {
 	@apply py-0 bg-slate-100 rounded-md !important;
+	min-height: 25vh !important;
+}
+
+.kg-header-card-header {
+	@apply text-2xl !important;
+}
+
+.kg-header-card-subheader {
+	@apply text-lg !important;
 }
