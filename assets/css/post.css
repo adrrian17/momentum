@@ -29,3 +29,15 @@
 .post-content hr {
 	@apply my-12;
 }
+
+.post-content .kg-callout-emoji {
+	@apply leading-loose !important;
+}
+
+.post-content .kg-callout-text {
+	@apply leading-loose !important;
+}
+
+.post-content .kg-callout-text a {
+	@apply text-brand-500 underline decoration-2;
+}
