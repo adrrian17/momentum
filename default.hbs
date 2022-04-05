@@ -16,7 +16,7 @@
 </head>
 
 <body class='{{body_class}}'>
-	<header class='flex items-center justify-center h-16'>
+	<header class='flex items-center justify-center h-16 dark:bg-slate-900'>
 		{{navigation}}
 	</header>
 	<main>
@@ -31,6 +31,7 @@
 			{{> "icons/rss"}}
 		</a>
 	</footer>
+	<script src="{{asset 'built/dark-mode.js'}}"></script>
 	<script src="{{asset 'built/jquery-3.4.1.min.js'}}"></script>
 	{{#is "post, page"}}
 		<script src="{{asset 'built/jquery.fitvids.js'}}"></script>

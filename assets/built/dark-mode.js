@@ -1,0 +1,2 @@
+function darkMode(){window.matchMedia("(prefers-color-scheme: dark)").matches?document.documentElement.classList.add("dark"):document.documentElement.classList.remove("dark")}darkMode();
+//# sourceMappingURL=dark-mode.js.map
