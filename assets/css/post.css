@@ -3,7 +3,7 @@
 }
 
 .post-content p {
-	@apply my-6 text-lg leading-loose;
+	@apply my-6 text-lg leading-loose dark:text-gray-200;
 }
 
 .post-content h2 {

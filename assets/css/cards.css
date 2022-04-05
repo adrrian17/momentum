@@ -68,7 +68,7 @@ a.kg-bookmark-container {
 }
 
 .kg-header-card-header {
-	@apply text-2xl !important;
+	@apply text-2xl dark:text-gray-800 !important;
 }
 
 .kg-header-card-subheader {
