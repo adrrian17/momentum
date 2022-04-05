@@ -2,7 +2,7 @@
 {{> "intro"}}
 <div class="max-w-md mx-auto px-4 md:px-0 md:mx-auto md:max-w-lg mt-12">
     <div class="mb-8">
-        <h2 class="font-work-sans text-xl font-bold text-slate-800">Recientes ⏰</h2>
+        <h2 class="font-work-sans text-xl font-bold text-slate-800 dark:text-gray-200">Recientes ⏰</h2>
         <div class="border-2 w-12 rounded-full border-brand-400 mt-1"></div>
     </div>
     {{#get "posts" limit="5" order="published_at desc" filter="tag:-[comic,guiones]"}}
@@ -11,19 +11,22 @@
         {{/foreach}}
     {{/get}}
     <a href="/archivo" class="group flex justify-center items-center mt-10">
-        <p class="text-slate-400 font-semibold group-hover:text-slate-800 mr-2">Ver más posts</p>
+        <p class="text-slate-400 font-semibold group-hover:text-slate-800 dark:group-hover:text-brand-400 mr-2">Ver más
+            posts</p>
         {{> "icons/arrow-circle-right"}}
     </a>
     <div class="flex flex-col space-y-4 md:space-y-0 md:space-x-6 md:flex-row mt-14">
         <a href="/herramientas" class="flex flex-1 group justify-center p-6 border-4 border-brand-400 rounded-xl 
                 hover:shadow-md hover:bg-brand-400">
             <div>
-                <h2 class="font-work-sans text-xl font-bold text-slate-800 group-hover:text-white">Herramientas 🛠</h2>
+                <h2 class="font-work-sans text-xl font-bold text-slate-800 dark:text-gray-200 group-hover:text-white">
+                    Herramientas 🛠</h2>
             </div>
         </a>
         <a href="/guiones" class="flex flex-1 group justify-center p-6 border-4 border-brand-400 rounded-xl 
             hover:shadow-md hover:bg-brand-400">
-            <h2 class="font-work-sans text-xl font-bold text-slate-800 group-hover:text-white">Guiones 📝</h2>
+            <h2 class="font-work-sans text-xl font-bold text-slate-800 dark:text-gray-200 group-hover:text-white">
+                Guiones 📝</h2>
         </a>
     </div>
 </div>
