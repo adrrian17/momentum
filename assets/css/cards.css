@@ -15,18 +15,18 @@ a.kg-bookmark-container {
 }
 
 .kg-bookmark-title {
-	@apply text-lg font-bold;
+	@apply text-lg font-bold dark:text-gray-200;
 }
 
 .kg-bookmark-description {
-	@apply mt-2 overflow-hidden;
+	@apply mt-2 overflow-hidden dark:text-gray-200;
 	display: -webkit-box;
 	-webkit-box-orient: vertical;
 	-webkit-line-clamp: 2;
 }
 
 .kg-bookmark-metadata {
-	@apply flex flex-row items-center mt-2 overflow-hidden text-ellipsis;
+	@apply flex flex-row items-center mt-2 overflow-hidden text-ellipsis dark:text-gray-200;
 }
 
 .kg-bookmark-icon {

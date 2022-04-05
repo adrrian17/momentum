@@ -7,23 +7,23 @@
 }
 
 .post-content h2 {
-	@apply my-6 text-3xl font-black;
+	@apply my-6 text-3xl leading-relaxed font-black dark:text-gray-200;
 }
 
 .post-content h3 {
-	@apply my-6 text-2xl leading-relaxed;
+	@apply my-6 text-2xl leading-relaxed font-black dark:text-gray-200;
 }
 
 .post-content h4 {
-	@apply my-6 text-xl leading-relaxed;
+	@apply my-6 text-xl leading-relaxed font-black dark:text-gray-200;
 }
 
 .post-content p a {
-	@apply underline decoration-2 decoration-brand-500;
+	@apply underline decoration-2 decoration-brand-400;
 }
 
 .post-content blockquote {
-	@apply my-6 py-1 px-6 border-l-4 border-l-brand-500 text-lg leading-loose italic;
+	@apply my-6 py-1 px-6 border-l-4 border-l-brand-400 text-lg leading-loose italic dark:text-gray-200;
 }
 
 .post-content hr {
@@ -35,9 +35,9 @@
 }
 
 .post-content .kg-callout-text {
-	@apply leading-loose !important;
+	@apply leading-loose dark:text-gray-200 !important;
 }
 
 .post-content .kg-callout-text a {
-	@apply text-brand-500 underline decoration-2;
+	@apply underline decoration-2 decoration-brand-400 dark:text-gray-200;
 }
