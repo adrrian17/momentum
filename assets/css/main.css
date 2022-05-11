@@ -4,13 +4,3 @@
 
 @import 'cards';
 @import 'post';
-
-.post-date-2022 + .post-date-2022 .post-label,
-.post-date-2021 + .post-date-2021 .post-label,
-.post-date-2020 + .post-date-2020 .post-label,
-.post-date-2019 + .post-date-2019 .post-label,
-.post-date-2018 + .post-date-2018 .post-label,
-.post-date-2015 + .post-date-2015 .post-label,
-.post-date-2013 + .post-date-2013 .post-label {
-	display: none;
-}
