@@ -1,76 +1,76 @@
 .kg-card {
-	@apply my-4;
+  @apply my-4;
 }
 
 .kg-bookmark-container {
-	@apply font-work-sans my-4;
+  @apply font-work-sans my-4;
 }
 
 a.kg-bookmark-container {
-	@apply flex flex-row border rounded-md;
+  @apply flex flex-row border rounded-md;
 }
 
 .kg-bookmark-content {
-	@apply w-2/3 p-4;
+  @apply w-2/3 p-4;
 }
 
 .kg-bookmark-title {
-	@apply text-lg font-bold dark:text-gray-200;
+  @apply text-lg font-bold dark:text-gray-200;
 }
 
 .kg-bookmark-description {
-	@apply mt-2 overflow-hidden dark:text-gray-200;
-	display: -webkit-box;
-	-webkit-box-orient: vertical;
-	-webkit-line-clamp: 2;
+  @apply mt-2 overflow-hidden dark:text-gray-200;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
 .kg-bookmark-metadata {
-	@apply flex flex-row items-center mt-2 overflow-hidden text-ellipsis dark:text-gray-200;
+  @apply flex flex-row items-center mt-2 overflow-hidden text-ellipsis dark:text-gray-200;
 }
 
 .kg-bookmark-icon {
-	@apply h-6 w-6 mr-2;
+  @apply h-6 w-6 mr-2;
 }
 
 .kg-bookmark-publisher::before {
-	content: '•';
-	margin: 0 0.5em;
+  content: '•';
+  margin: 0 0.5em;
 }
 
 .kg-bookmark-thumbnail {
-	@apply flex w-1/3 h-auto;
+  @apply flex w-1/3 h-auto;
 }
 
 .kg-bookmark-thumbnail img {
-	@apply object-cover rounded-r-md rounded-br-md;
+  @apply object-cover rounded-r-md rounded-br-md;
 }
 
 .kg-file-card-container {
-	@apply shadow-md;
+  @apply shadow-md dark:bg-gray-200;
 }
 
 .kg-file-card-icon:before {
-	background: none !important;
+  background: none !important;
 }
 
 .kg-file-card-icon {
-	@apply bg-brand-400 rounded-sm;
+  @apply bg-brand-400 rounded-sm;
 }
 
 .kg-file-card-icon svg {
-	color: #fff !important;
+  color: #fff !important;
 }
 
 .kg-header-card.kg-size-small {
-	@apply py-0 bg-slate-100 rounded-md !important;
-	min-height: 25vh !important;
+  @apply py-0 bg-slate-100 rounded-md !important;
+  min-height: 25vh !important;
 }
 
 .kg-header-card-header {
-	@apply text-2xl dark:text-gray-800 !important;
+  @apply text-2xl dark:text-gray-800 !important;
 }
 
 .kg-header-card-subheader {
-	@apply text-lg !important;
+  @apply text-lg !important;
 }
