@@ -74,3 +74,11 @@ a.kg-bookmark-container {
 .kg-header-card-subheader {
   @apply text-lg !important;
 }
+
+.kg-image-card {
+  @apply flex flex-col items-center my-12;
+}
+
+.kg-image-card figcaption {
+  @apply text-gray-400 mt-2;
+}
