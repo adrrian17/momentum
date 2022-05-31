@@ -5,7 +5,7 @@
         <h2 class="font-work-sans text-xl font-bold text-slate-800 dark:text-gray-200">Recientes ⏰</h2>
         <div class="border-2 w-12 rounded-full border-brand-400 mt-1"></div>
     </div>
-    {{#get "posts" limit="5" order="published_at desc" filter="tag:-[comic,guiones]"}}
+    {{#get "posts" limit="10" order="published_at desc" filter="tag:-[comic,guiones]"}}
         {{#foreach posts visibility="all"}}
             {{> "card"}}
         {{/foreach}}
