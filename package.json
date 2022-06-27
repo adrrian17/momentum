@@ -1,98 +1,98 @@
 {
-	"name": "momentum",
-	"description": "Theme for Adrian Ayala's personal blog",
-	"version": "1.1.0",
-	"engines": {
-		"ghost": ">=4.0.0",
-		"ghost-api": "v4"
-	},
-	"license": "MIT",
-	"scripts": {
-		"dev": "gulp",
-		"zip": "gulp zip",
-		"test": "gscan .",
-		"test:ci": "gscan --fatal --verbose .",
-		"pretest": "gulp build",
-		"preship": "yarn test",
-		"ship": "STATUS=$(git status --porcelain); echo $STATUS; if [ -z \"$STATUS\" ]; then yarn version && git push --follow-tags; fi"
-	},
-	"author": {
-		"name": "Adrian Ayala",
-		"email": "adrian.ayala17@gmail.com",
-		"url": "https://adrianayala.mx"
-	},
-	"gpm": {
-		"type": "theme"
-	},
-	"keywords": [
-		"ghost",
-		"theme",
-		"ghost-theme"
-	],
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/adrrian17/momentum.git"
-	},
-	"bugs": "https://github.com/adrrian17/momentum/issues",
-	"contributors": [],
-	"devDependencies": {
-		"@tailwindcss/typography": "^0.5.2",
-		"autoprefixer": "10.4.2",
-		"beeper": "2.1.0",
-		"cssnano": "5.0.17",
-		"gscan": "4.22.0",
-		"gulp": "4.0.2",
-		"gulp-livereload": "4.0.2",
-		"gulp-postcss": "9.0.1",
-		"gulp-sourcemaps": "3.0.0",
-		"gulp-uglify": "3.0.2",
-		"gulp-util": "3.0.8",
-		"gulp-watch": "5.0.1",
-		"gulp-zip": "5.1.0",
-		"postcss": "8.4.6",
-		"postcss-color-mod-function": "3.0.3",
-		"postcss-easy-import": "3.0.0"
-	},
-	"browserslist": [
-		"defaults"
-	],
-	"config": {
-		"custom": {
-			"intro_header": {
-				"type": "text",
-				"default": "Hola, me llamo Adrian (Sin Acento)",
-				"group": "homepage"
-			},
-			"intro_text": {
-				"type": "text",
-				"default": "Soy barista, escritor y programador. En mis ratos libres escribo guiones para cómic, y ocasionalmente, hago proyectos de programación.",
-				"group": "homepage"
-			}
-		},
-		"posts_per_page": 15,
-		"image_sizes": {
-			"xxs": {
-				"width": 30
-			},
-			"xs": {
-				"width": 100
-			},
-			"s": {
-				"width": 300
-			},
-			"m": {
-				"width": 600
-			},
-			"l": {
-				"width": 1200
-			},
-			"xl": {
-				"width": 2000
-			}
-		}
-	},
-	"dependencies": {
-		"flowbite": "^1.3.4",
-		"tailwindcss": "^3.0.23"
-	}
+  "name": "momentum",
+  "description": "Theme for Adrian Ayala's personal blog",
+  "version": "1.2.0",
+  "engines": {
+    "ghost": ">=4.0.0",
+    "ghost-api": "v4"
+  },
+  "license": "MIT",
+  "scripts": {
+    "dev": "gulp",
+    "zip": "gulp zip",
+    "test": "gscan .",
+    "test:ci": "gscan --fatal --verbose .",
+    "pretest": "gulp build",
+    "preship": "yarn test",
+    "ship": "STATUS=$(git status --porcelain); echo $STATUS; if [ -z \"$STATUS\" ]; then yarn version && git push --follow-tags; fi"
+  },
+  "author": {
+    "name": "Adrian Ayala",
+    "email": "adrian.ayala17@gmail.com",
+    "url": "https://adrianayala.mx"
+  },
+  "gpm": {
+    "type": "theme"
+  },
+  "keywords": [
+    "ghost",
+    "theme",
+    "ghost-theme"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adrrian17/momentum.git"
+  },
+  "bugs": "https://github.com/adrrian17/momentum/issues",
+  "contributors": [],
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.2",
+    "autoprefixer": "10.4.2",
+    "beeper": "2.1.0",
+    "cssnano": "5.0.17",
+    "gscan": "4.22.0",
+    "gulp": "4.0.2",
+    "gulp-livereload": "4.0.2",
+    "gulp-postcss": "9.0.1",
+    "gulp-sourcemaps": "3.0.0",
+    "gulp-uglify": "3.0.2",
+    "gulp-util": "3.0.8",
+    "gulp-watch": "5.0.1",
+    "gulp-zip": "5.1.0",
+    "postcss": "8.4.6",
+    "postcss-color-mod-function": "3.0.3",
+    "postcss-easy-import": "3.0.0"
+  },
+  "browserslist": [
+    "defaults"
+  ],
+  "config": {
+    "custom": {
+      "intro_header": {
+        "type": "text",
+        "default": "Hola, me llamo Adrian (Sin Acento)",
+        "group": "homepage"
+      },
+      "intro_text": {
+        "type": "text",
+        "default": "Soy barista, escritor y programador. En mis ratos libres escribo guiones para cómic, y ocasionalmente, hago proyectos de programación.",
+        "group": "homepage"
+      }
+    },
+    "posts_per_page": 15,
+    "image_sizes": {
+      "xxs": {
+        "width": 30
+      },
+      "xs": {
+        "width": 100
+      },
+      "s": {
+        "width": 300
+      },
+      "m": {
+        "width": 600
+      },
+      "l": {
+        "width": 1200
+      },
+      "xl": {
+        "width": 2000
+      }
+    }
+  },
+  "dependencies": {
+    "flowbite": "^1.3.4",
+    "tailwindcss": "^3.0.23"
+  }
 }
