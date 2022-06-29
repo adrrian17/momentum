@@ -1,21 +1,25 @@
-<div class="flex items-center space-x-8 mt-20">
-  <span class="dark:text-gray-200 font-work-sans font-bold text-xl">Compártelo en:</span>
-  <a href="https://twitter.com/intent/tweet?url={{url absolute='true'}}&amp;text={{encode title}}" target="_blank"
-    rel="noopener">
-    {{> icons/twitter-share}}
-  </a>
-  &nbsp;
-  <a href="https://www.facebook.com/sharer.php?u={{url absolute='true'}}" target="_blank" rel="noopener">
-    {{> icons/facebook}}
-  </a>
-  &nbsp;
-  <a href="https://pinterest.com/pin/create/button/?url={{url absolute='true'}}&amp;media=&amp;description={{encode title}}"
-    target="_blank" rel="noopener" data-pin-do="none">
-    {{> icons/pinterest}}
-  </a>
-  &nbsp;
-  <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url={{url absolute='true'}}&amp;title={{encode title}}"
-    target="_blank" rel="noopener">
-    {{> icons/linkedin}}
-  </a>
+<div class="flex flex-col items-center justify-center py-12 mt-14 border-t-2 border-t-slate-200">
+  <div>
+    <span class="dark:text-gray-200 font-work-sans font-bold text-xl">Compártelo</span>
+  </div>
+  <div class="flex items-center justify-center space-x-8 mt-6">
+    <a href="https://twitter.com/intent/tweet?url={{url absolute='true'}}&amp;text={{encode title}}" target="_blank"
+      rel="noopener">
+      {{> icons/twitter-share}}
+    </a>
+    &nbsp;
+    <a href="https://www.facebook.com/sharer.php?u={{url absolute='true'}}" target="_blank" rel="noopener">
+      {{> icons/facebook}}
+    </a>
+    &nbsp;
+    <a href="https://pinterest.com/pin/create/button/?url={{url absolute='true'}}&amp;media=&amp;description={{encode title}}"
+      target="_blank" rel="noopener" data-pin-do="none">
+      {{> icons/pinterest}}
+    </a>
+    &nbsp;
+    <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url={{url absolute='true'}}&amp;title={{encode title}}"
+      target="_blank" rel="noopener">
+      {{> icons/linkedin}}
+    </a>
+  </div>
 </div>
