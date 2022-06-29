@@ -62,6 +62,18 @@ a.kg-bookmark-container {
   color: #fff !important;
 }
 
+.kg-file-card-title {
+  @apply font-work-sans;
+}
+
+.kg-file-card-caption {
+  @apply font-work-sans py-2;
+}
+
+.kg-file-card-metadata {
+  @apply font-work-sans;
+}
+
 .kg-file-card-contents {
   @apply text-gray-900 dark:text-white;
 }
