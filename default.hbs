@@ -22,21 +22,13 @@
 	<main>
 		{{{body}}}
 	</main>
-	<footer class='flex flex-col items-center mt-12 md:mt-24 mb-6'>
-		<section class='text-slate-400 dark:text-gray-200 font-work-sans pb-3'>Adrian Ayala
-			&copy;
-			{{date format='YYYY'}}
-		</section>
-		<a href="/rss">
-			{{> "icons/rss"}}
-		</a>
-	</footer>
+	{{> footer}}
 	<script src="{{asset 'built/dark-mode.js'}}"></script>
 	<script src="{{asset 'built/jquery-3.4.1.min.js'}}"></script>
 	{{#is "post, page"}}
 		<script src="{{asset 'built/jquery.fitvids.js'}}"></script>
 		<script>
-			var images = document.querySelectorAll('.kg-gallery-image img');
+			var images = document.querySelectorAll('.kg-gallery-card img');
 
 			images.forEach(function (image) {
 				var container = image.closest('.kg-gallery-image');
