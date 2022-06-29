@@ -1,20 +1,18 @@
-<article class="my-12 pb-12 border-b-2 border-b-slate-200">
-    <div class="flex flex-row mb-6">
-        <div class="flex flex-col flex-1 items-start">
-            <a href="{{url}}">
-                <h2 class="font-bold font-work-sans text-2xl dark:text-gray-200">{{title}}</h2>
-            </a>
-            <span class="font-work-sans dark:text-gray-400">
-                <time datetime="{{date format=" YYYY-MM-DD"}}">{{date format="D MMM YYYY"}}</time>
-            </span>
-        </div>
-        <div>
-            <div class="rounded-full bg-brand-500 p-2 text-white text-sm font-work-sans">{{tags}}</div>
-        </div>
+<a href="{{url}}"
+  class="block my-12 p-6 bg-white rounded-xl border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+  <div class="flex flex-row justify-between items-center mb-6">
+    <div class="">
+      <h2 class="font-bold font-work-sans text-2xl dark:text-gray-200">{{title}}</h2>
+      <span class="font-work-sans dark:text-gray-400">
+        <time datetime="{{date format=" YYYY-MM-DD"}}">{{date format="D MMM YYYY"}}</time>
+      </span>
     </div>
-    <div class="comic-cover w-full">
-        <a href="{{url}}">
-            <img class="rounded-xl" src="{{feature_image}}" />
-        </a>
-    </div>
-</article>
+    {{#tags.[1]}}
+      <span
+        class="rounded-full bg-brand-500 dark:bg-brand-400 p-2 span-2 text-white text-sm font-work-sans">{{name}}</span>
+    {{/tags.[1]}}
+  </div>
+  <div class="comic-cover w-full">
+    <img class="rounded-xl" src="{{feature_image}}" />
+  </div>
+</a>
