@@ -3,14 +3,13 @@
   "description": "Theme for Adrian Ayala's personal blog",
   "version": "1.2.0",
   "engines": {
-    "ghost": ">=4.0.0",
-    "ghost-api": "v4"
+    "ghost": ">=4.0.0"
   },
   "license": "MIT",
   "scripts": {
     "dev": "gulp",
     "zip": "gulp zip",
-    "test": "gscan .",
+    "test": "gscan . -5",
     "test:ci": "gscan --fatal --verbose .",
     "pretest": "gulp build",
     "preship": "yarn test",
