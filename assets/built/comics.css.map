@@ -1,1 +1,0 @@
-{"version":3,"sources":["<no source>","comics.css"],"names":[],"mappings":"AAAA,eAAA,qBAAA,kBAAA,ACIA,aACC,uBAAkC,CAClC,qBACD","file":"comics.css","sourcesContent":[null,".comic-card h3 {\n\t@apply my-1;\n}\n\n.comic-cover {\n\tbackground-position: center center;\n\tbackground-size: cover;\n}\n"]}
