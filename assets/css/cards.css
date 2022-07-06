@@ -92,7 +92,7 @@ a.kg-bookmark-container {
 }
 
 .kg-image-card {
-  @apply flex flex-col items-center my-12;
+  @apply flex flex-col items-center my-12 rounded-lg;
 }
 
 .kg-image-card figcaption {
@@ -101,8 +101,10 @@ a.kg-bookmark-container {
 
 .kg-width-wide img {
   max-width: 85vw;
+  @apply rounded-lg;
 }
 
 .kg-width-full img {
   max-width: 100vw;
+  @apply rounded-none;
 }

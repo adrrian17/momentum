@@ -1,43 +1,43 @@
 .post-content {
-	@apply font-merriweather;
+  @apply font-merriweather;
 }
 
 .post-content p {
-	@apply my-6 text-lg leading-loose dark:text-gray-200;
+  @apply my-6 text-lg leading-loose dark:text-gray-200;
 }
 
 .post-content h2 {
-	@apply my-6 text-3xl leading-relaxed font-black dark:text-gray-200;
+  @apply my-6 text-3xl leading-relaxed font-black dark:text-gray-200;
 }
 
 .post-content h3 {
-	@apply my-6 text-2xl leading-relaxed font-black dark:text-gray-200;
+  @apply my-6 text-2xl leading-relaxed font-black dark:text-gray-200;
 }
 
 .post-content h4 {
-	@apply my-6 text-xl leading-relaxed font-black dark:text-gray-200;
+  @apply my-6 text-xl leading-relaxed font-black dark:text-gray-200;
 }
 
 .post-content p a {
-	@apply underline decoration-2 decoration-brand-400;
+  @apply underline decoration-2 decoration-brand-400;
 }
 
 .post-content blockquote {
-	@apply my-6 py-1 px-6 border-l-4 border-l-brand-400 text-lg leading-loose italic dark:text-gray-200;
+  @apply my-6 py-1 px-6 border-l-4 border-l-brand-400 text-lg leading-loose italic dark:text-gray-200;
 }
 
 .post-content hr {
-	@apply my-12;
+  @apply my-12;
 }
 
 .post-content .kg-callout-emoji {
-	@apply leading-loose !important;
+  @apply leading-loose !important;
 }
 
 .post-content .kg-callout-text {
-	@apply leading-loose dark:text-gray-200 !important;
+  @apply leading-loose dark:text-gray-200 !important;
 }
 
 .post-content .kg-callout-text a {
-	@apply underline decoration-2 decoration-brand-400 dark:text-gray-200;
+  @apply underline decoration-2 decoration-brand-400 dark:text-gray-200;
 }
