@@ -95,6 +95,10 @@ a.kg-bookmark-container {
   @apply flex flex-col items-center my-12 rounded-lg;
 }
 
+.kg-image {
+  @apply rounded-lg;
+}
+
 .kg-image-card figcaption {
   @apply text-gray-400 mt-2;
 }
