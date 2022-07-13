@@ -1,0 +1,25 @@
+.form-wrapper .loader,
+.form-wrapper .success {
+  display: none;
+}
+
+.form-wrapper .loader .icon {
+  width: 25px;
+  height: 25px;
+}
+
+.form-wrapper.loading .default,
+.form-wrapper.success .default,
+.form-wrapper.success .loader {
+  display: none;
+}
+
+.form-wrapper.loading .loader {
+  display: flex;
+  align-items: center;
+}
+
+.form-wrapper.success .success {
+  display: flex;
+  align-items: center;
+}
