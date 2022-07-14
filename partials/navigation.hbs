@@ -1,11 +1,8 @@
-<nav>
-	<ul class="flex flex-row">
-		{{#foreach navigation}}
-			<li class="px-6">
-				<a class="font-work-sans text-gray-800 dark:text-gray-200 text-xl {{#if current}} font-semibold {{else}} hover:text-brand-400 dark:hover:text-white {{/if}}"
-					href="{{url absolute='true'}}">{{label}}</a>
-				<div class="{{#if current}} border-2 rounded-full border-brand-400 w-1/2 mt-1 {{/if}}" />
-			</li>
-		{{/foreach}}
-	</ul>
-</nav>
+<ul class="flex flex-wrap flex-row justify-center md:justify-between">
+	{{#foreach navigation}}
+		<li class="p-2 md:p-0">
+			<a class="font-work-sans text-gray-800 dark:text-slate-400 text-lg {{#if current}} dark:text-slate-100 font-bold {{else}} hover:text-brand-400 dark:hover:text-white {{/if}}"
+				href="{{url absolute='true'}}">{{label}}</a>
+		</li>
+	{{/foreach}}
+</ul>

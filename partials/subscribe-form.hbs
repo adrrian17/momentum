@@ -1,20 +1,19 @@
-<div class="flex flex-col bg-slate-100 p-8 rounded-lg border mt-12 shadow-lg mx-auto">
-  <h2 class="font-work-sans text-2xl font-bold text-center">Suscríbete 📨</h2>
-  <p class="font-work-sans text-lg my-4 text-center">Recibe directamente en tu correo los
+<div class="flex flex-col bg-slate-100 p-8 rounded-lg border dark:bg-gray-800 dark:border-gray-700">
+  <h2 class="font-work-sans text-2xl font-bold text-center dark:text-gray-200">Suscríbete 📨</h2>
+  <p class="font-work-sans text-lg my-4 text-center dark:text-gray-200">Recibe directamente en tu correo los
     artículos recientes, novedades y otros temas.</p>
   <form class="form-wrapper flex flex-col" data-members-form="subscribe">
-    <div class="flex flex-row">
+    <div class="flex flex-col md:flex-row">
       <input type="email" data-members-email placeholder="Correo" required autocomplete="false"
         class="mb-4 md:mb-0 md:mr-6 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-brand-500 dark:focus:border-brand-500">
       <button type="submit"
-        class="text-white bg-brand-500 hover:bg-brand-600 focus:ring-4 focus:outline-none focus:ring-brand-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-brand-600 dark:hover:bg-brand-700 dark:focus:ring-brand-800">
-        <span class="default">Enviar</span>
+        class="text-white bg-brand-400 hover:bg-brand-500 focus:ring-4 focus:outline-none focus:ring-brand-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">
+        <span class=" default">Enviar</span>
         <span class="loader">{{> icons/loader}}</span>
         <span class="success">{{> icons/check}}</button>
       </button>
     </div>
-    <p class="success font-work-sans text-lg text-center text-green-500 mt-4">¡Listo, revisa tu correo para
-      confirmar la
+    <p class="success font-work-sans text-lg text-center text-green-500 mt-4">¡Listo, revisa tu correo para confirmar la
       suscripción!</p>
   </form>
   <p class="font-work-sans text-sm text-slate-400 text-center">Cero spam, lo prometo. Date de baja cuando quieras.
