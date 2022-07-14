@@ -23,17 +23,10 @@
         <div class="post-content">
             {{content}}
         </div>
+        {{> subscribe-form}}
         <div class="flex justify-center">
             {{> share-block}}
         </div>
-        {{!-- Related Posts --}}
-        {{#get "posts" limit="3" filter="id:-{{id}}+tag:-[comic,guiones]" as |related|}}
-            <section class="flex flex-col bg-slate-100 mt-6 p-8 rounded-xl dark:bg-gray-800">
-                <h3 class="font-work-sans text-xl font-bold mb-4">Tal vez te puedan gustar...</h3>
-                {{#foreach related}}
-                    {{> card}}
-                {{/foreach}}
-            </section>
-        {{/get}}
     </article>
+    {{> related-posts}}
 {{/post}}

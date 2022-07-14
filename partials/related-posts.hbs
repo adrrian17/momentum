@@ -1,0 +1,14 @@
+{{#get "posts" limit="1" filter="id:-{{id}}+tag:-[comic,guiones]" as |related|}}
+  <section class="flex flex-col mt-6 bg-slate-100 dark:bg-gray-800">
+    <div class="max-w-prose mx-auto pt-8">
+      <div class="flex flex-col items-center">
+        <h3 class="font-work-sans text-2xl font-bold mb-2 text-center text-slate-800 dark:text-gray-200">Tal vez te
+          pueda gustar...</h3>
+        <div class="border-2 w-1/4 rounded-full border-brand-400 mt-1"></div>
+      </div>
+      {{#foreach related}}
+        {{> card}}
+      {{/foreach}}
+    </div>
+  </section>
+{{/get}}
