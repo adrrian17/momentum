@@ -6,7 +6,7 @@
   </h1>
   <div class="flex">
     <span class="font-work-sans text-slate-400 text-md">
-      {{reading_time minute=(t "1 min read") minutes=(t "% min read")}}
+      <time datetime="{{date format=" YYYY-MM-DD"}}">{{date format="D MMM YYYY"}}</time>
     </span>
   </div>
   <p class="font-merriweather dark:text-gray-200 text-md my-4">{{excerpt characters="200"}} [...]</p>
