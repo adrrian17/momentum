@@ -1,10 +1,5 @@
 <li class="py-10 flex flex-col md:flex-row">
-  {{#if feature_image}}
-    <figure class="min-w-full min-h-[200] mb-4 md:mb-0 md:min-w-[200] md:min-h-full rounded-lg bg-cover bg-center"
-      style="background-image: url({{feature_image}})">
-    </figure>
-  {{/if}}
-  <div class="md:pl-6">
+  <div>
     <h1
       class="font-bold font-work-sans text-xl grow whitespace-nowrap overflow-hidden text-ellipsis dark:text-gray-200">
       <a class="hover:underline decoration-2" href="{{url}}">
@@ -17,7 +12,13 @@
       </span>
     </div>
     <p class="font-merriweather dark:text-gray-200 text-md my-4">{{excerpt characters="140"}}...</p>
-    <a href="{{url}}" class="font-work-sans font-bold dark:text-gray-200 hover:underline decoration-2">LEER
-      MÁS →</a>
+    <!-- <a href="{{url}}" class="font-work-sans font-bold dark:text-gray-200 hover:underline decoration-2">LEER
+      MÁS →</a> -->
   </div>
+  {{#if feature_image}}
+    <figure
+      class="min-w-full min-h-[200] mb-4 md:mb-0 md:min-w-[200] md:min-h-full md:pl-6 rounded-lg bg-cover bg-center"
+      style="background-image: url({{feature_image}})">
+    </figure>
+  {{/if}}
 </li>
