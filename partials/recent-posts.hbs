@@ -1,11 +1,12 @@
-<div class="max-w-prose mx-auto">
-  <div class="flex flex-col items-center mb-6">
-    <h2 class="font-work-sans text-2xl font-bold text-slate-800 dark:text-gray-200 text-center">Artículos Recientes ⏰
+<div class="max-w-2xl mx-auto">
+  <div class="flex items-center">
+    {{> "icons/articles"}}
+    <h2 class="font-work-sans text-2xl font-bold text-slate-800 dark:text-gray-100 ml-2">
+      Artículos Recientes
     </h2>
-    <div class="border-2 w-1/4 rounded-full border-brand-400 mt-1"></div>
   </div>
-  <ul class="divide-y divide-slate-200 dark:divide-slate-500">
-    {{#get "posts" limit="3" order="published_at desc" filter="tag:-[comic,guiones]"}}
+  <ul class="divide-y divide-slate-200 dark:divide-slate-500 mt-6">
+    {{#get "posts" limit="5" order="published_at desc" filter="tag:-[comic,guiones]"}}
       {{#foreach posts visibility="all"}}
         {{> "card"}}
       {{/foreach}}
