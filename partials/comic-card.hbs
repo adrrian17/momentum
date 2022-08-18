@@ -1,14 +1,8 @@
-<a href="{{url}}" style="background-image: url({{feature_image}})"
-  class="flex items-end my-12 rounded-lg shadow-md min-h-[300] max-h-[300] bg-center bg-cover">
-  <div class="flex flex-1 flex-row justify-between items-center bg-slate-900/70 rounded-b-lg p-3">
-    <div>
-      <h2 class="font-bold font-work-sans text-2xl text-slate-100 dark:text-gray-200">{{title}}</h2>
-      <span class="font-work-sans text-slate-100 dark:text-gray-400">
-        <time datetime="{{date format=" YYYY-MM-DD"}}">{{date format="D MMM YYYY"}}</time>
-      </span>
-    </div>
-    {{#tags.[1]}}
-      <span class="rounded-full bg-brand-400 p-2 span-2 text-white text-sm font-work-sans">{{name}}</span>
-    {{/tags.[1]}}
+<a href="{{url}}" style="background-image: url({{feature_image}})" class="flex rounded-lg shadow-md min-h-[250] 
+max-h-[250] bg-center bg-cover transition ease-in-out hover:-translate-y-1 hover:scale-110 duration-300">
+  <div class="flex flex-1 flex-col rounded-lg justify-end bg-gray-900/60 p-3 overflow-hidden">
+    <h2 class="font-bold font-work-sans text-lg text-slate-100 break-all text-center">
+      {{title}}
+    </h2>
   </div>
 </a>
