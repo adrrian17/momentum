@@ -1,7 +1,10 @@
 <div class="flex flex-col justify-center">
-  <h2 class="font-work-sans text-2xl font-bold text-slate-800 dark:text-gray-100">
-    [ Cómics ]
-  </h2>
+  <div class="flex items-center">
+    {{> "icons/comics"}}
+    <h2 class="font-work-sans text-2xl font-bold text-slate-800 dark:text-gray-100 ml-1">
+      Cómics
+    </h2>
+  </div>
   <div class="font-work-sans text-lg text-gray-400 mt-2">Algunos de los cómics que he escrito.</div>
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-6">
     {{#get "posts" limit="3" order="published_at desc" filter="tag:comic"}}
