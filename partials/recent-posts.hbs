@@ -5,7 +5,7 @@
       Artículos Recientes
     </h2>
   </div>
-  <ul class="divide-y divide-slate-200 dark:divide-slate-500 mt-6">
+  <ul class="mt-6">
     {{#get "posts" limit="5" order="published_at desc" filter="tag:-[comic,guiones]"}}
       {{#foreach posts visibility="all"}}
         {{> "card"}}
