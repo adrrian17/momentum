@@ -56,6 +56,7 @@
     "defaults"
   ],
   "config": {
+    "card_assets": false,
     "custom": {
       "intro_header": {
         "type": "text",
