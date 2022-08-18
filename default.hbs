@@ -15,14 +15,16 @@
 	{{ghost_head}}
 </head>
 
-<body class="{{body_class}} max-w-screen-lg mx-auto bg-stone-50 dark:bg-zinc-900" x-data="{ openMenu : false }"
-	:class="openMenu ? 'overflow-hidden' : 'overflow-visible' ">
+<body class="{{body_class}} x-data=" { openMenu : false }" :class="openMenu ? 'overflow-hidden' : 'overflow-visible' ">
 	<style>
 		[x-cloak] {
 			display: none !important;
 		}
 	</style>
-	{{navigation}}
+	<section id="header">
+		{{navigation}}
+		{{> intro}}
+	</section>
 	<main>
 		{{{body}}}
 	</main>
