@@ -1,12 +1,12 @@
 <a href="{{url}}"
-  class="flex flex-row items-center p-4 overflow-hidden relative transition ease-in-out hover:-translate-y-1 hover:scale-110 duration-300 hover:bg-brand-50 rounded-lg">
-  <div class="flex min-w-[50] mr-6 font-work-sans text-brand-400 text-xs uppercase">
+  class="flex flex-row items-center p-2 overflow-hidden relative transition ease-in-out hover:-translate-y-1 hover:scale-105 duration-300 hover:bg-brand-50 rounded-lg">
+  <div class="flex min-w-[40] mr-3 font-work-sans text-brand-400 text-xs uppercase">
     <time datetime="{{date format=" MM-DD"}}">{{date format="D MMM"}}</time>
   </div>
-  <h2 class="font-work-sans text-lg grow whitespace-nowrap overflow-hidden text-ellipsis dark:text-gray-200 pr-4">
+  <h2 class="font-work-sans text-lg grow whitespace-nowrap overflow-hidden text-ellipsis dark:text-gray-200 pr-2">
     {{title}}
   </h2>
   <div class="flex font-work-sans text-gray-400 text-xs whitespace-nowrap uppercase">
-    {{reading_time minute=(t "1 min read") minutes=(t "% min read")}}
+    {{> "icons/arrow-right"}}
   </div>
 </a>
