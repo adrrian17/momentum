@@ -21,10 +21,14 @@
 			display: none !important;
 		}
 	</style>
-	<section id="header">
+	{{#is "home"}}
+		<section id="header">
+			{{navigation}}
+			{{> intro}}
+		</section>
+		{{ else }}
 		{{navigation}}
-		{{> intro}}
-	</section>
+	{{/is}}
 	<main>
 		{{{body}}}
 	</main>
