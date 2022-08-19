@@ -1,7 +1,7 @@
 {{!< default}}
 {{#post}}
   <header class="header">
-    <div class="flex flex-col items-center max-w-screen-xl py-14 mx-auto">
+    <div class="flex flex-col items-center max-w-screen-xl pt-14 mx-auto">
       <h1 class="text-4xl font-bold font-work-sans mb-2 dark:text-gray-200 text-center">{{title}}</h1>
       <div class="flex justify-center">
         <span class="font-work-sans text-slate-400 text-lg">
@@ -14,15 +14,14 @@
           {{reading_time minute=(t "1 min read") minutes=(t "% min read")}}
         </span>
       </div>
-      <figure class="max-w-prose rounded-lg px-8 md:px-0">
+      <figure class="max-w-prose rounded-lg px-8 md:px-0 -mb-36">
         <img class="rounded-lg mt-8" src="{{feature_image}}" />
       </figure>
     </div>
   </header>
-  <article class="max-w-prose px-8 mx-auto mt-8 {{post_class}}">
+  <article class="max-w-prose px-8 mx-auto mb-14 mt-48 {{post_class}}">
     <div class="post-content">
       {{content}}
     </div>
-    {{> subscribe-form}}
   </article>
 {{/post}}
