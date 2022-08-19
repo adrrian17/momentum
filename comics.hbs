@@ -1,20 +1,21 @@
 {{!< default}}
 {{#page}}
-  <div class="flex flex-col max-w-md mx-auto px-4 md:px-0 md:mx-auto md:max-w-lg mt-12">
-    <div class="flex flex-col items-center">
-      <div class="">
-        <h1 class=" font-work-sans text-3xl font-bold text-slate-800 dark:text-gray-200">{{title}}</h1>
-      </div>
-      <div class="my-6 text-lg font-work-sans dark:text-gray-400">
-        {{content}}
-      </div>
+  <div class="header flex flex-col items-center py-20">
+    <div class="flex items-center">
+      {{> "icons/comics"}}
+      <h2 class="font-work-sans text-2xl font-bold text-slate-800 dark:text-gray-100 ml-2">
+        Cómics
+      </h2>
     </div>
-    <div>
-      {{#get "posts" limit="all" order="published_at desc" filter="tag:comic" include="tags"}}
-        {{#foreach posts}}
-          {{> "comic-card"}}
-        {{/foreach}}
-      {{/get}}
-    </div>
+    <p class="mt-2 text-lg font-work-sans dark:text-gray-400">
+      Algunos de los cómics que he escrito.
+    </p>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-screen-lg mx-auto px-8 md:px-0 mt-14">
+    {{#get "posts" limit="all" order="published_at desc" filter="tag:comic" include="tags"}}
+      {{#foreach posts}}
+        {{> "comic-card"}}
+      {{/foreach}}
+    {{/get}}
   </div>
 {{/page}}
