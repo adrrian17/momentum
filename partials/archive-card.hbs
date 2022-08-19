@@ -1,16 +1,15 @@
-<article class="my-2 post-date-{{date format='Y'}} {{post_class}}">
-    <div class="post-label font-bold font-work-sans text-xl my-6 dark:text-gray-200">{{date format="YYYY"}}</div>
-    <div class="flex items-center">
-        <div class="flex min-w-[50px] mr-4">
-            <span class="font-work-sans text-sm text-slate-400">
-                <time datetime="{{date format=" YYYY-MM-DD"}}">{{date format="D MMM"}}</time>
-            </span>
-        </div>
-        <h3
-            class="font-medium font-work-sans text-lg grow whitespace-nowrap overflow-hidden text-ellipsis dark:text-gray-200">
-            <a class="hover:underline decoration-2" href="{{url}}">
-                {{title}}
-            </a>
-        </h3>
+<div class="post-date-{{date format='Y'}} {{post_class}}">
+  <div class="post-label font-bold font-work-sans text-xl my-6 dark:text-gray-200">{{date format="YYYY"}}</div>
+  <a href="{{url}}"
+    class="flex flex-row items-center p-2 overflow-hidden relative transition ease-in-out hover:-translate-y-1 hover:scale-105 duration-300 hover:bg-brand-50 rounded-lg">
+    <div class="flex min-w-[45] mr-3 font-work-sans text-brand-400 text-xs uppercase">
+      <time datetime="{{date format=" MM-DD"}}">{{date format="D MMM"}}</time>
     </div>
-</article>
+    <h2 class="font-work-sans text-lg grow whitespace-nowrap overflow-hidden text-ellipsis dark:text-gray-200 pr-2">
+      {{title}}
+    </h2>
+    <div class="flex font-work-sans text-gray-400 text-xs whitespace-nowrap uppercase">
+      {{> "icons/arrow-right"}}
+    </div>
+  </a>
+</div>

@@ -1,20 +1,23 @@
 {{!< default}}
 {{#page}}
-    <div class="flex flex-col max-w-md mx-auto px-4 md:px-0 md:mx-auto md:max-w-lg mt-12">
-        <div class="flex flex-col items-center">
-            <div>
-                <h1 class="font-work-sans text-3xl font-bold text-slate-800 dark:text-gray-200">{{title}}</h1>
-            </div>
-            <p class="my-6 text-lg font-work-sans dark:text-gray-400">
-                {{#get "posts" filter="tags:-comic"}}
-                    {{t "{total} artículos, en orden cronológico." total=pagination.total}}
-                {{/get}}
-            </p>
-        </div>
-        {{#get "posts" limit="all" order="published_at desc" filter="tags:-comic"}}
-            {{#foreach posts visibility="all"}}
-                {{> "archive-card"}}
-            {{/foreach}}
-        {{/get}}
+  <div class="header flex flex-col items-center py-20">
+    <div class="flex items-center">
+      {{> "icons/archive"}}
+      <h2 class="font-work-sans text-2xl font-bold text-slate-800 dark:text-gray-100 ml-2">
+        Archivo
+      </h2>
     </div>
+    <p class="mt-2 text-lg font-work-sans dark:text-gray-400">
+      {{#get "posts" filter="tags:-comic"}}
+        {{t "{total} artículos, en orden cronológico." total=pagination.total}}
+      {{/get}}
+    </p>
+  </div>
+  <div class="flex flex-col max-w-lg mx-auto px-8 md:px-0 mt-6">
+    {{#get "posts" limit="all" order="published_at desc" filter="tags:-comic"}}
+      {{#foreach posts visibility="all"}}
+        {{> "archive-card"}}
+      {{/foreach}}
+    {{/get}}
+  </div>
 {{/page}}
