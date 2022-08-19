@@ -22,12 +22,14 @@
 		}
 	</style>
 	{{#is "home"}}
-		<section id="header">
+		<section class="header">
 			{{navigation}}
 			{{> intro}}
 		</section>
 		{{ else }}
-		{{navigation}}
+		<section class="header">
+			{{navigation}}
+		</section>
 	{{/is}}
 	<main>
 		{{{body}}}
