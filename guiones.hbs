@@ -1,16 +1,86 @@
 {{!< default}}
 {{#page}}
-    <div class="flex flex-col max-w-md mx-auto px-4 md:px-0 md:mx-auto md:max-w-lg mt-12">
-        <div class="flex flex-col items-center mb-12">
-            <div class="mb-6">
-                <h1 class="font-work-sans text-3xl font-bold text-slate-800 dark:text-gray-200">{{title}}</h1>
-            </div>
-            <p class="font-work-sans text-lg text-slate-800 dark:text-gray-400">
-                Algunos de los guiones de cómic que he escrito.
-            </p>
-        </div>
-        <div class="post-content">
-            {{content}}
-        </div>
+  <div class="header flex flex-col items-center py-20">
+    <div class="flex items-center">
+      {{> "icons/scripts"}}
+      <h2 class="font-work-sans text-2xl font-bold text-slate-800 dark:text-gray-80 ml-2">
+        Guiones
+      </h2>
     </div>
+    <p class="mt-2 text-lg font-work-sans text-gray-400 dark:text-gray-400">
+      Algunos de los guiones que he escrito.
+    </p>
+  </div>
+  <div class="flex flex-col max-w-lg mx-auto px-8 md:px-0 my-6">
+    <div class="post-label font-bold font-work-sans text-xl my-6 dark:text-gray-200">Mini Cómics</div>
+    <!-- GRACIAS - ABRIL 26, 2019 -->
+    <a href="https://drive.google.com/file/d/1Z33Z9VArCqgZuDMo3Pug9zN1yFo7ecgy/view?usp=sharing" target="_blank"
+      rel="noreferrer noopener"
+      class="flex flex-row items-center p-2 overflow-hidden relative transition ease-in-out hover:-translate-y-1 hover:scale-105 duration-300 hover:bg-brand-50 rounded-lg">
+      <div class="flex min-w-[80] mr-3 font-work-sans text-brand-400 text-xs">
+        26 ABR. 2019
+      </div>
+      <h2 class="font-work-sans text-lg grow whitespace-nowrap overflow-hidden text-ellipsis dark:text-gray-200">
+        Gracias
+      </h2>
+      <div class="flex font-work-sans text-gray-400 text-xs whitespace-nowrap">
+        {{> "icons/arrow-right"}}
+      </div>
+    </a>
+    <!-- PEW PEW - ABRIL 15, 2019 -->
+    <a href="https://drive.google.com/file/d/1SQXlCDd4qPnxhPmA9BWa9UKJUfZeq1UI/view?usp=sharing" target="_blank"
+      rel="noreferrer noopener"
+      class="flex flex-row items-center p-2 overflow-hidden relative transition ease-in-out hover:-translate-y-1 hover:scale-105 duration-300 hover:bg-brand-50 rounded-lg">
+      <div class="flex min-w-[80] mr-3 font-work-sans text-brand-400 text-xs">
+        15 ABR. 2019
+      </div>
+      <h2 class="font-work-sans text-lg grow whitespace-nowrap overflow-hidden text-ellipsis dark:text-gray-200">
+        Pew Pew
+      </h2>
+      <div class="flex font-work-sans text-gray-400 text-xs whitespace-nowrap">
+        {{> "icons/arrow-right"}}
+      </div>
+    </a>
+    <!-- LOS TRES HERMANOS - ABRIL 5, 2019 -->
+    <a href="https://drive.google.com/file/d/1U-F2c2oFIpzpXBtmhdFyca7RMeWS6B7A/view?usp=sharing" target="_blank"
+      rel="noreferrer noopener"
+      class="flex flex-row items-center p-2 overflow-hidden relative transition ease-in-out hover:-translate-y-1 hover:scale-105 duration-300 hover:bg-brand-50 rounded-lg">
+      <div class="flex min-w-[80] mr-3 font-work-sans text-brand-400 text-xs">
+        5 ABR. 2016
+      </div>
+      <h2 class="font-work-sans text-lg grow whitespace-nowrap overflow-hidden text-ellipsis dark:text-gray-200">
+        Los Tres Hermanos
+      </h2>
+      <div class="flex font-work-sans text-gray-400 text-xs whitespace-nowrap">
+        {{> "icons/arrow-right"}}
+      </div>
+    </a>
+    <!-- MIEDO A LA OSCURIDAD - DICIEMBRE 5, 2017 -->
+    <a href="https://drive.google.com/file/d/1IQM3F337v1PKDNECDE1I-qp11SZEsgSJ/view?usp=sharing" target="_blank"
+      rel="noreferrer noopener"
+      class="flex flex-row items-center p-2 overflow-hidden relative transition ease-in-out hover:-translate-y-1 hover:scale-105 duration-300 hover:bg-brand-50 rounded-lg">
+      <div class="flex min-w-[80] mr-3 font-work-sans text-brand-400 text-xs">
+        9 DIC. 2017
+      </div>
+      <h2 class="font-work-sans text-lg grow whitespace-nowrap overflow-hidden text-ellipsis dark:text-gray-200">
+        Miedo a la oscuridad
+      </h2>
+      <div class="flex font-work-sans text-gray-400 text-xs whitespace-nowrap">
+        {{> "icons/arrow-right"}}
+      </div>
+      <!-- HÉROE IMAGINARIO - AGOSTO 5, 2019 -->
+      <a href="https://drive.google.com/file/d/1cF3bblv7tdFQcoyZXHDTuL52KcrlGOVZ/view?usp=sharing" target="_blank"
+        rel="noreferrer noopener"
+        class="flex flex-row items-center p-2 overflow-hidden relative transition ease-in-out hover:-translate-y-1 hover:scale-105 duration-300 hover:bg-brand-50 rounded-lg">
+        <div class="flex min-w-[80] mr-3 font-work-sans text-brand-400 text-xs">
+          5 AGO. 2016
+        </div>
+        <h2 class="font-work-sans text-lg grow whitespace-nowrap overflow-hidden text-ellipsis dark:text-gray-200">
+          Héroe Imaginario
+        </h2>
+        <div class="flex font-work-sans text-gray-400 text-xs whitespace-nowrap">
+          {{> "icons/arrow-right"}}
+        </div>
+      </a>
+  </div>
 {{/page}}

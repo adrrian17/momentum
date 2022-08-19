@@ -15,7 +15,8 @@
 	{{ghost_head}}
 </head>
 
-<body class="{{body_class}} x-data=" { openMenu : false }" :class="openMenu ? 'overflow-hidden' : 'overflow-visible' ">
+<body class="flex flex-col h-screen {{body_class}} x-data=" { openMenu : false }"
+	:class="openMenu ? 'overflow-hidden' : 'overflow-visible' ">
 	<style>
 		[x-cloak] {
 			display: none !important;
@@ -31,7 +32,7 @@
 			{{navigation}}
 		</section>
 	{{/is}}
-	<main>
+	<main class="mb-auto">
 		{{{body}}}
 	</main>
 	{{> footer}}
