@@ -13,7 +13,7 @@
       {{/get}}
     </p>
   </div>
-  <div class="flex flex-col max-w-lg mx-auto px-8 md:px-0 mt-6">
+  <div class="flex flex-col max-w-lg mx-auto px-8 md:px-0 mt-6 mb-10">
     {{#get "posts" limit="all" order="published_at desc" filter="tags:-comic"}}
       {{#foreach posts visibility="all"}}
         {{> "archive-card"}}
