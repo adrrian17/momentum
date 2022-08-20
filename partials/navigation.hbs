@@ -20,10 +20,10 @@
 	<ul
 		class="absolute flex flex-col items-center justify-center space-y-8 top-0 right-0 bottom-0 w-10/12 py-4 bg-white dark:bg-[#1c1c1c] z-10 transition-all"
 		:class="openMenu ? 'translate-x-0' : 'translate-x-full'">
-		<li><a href="/" class="font-work-sans text-xl font-bold text-brand-400 dark:text-slate-100">[ Sin Acento ]</a></li>
+		<li><a href="/" class="font-work-sans text-xl font-bold dark:text-slate-100">Adrian [ Sin Acento ]</a></li>
 		{{#foreach navigation}}
 			<li class="md:p-4">
-				<a class="font-work-sans text-gray-400 text-lg {{#if current}} text-brand-400 dark:text-white font-bold underline underline-offset-4 decoration-gray-800 {{else}} hover:text-gray-800 hover:underline hover:underline-offset-4 hover:decoration-brand-500 hover:font-bold dark:text-slate-400 dark:hover:text-white {{/if}}"
+				<a class="font-work-sans font-semibold text-lg {{#if current}} text-gray-800 dark:text-white {{else}} hover:text-brand-400 text-gray-400 dark:text-gray-400 dark:hover:text-white {{/if}}"
 					href="{{url absolute='true'}}">{{label}}</a>
 			</li>
 		{{/foreach}}
