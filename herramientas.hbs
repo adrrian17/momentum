@@ -1,16 +1,19 @@
 {{!< default}}
 {{#page}}
-  <div class="header flex flex-col items-center py-20">
-    <div class="flex items-center">
-      {{> "icons/app"}}
-      <h2 class="font-work-sans text-2xl font-bold text-slate-800 dark:text-gray-100 ml-2">
-        Herramientas
-      </h2>
+  <section class="header">
+    {{navigation}}
+    <div class="flex flex-col items-center py-20">
+      <div class="flex items-center">
+        {{> "icons/app"}}
+        <h2 class="font-work-sans text-2xl font-bold text-slate-800 dark:text-gray-100 ml-2">
+          Herramientas
+        </h2>
+      </div>
+      <p class="mt-2 text-lg font-work-sans text-gray-400 dark:text-gray-400">
+        Las apps y servicios que uso en el día a día.
+      </p>
     </div>
-    <p class="mt-2 text-lg font-work-sans text-gray-400 dark:text-gray-400">
-      Las apps y servicios que uso en el día a día.
-    </p>
-  </div>
+  </section>
   <div class="grid grid-cols-1 md:grid-cols-2 md:gap-10 max-w-screen-md mx-auto px-8 md:px-4 mt-4 mb-10">
     {{content}}
   </div>

@@ -1,18 +1,21 @@
 {{!< default}}
 {{#page}}
-  <div class="header flex flex-col items-center py-20">
-    <div class="flex items-center">
-      {{> "icons/archive"}}
-      <h2 class="font-work-sans text-2xl font-bold text-slate-800 dark:text-gray-100 ml-2">
-        Archivo
-      </h2>
+  <section class="header">
+    {{navigation}}
+    <div class="flex flex-col items-center py-20">
+      <div class="flex items-center">
+        {{> "icons/archive"}}
+        <h2 class="font-work-sans text-2xl font-bold text-slate-800 dark:text-gray-100 ml-2">
+          Archivo
+        </h2>
+      </div>
+      <p class="mt-2 text-lg font-work-sans text-gray-400 dark:text-gray-400">
+        {{#get "posts" filter="tags:-comic"}}
+          {{t "{total} artículos, en orden cronológico." total=pagination.total}}
+        {{/get}}
+      </p>
     </div>
-    <p class="mt-2 text-lg font-work-sans text-gray-400 dark:text-gray-400">
-      {{#get "posts" filter="tags:-comic"}}
-        {{t "{total} artículos, en orden cronológico." total=pagination.total}}
-      {{/get}}
-    </p>
-  </div>
+  </section>
   <div class="flex flex-col max-w-lg mx-auto px-8 md:px-0 mt-6 mb-10">
     {{#get "posts" limit="all" order="published_at desc" filter="tags:-comic"}}
       {{#foreach posts visibility="all"}}

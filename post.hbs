@@ -1,6 +1,7 @@
 {{!< default}}
 {{#post}}
-  <header class="header">
+  <section class="header">
+    {{navigation}}
     <div class="flex flex-col items-center max-w-screen-xl pt-14 mx-auto">
       <h1 class="text-4xl font-bold font-work-sans mb-2 dark:text-slate-100 text-center">{{title}}</h1>
       <div class="flex justify-center">
@@ -18,7 +19,7 @@
         <img class="rounded-lg mt-8" src="{{feature_image}}" />
       </figure>
     </div>
-  </header>
+  </section>
   <article class="max-w-prose px-8 mx-auto mb-14 mt-48 {{post_class}}">
     <div class="post-content">
       {{content}}
