@@ -1,0 +1,22 @@
+{
+  "name": "@momentum/api",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@momentum/auth": "workspace:*",
+    "@momentum/db": "workspace:*",
+    "@trpc/client": "catalog:",
+    "@trpc/server": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@momentum/config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}

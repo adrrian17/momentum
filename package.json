@@ -1,0 +1,46 @@
+{
+  "name": "momentum",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "type": "module",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "check-types": "turbo run check-types",
+    "dev:web": "turbo run dev:bare -F web --",
+    "dev:server": "turbo run dev:bare -F hono --",
+    "db:generate": "turbo run db:generate -F @momentum/db --",
+    "deploy": "turbo run deploy -F @momentum/infra --",
+    "destroy": "turbo run destroy -F @momentum/infra --",
+    "env:generate": "varlock codegen --path ./apps/web/ && varlock codegen --path ./apps/server/ && varlock codegen --path ./packages/db/",
+    "postinstall": "varlock codegen --path ./apps/web/ && varlock codegen --path ./apps/server/ && varlock codegen --path ./packages/db/",
+    "check": "ultracite check",
+    "fix": "ultracite fix",
+    "prepare": "lefthook install"
+  },
+  "dependencies": {
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "catalog:",
+    "@momentum/config": "workspace:*",
+    "@oxlint/plugins": "1.86.0",
+    "@shadcn/lint": "^0.2.0",
+    "@types/node": "catalog:",
+    "eslint-plugin-github": "6.1.2",
+    "eslint-plugin-sonarjs": "^4.2.2",
+    "lefthook": "^2.1.16",
+    "lint-staged": "^17.6.0",
+    "oxfmt": "^0.71.0",
+    "oxlint": "^1.86.0",
+    "oxlint-plugin-react-doctor": "^0.9.14",
+    "turbo": "^2.11.6",
+    "typescript": "catalog:",
+    "ultracite": "7.12.2",
+    "varlock": "catalog:"
+  },
+  "packageManager": "pnpm@12.4.1"
+}

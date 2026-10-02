@@ -1,0 +1,3 @@
+{
+  "extends": "@momentum/config/tsconfig.base.json"
+}
