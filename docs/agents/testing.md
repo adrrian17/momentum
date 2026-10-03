@@ -11,7 +11,7 @@ Read this guide before writing code or choosing a testing approach.
 
 ## E2E
 
-Playwright tests live in `apps/web/e2e` and run on desktop Chromium and an iPhone (WebKit) preset against the real dev stack. Run `pnpm --filter web e2e`; it reuses a running `pnpm run dev` or starts one. Push the current schema with `pnpm run db:push` first. The HTML report and traces are written to `apps/web/e2e-results/` (`pnpm --filter web exec playwright show-report e2e-results/report`).
+Playwright tests live in `apps/web/e2e` and run on desktop Chromium and an iPhone (WebKit) preset against the real dev stack. Run `pnpm --filter web e2e`; it reuses a running `pnpm run dev` or starts one. After a schema change, run `pnpm run db:generate` and restart the dev stack so Alchemy applies the migration. The HTML report and traces are written to `apps/web/e2e-results/` (`pnpm --filter web exec playwright show-report e2e-results/report`).
 
 ## Code checks
 

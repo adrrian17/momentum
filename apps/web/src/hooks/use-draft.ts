@@ -24,7 +24,12 @@ export function useDraft(key: string, initial: Draft) {
 
   function updateDraft(next: Draft) {
     setDraft(next);
-    localStorage.setItem(key, JSON.stringify(next));
+
+    try {
+      localStorage.setItem(key, JSON.stringify(next));
+    } catch {
+      // Storage full or blocked: keep editing from memory; only reload resilience is lost.
+    }
   }
 
   function clearDraft() {

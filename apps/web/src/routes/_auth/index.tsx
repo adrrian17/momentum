@@ -27,6 +27,7 @@ const dateFormat = new Intl.DateTimeFormat(undefined, {
 
 function NotesHome() {
   const { tag } = Route.useSearch();
+  const { session } = Route.useRouteContext();
 
   const createNote = useMutation(
     trpc.notes.create.mutationOptions({
@@ -52,7 +53,8 @@ function NotesHome() {
             Notes
           </h1>
           <NoteForm
-            draftKey="draft:new-note"
+            // Per user, so a later sign-in on this device never restores someone else's unsaved text.
+            draftKey={`draft:new-note:${session.user.id}`}
             initial={EMPTY_DRAFT}
             label="New note"
             pending={createNote.isPending}

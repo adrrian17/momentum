@@ -13,7 +13,7 @@ export const Route = createFileRoute("/_auth")({
       });
     }
 
-    return { session };
+    return { session: session.data };
   },
 });
 
