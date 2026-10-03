@@ -13,6 +13,13 @@ Read this guide when changing the server runtime, database, environment schemas,
 - Environment schemas live in `.env.schema`. Regenerate `src/env.ts` with `pnpm run env:generate` after schema changes. Keep secrets in ignored environment files or platform configuration.
 - Use the app's environment accessor. Workers read native bindings through the existing server integration, and browser code uses `apps/web/src/env.public.ts`.
 - Run standalone environment-dependent tools from the owning application directory. Generating types does not initialize environment values for another command.
+- `SIGNUP_EMAIL` is an optional, sensitive email in `apps/server/.env.schema`, imported by the infrastructure schema. The Worker receives an empty string when it is unset, so sign-up is closed by default. Set it to the initial account's email to allow registration, ignoring case. Restart the dev stack after changes. Sign-in for existing accounts does not depend on it.
+
+## PWA assets
+
+`apps/web/vite.config.ts` builds a service worker with `autoUpdate`. Precache contains static assets only, including fonts. Runtime caching is disabled, and `/api` plus its descendants are excluded from the navigation fallback. Notes and authentication remain online operations. The production build emits `manifest.webmanifest`, `sw.js`, and the Workbox script in `apps/web/dist/`.
+
+Regenerate icons from `apps/web/public/logo.svg` with `pnpm --filter web generate-pwa-assets`. The manifest references the generated PNGs; `index.html` references the favicon and Apple Touch icon.
 
 ## Commands
 
