@@ -1,6 +1,6 @@
 # Momentum verification map
 
-Use this index as the maintained inventory of user-facing paths, not as a claim that every path already has automated coverage. The web UI is primary. The auth and tRPC APIs are supporting surfaces. No CLI, native app, activity log, or reports UI exists in this revision.
+Use this index as the maintained inventory of user-facing paths, not as a claim that every path already has automated coverage. The web UI is primary. The auth and tRPC APIs are supporting surfaces. A private operator bootstrap CLI supports account creation. No native app, activity log, or reports UI exists.
 
 ## Baseline preconditions
 
@@ -21,11 +21,11 @@ Each entry has four H2 sections. Its automated command covers only the explicitl
 
 Record the feature ID, entry point, action, resulting state, command, revision, and artifacts. Reopen or reload saved notes to prove persistence. Use the local email simulator and real confirmation endpoint to prove verification. PWA proof requires a production build, service-worker control, CDP diagnostics, and API bypass checks.
 
-Do not upload private reports, traces, screenshots, email text, or storage state. A failed prerequisite is a blocker, not a pass. Report first-registration checks as skipped when setup reuses an already verified account.
+Do not upload private reports, traces, screenshots, email text, or storage state. A failed prerequisite is a blocker, not a pass. Report fresh-bootstrap checks as skipped when setup reuses an already verified account.
 
 ## Features
 
-- [Account access](account-access.md) covers sign-in, restricted registration, verification, recovery, and sign-out.
+- [Account access](account-access.md) covers sign-in, closed public registration, private bootstrap, verification, recovery, and sign-out.
 - [Capture and render notes](capture-notes.md) covers Markdown, persistence, drafts, and loading more notes.
 - [Organize notes with tags](tags.md) covers inline tags, attached tags, autocomplete, filters, and the desktop sidebar.
 - [Edit and delete notes](edit-notes.md) covers the full-screen editor, drafts, save, back, confirmation, and missing notes.

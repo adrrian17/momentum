@@ -1,46 +1,44 @@
 # Account access
 
-A user signs in to view private notes. Registration accepts only the configured email, requires email verification, and provides a way to request another link.
+Users sign in to access private notes. The operator creates the single account with a private CLI on an empty database. Public registration is always closed. Email verification is required.
 
 ## Sub-features
 
-- `auth-sign-in` signs in a verified account.
-- `auth-closed-sign-up` rejects a different email and rejects all registration when the allowlist is unset.
-- `auth-case-variation` permits a different letter case of the configured email.
-- `auth-verification` blocks an unverified account until its owner confirms the link.
-- `auth-resend` requests another verification email.
+- `auth-sign-in` signs in a verified account, including an email case variant.
+- `auth-closed-sign-up` rejects all public candidates with an identical response and no mutation or mail.
+- `auth-private-bootstrap` creates an unverified account through the private CLI only on an empty local D1.
+- `auth-verification` blocks access until the owner confirms the link.
+- `auth-resend` requests another verification through unverified sign-in.
 - `auth-invalid-link` explains an invalid or expired link.
 - `auth-sign-out` ends access through the user menu.
 
 ## How to get to it (user POV)
 
 - Open `/` without a session, or choose **Sign In** in the header.
-- Open `/login`, then choose **Create account** for registration.
-- Use **Back to Sign In** or **Already have an account? Sign In** to return.
-- Open the received verification link. Use **Resend verification email** on the pending screen, or attempt sign-in again when unverified.
-- Open the header menu named after the signed-in user, then choose **Sign Out**.
+- Open `/login` and fill **Email** and **Password**. Account creation is absent.
+- Open the verification link after authorized bootstrap. Attempt sign-in again to resend a pending link.
+- Open the signed-in user's header menu and choose **Sign Out**.
+- The operator follows the private [bootstrap runbook](../../../../../../docs/agents/runtime.md#private-account-bootstrap). This is a CLI operation, not a web entry point.
 
 ## Driving it with Playwright
 
-Preconditions:
+Require Doctor success, a synthetic `AUTH_TEST_EMAIL`, matching local stage and origin, and a local EMAIL binding. Setup serializes account creation and confirmation. Auth specs disable traces.
 
-- Doctor passes, the account is synthetic, and the local email binding is not remote.
-- Use setup to serialize confirmation; auth tests disable traces to protect credentials and bearer links.
-
-Run `pnpm --filter web exec playwright test sign-up.spec.ts --project=desktop-chromium --project=iphone-webkit` with the runbook's private report options.
+Run `pnpm --filter web exec playwright test sign-up.spec.ts --project=desktop-chromium --project=iphone-webkit` with the private evidence options in the runbook.
 
 - Sign-in uses `getByLabel("Email")`, `getByLabel("Password")`, and the form's **Sign In** button. Require **New note** and URL `/`.
-- Registration uses **Create account**, fields **Name**, **Email**, **Password**, and the form's **Sign Up** button. A disallowed email returns 403 and visible **Sign-up is closed**.
-- Submit `oppositeEmailCase(accountEmail())` and assert that it differs from the configured value. Duplicate registration returns generic 200 with no token; it must not create a session or change the password.
-- Fresh setup asserts **Check your email**, clicks **Resend verification email**, and observes sign-in 403, null session, and notes API 401. `e2e/verification.ts` reads newly generated simulator text, confirms via Node fetch, and asserts 302 without session cookies before sign-in succeeds.
+- Public signup tests use Node fetch to submit existing, case-varied and new emails. Require the exact built-in 400 code/message, unchanged database counts, no extra simulator messages and no session. The login UI must have zero **Create account** buttons.
+- Fresh setup calls the real private CLI with stdin before any sign-in, then asserts sign-in 403, null session and notes API 401. `e2e/verification.ts` reads new actual simulator text and confirms via Node fetch. Require 302 without session cookies before normal sign-in succeeds.
+- Setup attempts a second bootstrap with another email and password. Require nonzero exit and unchanged counts. Sign in with the original password afterward.
 - The invalid-link test visits the real verification endpoint with an invalid token. Require the recovery alert and successful subsequent sign-in.
 - Header sign-in and sign-out need an additional browser check. Click the current user's menu, choose **Sign Out**, and require `/login`; revisit `/` and confirm no private notes appear.
-- Closed-default registration needs the controlled empty-binding restart described in the testing guide. Do not count a disallowed-email test as proof of unset configuration.
+- The separate real D1 probe in the testing guide verifies rollback, two-process distinct-email concurrency and record preservation. It is additional evidence outside the 8 Playwright tests.
 
 ## Gotchas
 
-- Existing verified setup skips initial registration, resend, and the before-verification gate. Use a new local stage for fresh-account proof; never reset the shared database.
-- Existing unverified accounts receive a link on sign-in. Preserve their records.
-- Do not display or attach verification URLs. Confirm only a synthetic registration initiated by the test.
-- Verification does not stop an attacker reserving an email first. Do not confirm unsolicited registrations.
-- Local delivery simulation does not prove production sender-domain readiness.
+- Existing verified setup skips first creation and before-verification behavior. Use a new local stage for fresh-account proof; never reset the shared database.
+- Leave `AUTH_TEST_EMAIL` unset in the shell or deliberately aligned with its file. Playwright and Alchemy load different schemas. They must share the selected origin and stage.
+- Bootstrap refuses any nonempty user table, even when its email differs from the requested identity. It cannot replace or recover an account.
+- Do not display or attach verification URLs. Confirm only a synthetic bootstrap initiated by the test.
+- Unsolicited verification can still be social engineering. Standard public resend behavior is outside signup closure.
+- Local simulation does not prove production sender readiness or remote bootstrap execution.

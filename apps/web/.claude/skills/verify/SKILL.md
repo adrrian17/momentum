@@ -13,9 +13,9 @@ Read [the feature index](features/README.md) before choosing a path. Follow [the
 
 ## Launch
 
-Use `pnpm run dev` for the real Alchemy stack on ports 3000 and 3001. Reuse an instance only after Doctor confirms this checkout and its operator permits driving a synthetic account. Do not change ignored env files. Require a dedicated synthetic `SIGNUP_EMAIL` configured through Varlock before auth or notes tests.
+Use `pnpm -F @momentum/infra dev:local --stage e2e-bootstrap` for the real local Alchemy stack on ports 3000 and 3001. Reuse an instance only after Doctor confirms this checkout and its operator permits driving a synthetic account. Do not change ignored env files. Require a dedicated synthetic `AUTH_TEST_EMAIL` configured through Varlock before auth or notes tests.
 
-Playwright launches the production build and preview on 4173, even for auth-only selections. Keep 4173 free. No two verification runs may share these ports, the outbox, or the shared auth state. See the runbook for isolated fresh-account stages.
+Playwright launches the production build and preview on 4173, even for auth-only selections. Keep 4173 free. No two verification runs may share these ports, the outbox, or the shared auth state. See the runbook for isolated fresh-bootstrap stages.
 
 ## Doctor
 

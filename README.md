@@ -34,7 +34,7 @@ The repository currently provides authentication, Markdown notes with tags in th
 
 The PWA caches static assets and updates its service worker automatically. Notes and authentication require a network connection; API responses are never cached. On iPhone, use Safari's **Add to Home Screen** to install it. Push notifications and offline notes are not implemented.
 
-The login page opens on sign-in. **Create account** opens sign-up, which accepts only the email configured in `SIGNUP_EMAIL`, ignoring letter case. Leaving it unset closes sign-up. Accounts must verify their email before signing in. Sign-up shows a check-email screen; confirmation returns to sign-in without creating a session. Signing in with an unverified account sends a new link, including for accounts registered before verification was required.
+The login page offers sign-in only. Public account registration is always disabled. The operator creates the single account through a private bootstrap command on an empty database. Accounts must verify their email before signing in. Confirmation returns to sign-in without creating a session; signing in while unverified requests another link. Existing verified accounts and notes are preserved. See the [bootstrap runbook](docs/agents/runtime.md#private-account-bootstrap).
 
 ## Product principles
 
@@ -128,11 +128,11 @@ Bun's automatic env loading is disabled in `bunfig.toml`; the framework integrat
 
 Run standalone Node/Bun tools that use Varlock from the owning app directory so they load that app's schema and env files. `env:generate` only generates TypeScript files; it does not initialize environment values in a subsequent command.
 
-Set `SIGNUP_EMAIL` in `apps/server/.env` to allow the initial account registration. It is an optional, sensitive email imported by the infrastructure schema and bound to the server Worker. An unset value becomes an empty binding, which rejects every sign-up. Restart the dev stack after changing this value.
+Public auth has no registration allowlist or bootstrap environment switch. Legacy ignored `SIGNUP_EMAIL` values can stay in local files; they have no application effect.
 
 Verification uses the native Cloudflare `EMAIL` binding with `EMAIL_FROM=noreply@adrianayala.mx` by default. Local Alchemy development saves messages without delivering them. Production requires a prepared sender domain and Email Service access; see [runtime and deployment](docs/agents/runtime.md#email-verification).
 
-For E2E, use a dedicated synthetic email in `SIGNUP_EMAIL` and keep real work in a different account. See [testing and validation](docs/agents/testing.md) for the shared test account and local reports.
+For E2E, configure a dedicated synthetic `AUTH_TEST_EMAIL` in `apps/web/.env`. This sensitive test setting is never exposed to the browser or imported into the public server. Copy the old synthetic email there when migrating; retain existing ignored values and secrets. The harness uses an isolated local stage and private bootstrap. See [testing and validation](docs/agents/testing.md).
 
 ## Regenerate PWA icons
 
@@ -187,7 +187,7 @@ The Swift macOS app is planned and does not have a directory yet.
 - `pnpm run check`: Check formatting and lint rules
 - `pnpm run fix`: Apply formatting and lint fixes
 - `pnpm run env:generate`: Regenerate environment types
-- `pnpm --filter web e2e`: Verify sign-up, notes on Chromium and iPhone WebKit, and PWA installability
+- `pnpm --filter web e2e`: Verify private bootstrap, closed public registration, notes on Chromium and iPhone WebKit, and PWA installability
 - `pnpm --filter web generate-pwa-assets`: Regenerate PWA icons from the SVG
 - `pnpm run db:generate`: Generate Drizzle migration files
 - `pnpm run deploy`: Deploy Cloudflare resources with Alchemy

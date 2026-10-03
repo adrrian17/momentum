@@ -13,10 +13,17 @@ done
 
 printf 'Checkout: %s\nRevision: %s\npnpm: %s\n' "$root" "$(git rev-parse --short HEAD)" "$(pnpm --version)"
 
-for port in 3000 3001; do
+web_origin="${1:-http://localhost:3001}"
+if [[ ! "$web_origin" =~ ^http://localhost:[0-9]+$ ]]; then
+  printf "Doctor requires a localhost web origin with an explicit port.\n" >&2
+  exit 1
+fi
+web_port="${web_origin##*:}"
+
+for port in 3000 "$web_port"; do
   pids="$(lsof -nP -t -iTCP:"$port" -sTCP:LISTEN 2>/dev/null | sort -u || true)"
   if [[ -z "$pids" ]]; then
-    printf 'Port %s has no listener. Launch pnpm run dev first.\n' "$port" >&2
+    printf 'Port %s has no listener. Launch the matching dev:local stage first.\n' "$port" >&2
     exit 1
   fi
 
@@ -36,5 +43,5 @@ if lsof -nP -t -iTCP:4173 -sTCP:LISTEN >/dev/null 2>&1; then
 fi
 
 curl --fail --silent --show-error --max-time 5 --output /dev/null http://localhost:3000/
-curl --fail --silent --show-error --max-time 5 --output /dev/null http://localhost:3001/login
+curl --fail --silent --show-error --max-time 5 --output /dev/null "$web_origin/login"
 printf 'Ready: API and login respond; preview port is free. Authentication is not checked.\n'

@@ -4,15 +4,17 @@ Run commands from the monorepo root. Use pnpm 12.4.1 as pinned in `package.json`
 
 ## Launch and ownership
 
+Defaults below use 3001. For another free web port, export `AUTH_TEST_BASE_URL=http://localhost:<port>`, align `CORS_ORIGIN` for the owned stack, and pass that origin to Doctor. Keep 3000 and 4173 reserved. Never stop another application to free a port.
+
 1. Inspect listeners with `lsof -nP -iTCP:3000 -iTCP:3001 -iTCP:4173 -sTCP:LISTEN`. An empty result exits nonzero. Check each PID's cwd with `lsof -a -p PID -d cwd -Fn` and its parent with `ps -p PID -o pid=,ppid=,comm=`.
-2. If 3000 and 3001 are free, launch `pnpm run dev` in a supervised terminal session. Record the session and PIDs. Wait for both HTTP checks in Doctor to succeed. Do not start only Vite; notes and auth require the real Worker and D1.
+2. If the selected ports are free, launch `pnpm -F @momentum/infra dev:local --stage e2e-bootstrap` in a supervised terminal session. Record the session and PIDs. Wait for both HTTP checks in Doctor to succeed. Do not start only Vite; notes and auth require the real Worker and D1.
 3. If both ports belong to this checkout, confirm that using the configured synthetic account is authorized. A matching cwd does not authorize using real work records. Leave the borrowed stack running during cleanup.
 4. Run `apps/web/.claude/skills/verify/scripts/doctor.sh`. If only one port is healthy, diagnose the current stack instead of launching another.
-5. For auth or notes, require a synthetic `SIGNUP_EMAIL` in `apps/server/.env` and the dedicated test password defined in `apps/web/e2e/account.ts`. Ask the operator to configure it if missing. Never print its value, use a real account, or rewrite secrets to make a test pass. Varlock loads the owning web schema through Playwright config.
+5. For auth or notes, require a synthetic `AUTH_TEST_EMAIL` in `apps/web/.env` and the dedicated test password defined in `apps/web/e2e/account.ts`. Ask the operator to configure it if missing. Never print its value, use a real account, or rewrite secrets to make a test pass. Leave `AUTH_TEST_EMAIL` unset in the shell or aligned with the file. Varlock process overrides take precedence. Playwright loads the web schema; Alchemy loads the infra schema. Use the same `AUTH_TEST_STAGE` and `AUTH_TEST_BASE_URL` across stack and harness.
 
-The normal dev stage shares one D1, auth-state file, and email outbox. Serialize all Playwright runs. Browser projects within one run use serial setup plus unique notes and tags. Fixed ports prevent side-by-side dev stacks without changing configuration; a separate stage alone does not change ports.
+The selected isolated local stage shares one D1, auth-state file, and email outbox. Serialize all Playwright runs. Browser projects within one run use serial setup plus unique notes and tags. Fixed ports prevent side-by-side dev stacks without changing configuration; a separate stage alone does not change ports.
 
-For fresh registration, follow [the testing guide](../../../../../../docs/agents/testing.md). Use a new local stage only on an agent-owned stack. Preserve the original stage, env files, and all data. No deploy, remote binding, `db:push`, or database reset is part of verification.
+For fresh bootstrap, follow [the testing guide](../../../../../../docs/agents/testing.md). Use a new local stage only on an agent-owned stack. Preserve the original stage, env files, and all data. The local entrypoint uses a file state store. No deploy, remote binding, `db:push`, or database reset is part of verification.
 
 ## Create a private evidence directory
 
@@ -54,7 +56,7 @@ status=$?
 printf '%s\n' "$status" > "$RUN/exit-code.txt"
 ```
 
-Require 8 passing tests at this revision. Setup signs in, registers if missing, and verifies if needed. A reused verified account does not retest first registration; report that distinction.
+Require 8 passing tests at this revision. Setup privately bootstraps an empty target, signs in and verifies if needed. A reused verified account does not retest first bootstrap; report that distinction.
 
 For a focused feature, append its spec name and `--project=desktop-chromium --project=iphone-webkit` instead of `--project=pwa-chromium`. Dependencies still run setup, and preview still starts. Do not use `--no-deps` to skip auth.
 

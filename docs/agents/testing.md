@@ -5,34 +5,56 @@ Read this guide before writing code or choosing a testing approach.
 ## Testing policy
 
 - Never write unit tests after writing the code they test.
-- Strongly prefer end-to-end (E2E) tests as the sole testing mechanism. Use them to verify that complex features work through the real application.
-- At the end of E2E tests, produce a verifiable and repeatable artifact. Include the artifact location and the command or steps to reproduce it.
+- Strongly prefer end-to-end (E2E) tests as the sole testing mechanism. Use them to verify complex features through the real application.
+- Produce a repeatable artifact after E2E. Include its location and command.
 - If a system must be tested in isolation, first write down all the ways it could fail, then write the code.
 
 ## E2E
 
-Playwright tests live in `apps/web/e2e` and run on desktop Chromium and an iPhone (WebKit) preset against the real dev stack. Run `pnpm --filter web e2e`; it reuses a running `pnpm run dev` or starts one. After a schema change, run `pnpm run db:generate` and restart the dev stack so Alchemy applies the migration. The HTML report and traces are written to `apps/web/e2e-results/` (`pnpm --filter web exec playwright show-report e2e-results/report`).
+Playwright tests in `apps/web/e2e` run on desktop Chromium, iPhone WebKit and the production PWA preview. Run `pnpm --filter web e2e`. The harness starts `packages/infra/scripts/local.alchemy.ts` through `dev:local` when needed. This uses the normal Worker, D1 migrations and EMAIL simulator, with Alchemy's file state store. No cloud state-store request or remote email binding is needed.
 
-Configure a dedicated synthetic `SIGNUP_EMAIL` in `apps/server/.env` before running E2E. Preserve existing environment settings. The setup project runs once before both browser projects: it signs in with the fixed test password in `e2e/account.ts`, or creates the account if it does not exist. An existing unverified account receives a link on sign-in. A fresh registration checks the pending screen, explicit resend, 403 sign-in rejection, and a null session before confirmation. Setup reads only newly created text files from the real local Cloudflare simulator, confirms the link with Node fetch, then signs in and saves cookies. Confirmation itself must not set session cookies. Setup alone handles confirmation so browser projects never race to verify the shared account. It saves cookies in the ignored `e2e-results/.auth/user.json`. Tests use unique tags and note text for each project and run. Only the note created for the delete test is deleted; existing notes are preserved. Treat local reports, traces, and storage state as private artifacts.
+Configure a dedicated synthetic `AUTH_TEST_EMAIL` in `apps/web/.env`. This sensitive test setting is not browser exposed or imported into the server. Copy the previous synthetic `SIGNUP_EMAIL` value here when migrating. Keep the old ignored setting and all other env values. Leave `AUTH_TEST_EMAIL` unset in the shell, or align it with the file deliberately; process values override Varlock files. Playwright loads the web schema. Alchemy loads the infra schema, which imports server settings and independently declares the local test origin. The public Worker never receives the test email or bootstrap configuration.
 
-Sign-up tests check the default sign-in view, a visible rejection for another email, and case-insensitive acceptance through the generic duplicate response followed by successful sign-in. Both tests choose the opposite case of the configured email, including uppercase or mixed-case settings. Better Auth 1.7.7 returns a generic 200 with a null token for duplicate registration under required verification; the test checks that response, the pending UI, absence of a session, and subsequent successful sign-in. A first setup on a fresh local D1 also checks real registration. Do not reset a database to repeat that check.
+`AUTH_TEST_STAGE` defaults to `e2e-bootstrap`. `AUTH_TEST_BASE_URL` defaults to `http://localhost:3001`; the API remains on port 3000. Use matching stage and origin settings if borrowing an existing stack. For an owned stack:
 
-The `pwa-chromium` project builds the production bundle and starts Vite preview on port 4173. It checks Chrome's `Page.getAppManifest` and `Page.getInstallabilityErrors`, static cache contents, Apple Touch metadata, the offline static shell, and rejected offline API requests and navigations. The saved `installability.json` attachment includes the manifest and Chrome diagnostics in `e2e-results/artifacts/` and the HTML report. Run `pnpm --filter web exec playwright test --project=pwa-chromium` to reproduce this check alone. This does not validate deployment, Safari installation, or offline note editing.
+```bash
+AUTH_TEST_BASE_URL=http://localhost:3001 CORS_ORIGIN=http://localhost:3001 \
+  pnpm -F @momentum/infra dev:local --stage e2e-bootstrap
+```
 
-To verify closed-by-default sign-up on an agent-owned dev stack, stop that stack and restart it with `SIGNUP_EMAIL= pnpm run dev`, leaving the env file unchanged. POST the configured test email to `/api/auth/sign-up/email` with a synthetic name and password; expect 403 and `Sign-up is closed`. Restore the normal dev command and repeat the same request; the existing test account must return a generic 200 with a null token; verify sign-in still works. Never stop a user's stack or print environment values for this check.
+Run tests with the same origin and stage. Select a free web port when 3001 belongs to another application. Stop only recorded owned processes. Never start a second stack against a borrowed database or infer ownership from an old PID.
 
-Authentication setup and sign-up tests disable Playwright traces so credentials and bearer links stay out of trace attachments. Verification requests run through Node fetch and only status assertions enter reports. Outbox files, storage state, screenshots, reports, and Alchemy logs remain private local artifacts. The installed structured simulator writes `packages/infra/.alchemy/local/email/text/*.txt`, rather than `.eml`, and never sends real mail.
+Setup inspects the selected local D1, bootstraps only when it is empty, and uses the private CLI with JSON stdin. It tries an email case variant so Better Auth normalization is exercised on fresh creation. The CLI requests verification through the actual backend. Sign-in while unverified returns 403 and sends another link. Setup asserts no session and notes API 401, reads new simulator text, confirms via Node fetch, then signs in and stores cookies. Confirmation itself must not set session cookies. A second bootstrap with a different email and password must refuse without changing user or credential counts. Subsequent sign-in proves the original password still works. Setup alone confirms the shared account so browser projects do not race. An existing verified synthetic account is reused; first creation and verification are skipped in that run.
 
-To exercise registration again without touching existing accounts, use a new Alchemy dev stage on an agent-owned stack. Stop only that stack, run `pnpm -F @momentum/infra exec alchemy dev --stage e2e-email-<unique-run-id>`, then run `pnpm --filter web e2e`. Each new stage creates a separate local D1 with normal migrations; no `db:push`, database reset, or data deletion is needed. Preserve the generated stage state and stop the test stack after the run. Restart the original dev stage before returning ownership. Never use a production stage or a remote binding for this check.
+Public signup tests submit the existing email, its opposite case and unrelated new candidates. Every valid request must return 400, code `EMAIL_PASSWORD_SIGN_UP_DISABLED` and message `Email and password sign up is not enabled`. User and credential counts and simulator message count must stay unchanged. The login page must offer no **Create account** button. Tests also drive invalid-link recovery and normal sign-in. Signup closure has no configuration-dependent variant.
+
+The full harness has 8 tests. Notes tests use unique text and tags, preserve existing notes and delete only their own delete fixture. Auth traces are disabled; Node fetch keeps bearer links and credentials out of Playwright traces. The HTML report, JSON status and installability attachments live in ignored `apps/web/e2e-results/`. Treat reports, traces, screenshots, simulator messages, cookies and dev logs as private local artifacts. Never upload them or print private input.
+
+The `pwa-chromium` project builds the production bundle and starts Vite preview on 4173. It checks the manifest, Chrome installability diagnostics, cache contents, Apple Touch metadata, offline static shell and rejected offline API requests. Run `pnpm --filter web exec playwright test --project=pwa-chromium` to reproduce it alone. This does not validate deployment or Safari installation.
+
+For fresh bootstrap proof, stop only the owned stack and start a new explicit stage such as `e2e-bootstrap-<unique-run-id>`. Run `AUTH_TEST_STAGE=<same-stage> pnpm --filter web e2e` with the matching origin. Alchemy creates a separate local D1 and applies normal migrations. Preserve this state after testing. No reset, `db:push`, remote binding, production stage or data deletion is allowed. The simulator saves structured mail at `packages/infra/.alchemy/local/email/text/*.txt` and sends no real email.
+
+## Bootstrap concurrency and rollback
+
+The private CLI probe uses a separate, empty synthetic stage. Before implementation the failure modes identified were wrong-target selection, a second operator creating another user, partial user creation if credential persistence fails, replacing an existing password, and logging private values. The probe covers real D1 rollback, two distinct-email processes, refusal and complete user/credential record preservation. It does not send email, issue sessions or mark a user verified.
+
+```bash
+ALCHEMY_DEV_ONCE=1 pnpm -F @momentum/infra exec alchemy dev \
+  --config scripts/local.alchemy.ts --stage e2e-bootstrap-probe-<unique-run-id> --include database
+pnpm -F @momentum/infra exec bun run scripts/verify-bootstrap.ts \
+  --stage e2e-bootstrap-probe-<same-run-id>
+```
+
+The probe first requires zero users. It creates its own temporary rejection trigger to force a credential insert failure, checks that both counts remain zero, and drops only that trigger. It then retains the winning account and all stage data. A completed probe cannot be rerun on the same stage; choose a new stage instead of resetting it. Exit 0 is success. Output contains status only. The remote path remains untested live.
 
 ## Code checks
 
-Ultracite uses Oxlint and Oxfmt for this repository. Run commands from the repository root:
+Use pnpm from the repository root:
 
-| Command                      | Purpose                         |
-| ---------------------------- | ------------------------------- |
-| `pnpm exec ultracite check`  | Check lint and formatting       |
-| `pnpm exec ultracite fix`    | Apply lint and formatting fixes |
-| `pnpm exec ultracite doctor` | Diagnose the tooling setup      |
+| Command | Purpose |
+| --- | --- |
+| `pnpm exec ultracite check` | Check lint and formatting |
+| `pnpm exec ultracite fix` | Apply lint and formatting fixes |
+| `pnpm -r check-types` | Check every package, including private CLI scripts |
 
-Before committing code, run `pnpm exec ultracite fix`, review the resulting diff, and run the relevant type and behavior checks. Build and typecheck commands are listed in [AGENTS.md](../../AGENTS.md).
+Before committing, run Ultracite fix, inspect the diff, and run relevant type and real behavior checks.
