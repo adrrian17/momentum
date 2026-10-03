@@ -9,7 +9,7 @@ export const { router } = t;
 export const publicProcedure = t.procedure;
 
 export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
-  if (!ctx.session) {
+  if (!ctx.session?.user.emailVerified) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
       message: "Authentication required",

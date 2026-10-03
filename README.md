@@ -21,7 +21,7 @@ The web app and server will run on Cloudflare. Offline access and editing can co
 These capabilities describe the product direction and are not implemented yet:
 
 - Activity entries with a date and a brief description of work performed. Tags can capture project context.
-- Configurable reminders to record work, initially within the app, with VAPID web push notifications planned for an installable PWA on phones.
+- Configurable reminders to record work, initially within the app, with VAPID web push notifications planned for the PWA on phones.
 - Tasks users can choose to add to the activity log. Completing a task does not automatically add it.
 - Related notes, activities, tasks, and meetings, with tags for organization and discovery.
 - Meeting recording and audio uploads, speech-to-text transcription, later analysis, and optional summaries.
@@ -30,7 +30,11 @@ These capabilities describe the product direction and are not implemented yet:
 
 ## Current state
 
-The repository currently provides authentication, Markdown notes with tags in the web app (create, filter by tag, edit, delete, and local drafts of unsaved input), shared UI components, and Cloudflare deployment infrastructure. The planned capabilities above still need to be built.
+The repository currently provides authentication, Markdown notes with tags in the web app (create, filter by tag, edit, delete, and local drafts of unsaved input), an installable PWA, shared UI components, and Cloudflare deployment infrastructure. The planned capabilities above still need to be built.
+
+The PWA caches static assets and updates its service worker automatically. Notes and authentication require a network connection; API responses are never cached. On iPhone, use Safari's **Add to Home Screen** to install it. Push notifications and offline notes are not implemented.
+
+The login page opens on sign-in. **Create account** opens sign-up, which accepts only the email configured in `SIGNUP_EMAIL`, ignoring letter case. Leaving it unset closes sign-up. Accounts must verify their email before signing in. Sign-up shows a check-email screen; confirmation returns to sign-in without creating a session. Signing in with an unverified account sends a new link, including for accounts registered before verification was required.
 
 ## Product principles
 
@@ -124,6 +128,16 @@ Bun's automatic env loading is disabled in `bunfig.toml`; the framework integrat
 
 Run standalone Node/Bun tools that use Varlock from the owning app directory so they load that app's schema and env files. `env:generate` only generates TypeScript files; it does not initialize environment values in a subsequent command.
 
+Set `SIGNUP_EMAIL` in `apps/server/.env` to allow the initial account registration. It is an optional, sensitive email imported by the infrastructure schema and bound to the server Worker. An unset value becomes an empty binding, which rejects every sign-up. Restart the dev stack after changing this value.
+
+Verification uses the native Cloudflare `EMAIL` binding with `EMAIL_FROM=noreply@adrianayala.mx` by default. Local Alchemy development saves messages without delivering them. Production requires a prepared sender domain and Email Service access; see [runtime and deployment](docs/agents/runtime.md#email-verification).
+
+For E2E, use a dedicated synthetic email in `SIGNUP_EMAIL` and keep real work in a different account. See [testing and validation](docs/agents/testing.md) for the shared test account and local reports.
+
+## Regenerate PWA icons
+
+Run `pnpm --filter web generate-pwa-assets` after editing `apps/web/public/logo.svg` or `apps/web/pwa-assets.config.ts`. The generator creates the manifest icons, maskable icon, Apple Touch icon, and favicon. Commit the SVG, config, and generated images together. The M uses the light theme's `--brand` color, with the glyph inside the maskable safe zone. The manifest and HTML theme color match the dark `--background` token in `packages/ui/src/styles/globals.css`.
+
 ## Deployment
 
 ### Alchemy
@@ -173,6 +187,8 @@ The Swift macOS app is planned and does not have a directory yet.
 - `pnpm run check`: Check formatting and lint rules
 - `pnpm run fix`: Apply formatting and lint fixes
 - `pnpm run env:generate`: Regenerate environment types
+- `pnpm --filter web e2e`: Verify sign-up, notes on Chromium and iPhone WebKit, and PWA installability
+- `pnpm --filter web generate-pwa-assets`: Regenerate PWA icons from the SVG
 - `pnpm run db:generate`: Generate Drizzle migration files
 - `pnpm run deploy`: Deploy Cloudflare resources with Alchemy
 - `pnpm run destroy`: Destroy resources in the selected Alchemy stage

@@ -40,7 +40,11 @@ export default function SignInForm({
             toast.success("Sign in successful");
           },
           onError: (error) => {
-            toast.error(error.error.message || error.error.statusText);
+            toast.error(
+              error.error.code === "EMAIL_NOT_VERIFIED"
+                ? "Verify your email before signing in. A new link was sent; check your inbox. Sign in again to resend it."
+                : error.error.message || error.error.statusText
+            );
           },
         }
       );
@@ -135,7 +139,7 @@ export default function SignInForm({
 
       <div className="mt-4 text-center">
         <Button variant="link" onClick={onSwitchToSignUp}>
-          Need an account? Sign Up
+          Create account
         </Button>
       </div>
     </div>

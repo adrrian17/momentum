@@ -43,6 +43,7 @@ Read the applicable guides before starting the corresponding work:
 - [Architecture and data handling](docs/agents/architecture.md): application code and package boundaries.
 - [Runtime and deployment](docs/agents/runtime.md): server, database, environment, and infrastructure changes.
 - [Testing and validation](docs/agents/testing.md): before writing code or choosing a testing approach.
+- [Web verification skill](apps/web/.claude/skills/verify/SKILL.md): drive the real web app and preserve private local evidence. Read its feature map before selecting checks.
 
 Read the [README](README.md) for setup and current implementation status. When a change crosses packages, follow the affected flow through the client, API, and database rather than checking only the edited file.
 
