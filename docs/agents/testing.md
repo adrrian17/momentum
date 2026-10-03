@@ -9,6 +9,10 @@ Read this guide before writing code or choosing a testing approach.
 - At the end of E2E tests, produce a verifiable and repeatable artifact. Include the artifact location and the command or steps to reproduce it.
 - If a system must be tested in isolation, first write down all the ways it could fail, then write the code.
 
+## E2E
+
+Playwright tests live in `apps/web/e2e` and run on desktop Chromium and an iPhone (WebKit) preset against the real dev stack. Run `pnpm --filter web e2e`; it reuses a running `pnpm run dev` or starts one. Push the current schema with `pnpm run db:push` first. The HTML report and traces are written to `apps/web/e2e-results/` (`pnpm --filter web exec playwright show-report e2e-results/report`).
+
 ## Code checks
 
 Ultracite uses Oxlint and Oxfmt for this repository. Run commands from the repository root:
