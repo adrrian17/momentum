@@ -1,3 +1,4 @@
+import "varlock/auto-load";
 import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
@@ -12,8 +13,19 @@ export default defineConfig({
     trace: "on",
   },
   projects: [
-    { name: "desktop-chromium", use: { ...devices["Desktop Chrome"] } },
-    { name: "iphone-webkit", use: { ...devices["iPhone 15"] } },
+    { name: "setup", testMatch: /auth\.setup\.ts/u },
+    {
+      name: "desktop-chromium",
+      use: { ...devices["Desktop Chrome"] },
+      testIgnore: /pwa\.spec\.ts/u,
+      dependencies: ["setup"],
+    },
+    {
+      name: "iphone-webkit",
+      use: { ...devices["iPhone 15"] },
+      testIgnore: /pwa\.spec\.ts/u,
+      dependencies: ["setup"],
+    },
   ],
   webServer: {
     command: "pnpm --dir ../.. run dev",

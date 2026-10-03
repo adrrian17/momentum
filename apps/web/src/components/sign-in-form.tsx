@@ -135,7 +135,7 @@ export default function SignInForm({
 
       <div className="mt-4 text-center">
         <Button variant="link" onClick={onSwitchToSignUp}>
-          Need an account? Sign Up
+          Create account
         </Button>
       </div>
     </div>
