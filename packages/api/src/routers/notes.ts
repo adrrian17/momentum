@@ -1,9 +1,10 @@
 import { note, noteTag } from "@momentum/db/schema/notes";
 import { TRPCError } from "@trpc/server";
-import { and, eq } from "drizzle-orm";
+import { and, asc, count, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { protectedProcedure, router } from "../index";
+import { extractTags } from "../tags";
 
 const PAGE_SIZE = 50;
 
@@ -18,6 +19,15 @@ const tags = z
   .array(tag)
   .transform((values) => [...new Set(values)])
   .pipe(z.array(z.string()).max(20));
+
+// A note's tags are its inline `#tag`s plus the ones attached without touching the text.
+const noteBody = z
+  .object({ content, tags: z.array(z.string()).default([]) })
+  .transform((body) => ({
+    content: body.content,
+    tags: [...extractTags(body.content), ...body.tags],
+  }))
+  .pipe(z.object({ content: z.string(), tags }));
 
 const cursor = z.object({ updatedAt: z.number().int(), id: noteId });
 
@@ -83,6 +93,18 @@ export const notesRouter = router({
       return { items: page.map(toNote), nextCursor };
     }),
 
+  tags: protectedProcedure.query(({ ctx }) => {
+    const uses = count();
+
+    return ctx.db
+      .select({ tag: noteTag.tag, count: uses })
+      .from(noteTag)
+      .innerJoin(note, eq(note.id, noteTag.noteId))
+      .where(eq(note.userId, ctx.session.user.id))
+      .groupBy(noteTag.tag)
+      .orderBy(desc(uses), asc(noteTag.tag));
+  }),
+
   get: protectedProcedure
     .input(z.object({ id: noteId }))
     .query(async ({ ctx, input }) => {
@@ -99,7 +121,7 @@ export const notesRouter = router({
     }),
 
   create: protectedProcedure
-    .input(z.object({ content, tags }))
+    .input(noteBody)
     .mutation(async ({ ctx, input }) => {
       const id = crypto.randomUUID();
       const tagRows = input.tags.map((value) => ({ noteId: id, tag: value }));
@@ -115,7 +137,7 @@ export const notesRouter = router({
     }),
 
   update: protectedProcedure
-    .input(z.object({ id: noteId, content, tags }))
+    .input(z.object({ id: noteId }).and(noteBody))
     .mutation(async ({ ctx, input }) => {
       const owned = and(
         eq(note.id, input.id),
