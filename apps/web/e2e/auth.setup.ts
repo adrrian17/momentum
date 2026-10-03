@@ -1,66 +1,49 @@
-// oxlint-disable sonarjs/prefer-specific-assertions -- Boolean auth checks keep bearer tokens and emails out of failure output.
+// oxlint-disable sonarjs/prefer-specific-assertions -- Boolean auth checks keep private values out of failures.
 import { expect, test as setup } from "@playwright/test";
 
 import {
   AUTH_STATE,
+  PASSWORD,
   accountEmail,
   oppositeEmailCase,
   signIn,
   submitSignIn,
-  submitSignUp,
 } from "./account";
+import { bootstrapSyntheticAccount, inspectBootstrap } from "./bootstrap";
 import { confirmSimulatedEmail, verificationMessages } from "./verification";
 
 setup.use({ trace: "off" });
 
-// Runs once before the browser projects so they never race to create the account.
 setup(
-  "create the E2E account once, then sign in",
+  "bootstrap the private E2E account if empty, verify, then sign in",
   async ({ page }, testInfo) => {
     const email = accountEmail();
     const messages = await verificationMessages();
-
-    await page.goto("/login");
-    const existingAccount = await submitSignIn(page, email);
-    let registrationStatus: number | undefined;
+    const target = await inspectBootstrap();
+    let bootstrapStatus: number | undefined;
     let verificationStatus: number | undefined;
     let blockedSignInStatus: number | undefined;
 
-    if (existingAccount.status() === 401) {
-      await page.getByRole("button", { name: "Create account" }).click();
-      const variedEmail = oppositeEmailCase(email);
-      expect(variedEmail !== email).toBe(true);
-      const signUp = await submitSignUp(page, variedEmail);
-      expect(signUp.status()).toBe(200);
-      registrationStatus = signUp.status();
-      const signUpBody = await signUp.json();
-      expect(signUpBody.token === null).toBe(true);
-      await expect(
-        page.getByRole("heading", { name: "Check your email" })
-      ).toBeVisible();
-
-      await page
-        .getByRole("button", { name: "Resend verification email" })
-        .click();
-      await expect(
-        page.getByText(
-          "If your account needs verification, a new link was sent."
-        )
-      ).toBeVisible();
-      await page.getByRole("button", { name: "Back to Sign In" }).click();
-      const blocked = await submitSignIn(page, email);
-      expect(blocked.status()).toBe(403);
-      blockedSignInStatus = blocked.status();
-      const blockedBody = await blocked.json();
-      expect(blockedBody.code).toBe("EMAIL_NOT_VERIFIED");
-    } else if (!existingAccount.ok()) {
-      expect(existingAccount.status()).toBe(403);
-      blockedSignInStatus = existingAccount.status();
-      const existingBody = await existingAccount.json();
-      expect(existingBody.code).toBe("EMAIL_NOT_VERIFIED");
+    if (target.userCount === 0) {
+      bootstrapStatus = await bootstrapSyntheticAccount(
+        oppositeEmailCase(email),
+        PASSWORD,
+        target.confirmation
+      );
+      expect(bootstrapStatus).toBe(0);
+      const created = await inspectBootstrap();
+      expect(created.userCount).toBe(1);
+      expect(created.credentialCount).toBe(1);
     }
 
+    await page.goto("/login");
+    const existingAccount = await submitSignIn(page, email);
+
     if (!existingAccount.ok()) {
+      expect(existingAccount.status()).toBe(403);
+      blockedSignInStatus = existingAccount.status();
+      const body = await existingAccount.json();
+      expect(body.code).toBe("EMAIL_NOT_VERIFIED");
       await expect(
         page.getByText("Verify your email before signing in.", { exact: false })
       ).toBeVisible();
@@ -81,13 +64,26 @@ setup(
       await signIn(page, email);
     }
 
-    await expect(page.getByLabel("New note")).toBeVisible();
+    expect(
+      await bootstrapSyntheticAccount(
+        `other-${Date.now()}@example.com`,
+        `${PASSWORD}-different`,
+        target.confirmation
+      )
+    ).toBe(1);
+    const preserved = await inspectBootstrap();
+    expect(preserved.userCount).toBe(target.userCount || 1);
+    expect(preserved.credentialCount).toBe(target.credentialCount || 1);
+    await page.context().clearCookies();
+    await page.goto("/login");
+    await signIn(page, oppositeEmailCase(email));
     await page.context().storageState({ path: AUTH_STATE });
     await testInfo.attach("verification-status.json", {
       body: JSON.stringify({
-        registrationStatus,
+        bootstrapStatus,
         blockedSignInStatus,
         verificationStatus,
+        repeatBootstrapRefused: true,
         signedIn: true,
       }),
       contentType: "application/json",

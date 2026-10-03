@@ -5,6 +5,8 @@ import { fileURLToPath } from "node:url";
 import { expect } from "@playwright/test";
 import { z } from "zod";
 
+import { ENV } from "../src/env";
+
 const outbox = fileURLToPath(
   new URL("../../../packages/infra/.alchemy/local/email/text/", import.meta.url)
 );
@@ -80,7 +82,7 @@ export async function confirmSimulatedEmail(
 
   expect(
     verificationURL.searchParams.get("callbackURL") ===
-      "http://localhost:3001/login"
+      new URL("/login", ENV.AUTH_TEST_BASE_URL).href
   ).toBe(true);
   // Node fetch keeps the bearer link out of Playwright traces and report attachments.
   let response: Response;
@@ -93,7 +95,8 @@ export async function confirmSimulatedEmail(
 
   expect(response.status).toBe(302);
   expect(
-    response.headers.get("location") === "http://localhost:3001/login"
+    response.headers.get("location") ===
+      new URL("/login", ENV.AUTH_TEST_BASE_URL).href
   ).toBe(true);
   expect(response.headers.get("set-cookie") === null).toBe(true);
 

@@ -18,7 +18,6 @@ export const server = Cloudflare.Worker("server", {
     CORS_ORIGIN: Config.String("CORS_ORIGIN"),
     BETTER_AUTH_SECRET: Config.Redacted("BETTER_AUTH_SECRET"),
     BETTER_AUTH_URL: Cloudflare.Worker.URL,
-    SIGNUP_EMAIL: Config.String("SIGNUP_EMAIL").pipe(Config.withDefault("")),
     EMAIL_FROM: Config.String("EMAIL_FROM"),
     EMAIL: Config.String("EMAIL_FROM").pipe(
       Effect.flatMap((from) =>

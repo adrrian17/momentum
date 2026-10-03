@@ -1,6 +1,8 @@
 import "varlock/auto-load";
 import { defineConfig, devices } from "@playwright/test";
 
+import { ENV } from "./src/env";
+
 export default defineConfig({
   testDir: "./e2e",
   outputDir: "./e2e-results/artifacts",
@@ -9,7 +11,7 @@ export default defineConfig({
     ["html", { outputFolder: "./e2e-results/report", open: "never" }],
   ],
   use: {
-    baseURL: "http://localhost:3001",
+    baseURL: ENV.AUTH_TEST_BASE_URL,
     trace: "on",
   },
   projects: [
@@ -34,8 +36,8 @@ export default defineConfig({
   ],
   webServer: [
     {
-      command: "pnpm --dir ../.. run dev",
-      url: "http://localhost:3001",
+      command: `CORS_ORIGIN=${ENV.AUTH_TEST_BASE_URL} pnpm --dir ../../packages/infra dev:local --stage ${ENV.AUTH_TEST_STAGE}`,
+      url: ENV.AUTH_TEST_BASE_URL,
       reuseExistingServer: true,
       timeout: 180_000,
     },

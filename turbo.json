@@ -37,7 +37,6 @@
     "CI",
     "CORS_ORIGIN",
     "NODE_ENV",
-    "SIGNUP_EMAIL",
     "VERCEL",
     "VERCEL_ENV",
     "VERCEL_PROJECT_PRODUCTION_URL",
