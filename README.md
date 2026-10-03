@@ -72,19 +72,13 @@ Runtime database access uses the Cloudflare `DB` binding from `packages/infra/al
 
 Alchemy provisions the D1 database and applies migrations during `deploy`.
 
-In development, run `pnpm run dev` once so Alchemy creates the local D1, then push schema changes to it:
-
-```bash
-pnpm run db:push
-```
-
-Generate migration files only for changes that ship to production:
+1. Generate migration files:
 
 ```bash
 pnpm run db:generate
 ```
 
-Run the development server:
+Then, run the development server:
 
 ```bash
 pnpm run dev
@@ -179,7 +173,6 @@ The Swift macOS app is planned and does not have a directory yet.
 - `pnpm run check`: Check formatting and lint rules
 - `pnpm run fix`: Apply formatting and lint fixes
 - `pnpm run env:generate`: Regenerate environment types
-- `pnpm run db:push`: Push the Drizzle schema to the local dev D1
 - `pnpm run db:generate`: Generate Drizzle migration files
 - `pnpm run deploy`: Deploy Cloudflare resources with Alchemy
 - `pnpm run destroy`: Destroy resources in the selected Alchemy stage

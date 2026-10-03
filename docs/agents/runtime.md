@@ -5,8 +5,7 @@ Read this guide when changing the server runtime, database, environment schemas,
 ## Cloudflare and database
 
 - The web app and server target Cloudflare. Worker database access uses the native `DB` binding defined in `packages/infra/alchemy.run.ts`.
-- Use Drizzle migrations in `packages/db/src/migrations`. Alchemy applies them during deployment and when `alchemy dev` creates the local database.
-- In development, apply schema changes to the local D1 with `pnpm run db:push`; never generate or apply migrations for development. It writes only to the SQLite file `alchemy dev` keeps under `packages/infra/.alchemy/local/d1`, so run `pnpm run dev` once first. Generate a migration only when the change ships to production.
+- Use Drizzle migrations in `packages/db/src/migrations`. Alchemy applies them during deployment. A local `DATABASE_URL` is for database tooling.
 - Keep `CORS_ORIGIN` aligned with the deployed web origin. Verify the Alchemy stage before deploying or destroying resources.
 
 ## Environment configuration
@@ -23,8 +22,7 @@ Run these from the repository root:
 | --- | --- |
 | `pnpm install` | Install dependencies and generate environment types |
 | `pnpm run dev` | Start the Alchemy development environment |
-| `pnpm run db:push` | Push the Drizzle schema to the local dev D1 |
-| `pnpm run db:generate` | Generate Drizzle migration files for production |
+| `pnpm run db:generate` | Generate Drizzle migration files |
 | `pnpm run env:generate` | Regenerate environment types |
 | `pnpm run deploy` | Deploy the selected Alchemy stage |
 | `pnpm run destroy` | Destroy resources in the selected Alchemy stage |
