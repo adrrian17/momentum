@@ -15,6 +15,11 @@ export default defineConfig({
   projects: [
     { name: "setup", testMatch: /auth\.setup\.ts/u },
     {
+      name: "pwa-chromium",
+      testMatch: /pwa\.spec\.ts/u,
+      use: { ...devices["Desktop Chrome"], baseURL: "http://localhost:4173" },
+    },
+    {
       name: "desktop-chromium",
       use: { ...devices["Desktop Chrome"] },
       testIgnore: /pwa\.spec\.ts/u,
@@ -27,10 +32,18 @@ export default defineConfig({
       dependencies: ["setup"],
     },
   ],
-  webServer: {
-    command: "pnpm --dir ../.. run dev",
-    url: "http://localhost:3001",
-    reuseExistingServer: true,
-    timeout: 180_000,
-  },
+  webServer: [
+    {
+      command: "pnpm --dir ../.. run dev",
+      url: "http://localhost:3001",
+      reuseExistingServer: true,
+      timeout: 180_000,
+    },
+    {
+      // The service worker exists only in production builds.
+      command: "pnpm run build && pnpm run serve --port 4173 --strictPort",
+      url: "http://localhost:4173",
+      timeout: 120_000,
+    },
+  ],
 });
