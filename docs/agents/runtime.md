@@ -5,7 +5,7 @@ Read this guide when changing the server runtime, database, environment schemas,
 ## Cloudflare and database
 
 - The web app and server target Cloudflare. Worker database access uses the native `DB` binding defined in `packages/infra/alchemy.run.ts`.
-- Use Drizzle migrations in `packages/db/src/migrations`. Alchemy applies them during deployment. A local `DATABASE_URL` is for database tooling.
+- Use Drizzle migrations in `packages/db/src/migrations`, also in development: after a schema change run `pnpm run db:generate`, and Alchemy applies pending migrations on `deploy` and when `alchemy dev` starts. Deleting `packages/infra/.alchemy/local/d1` leaves an empty database, because Alchemy state still records the migrations as applied; recreate it with `pnpm -F @momentum/infra exec alchemy dev --force`. A local `DATABASE_URL` is for database tooling.
 - Keep `CORS_ORIGIN` aligned with the deployed web origin. Verify the Alchemy stage before deploying or destroying resources.
 
 ## Environment configuration
