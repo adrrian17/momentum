@@ -9,12 +9,14 @@
     "start": "vite",
     "check-types": "vite build && tsc --noEmit",
     "dev:bare": "vite dev",
-    "env:generate": "varlock codegen"
+    "env:generate": "varlock codegen",
+    "e2e": "playwright test"
   },
   "dependencies": {
     "@momentum/api": "workspace:*",
     "@momentum/ui": "workspace:*",
     "@tailwindcss/vite": "^4.3.3",
+    "@tanstack/markdown": "^1.0.0",
     "@tanstack/react-form": "^1.33.5",
     "@tanstack/react-query": "^5.104.0",
     "@tanstack/react-router": "^1.170.41",
@@ -32,6 +34,7 @@
   },
   "devDependencies": {
     "@momentum/config": "workspace:*",
+    "@playwright/test": "^1.63.0",
     "@tanstack/react-query-devtools": "^5.104.0",
     "@tanstack/react-router-devtools": "^1.167.2",
     "@tanstack/router-plugin": "^1.168.42",

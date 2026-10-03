@@ -14,6 +14,10 @@ export function createAuth(
   database: Database,
   desktopOrigins: readonly string[] = []
 ) {
+  // The deployed web and API Workers are different sites, so the cookie must be SameSite=None; Secure.
+  // Local dev serves plain http, where WebKit drops Secure cookies; localhost ports are same-site, so Lax works there.
+  const crossSiteCookie = env.BETTER_AUTH_URL.startsWith("https://");
+
   return betterAuth({
     database: drizzleAdapter(database, {
       provider: "sqlite",
@@ -25,8 +29,8 @@ export function createAuth(
     baseURL: env.BETTER_AUTH_URL,
     advanced: {
       defaultCookieAttributes: {
-        sameSite: "none",
-        secure: true,
+        sameSite: crossSiteCookie ? "none" : "lax",
+        secure: crossSiteCookie,
         httpOnly: true,
       },
     },

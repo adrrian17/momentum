@@ -30,7 +30,7 @@ These capabilities describe the product direction and are not implemented yet:
 
 ## Current state
 
-The repository currently provides authentication, API health checks, a protected placeholder dashboard, shared UI components, and Cloudflare deployment infrastructure. Notes and the planned capabilities above still need to be built.
+The repository currently provides authentication, Markdown notes with tags in the web app (create, filter by tag, edit, delete, and local drafts of unsaved input), shared UI components, and Cloudflare deployment infrastructure. The planned capabilities above still need to be built.
 
 ## Product principles
 
