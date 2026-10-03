@@ -16,6 +16,10 @@ export interface AuthConfig {
 export function createAuth(
   env: AuthConfig,
   database: Database,
+  sendVerificationEmail: (data: {
+    user: { email: string };
+    url: string;
+  }) => Promise<void>,
   desktopOrigins: readonly string[] = []
 ) {
   // The deployed web and API Workers are different sites, so the cookie must be SameSite=None; Secure.
@@ -28,7 +32,14 @@ export function createAuth(
       schema,
     }),
     trustedOrigins: [env.CORS_ORIGIN, ...desktopOrigins],
-    emailAndPassword: { enabled: true },
+    emailAndPassword: { enabled: true, requireEmailVerification: true },
+    emailVerification: {
+      sendOnSignUp: true,
+      sendOnSignIn: true,
+      autoSignInAfterVerification: false,
+      sendVerificationEmail,
+    },
+    logger: { disabled: true },
     secret: env.BETTER_AUTH_SECRET,
     baseURL: env.BETTER_AUTH_URL,
     advanced: {

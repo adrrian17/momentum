@@ -1,6 +1,26 @@
+// oxlint-disable sonarjs/prefer-specific-assertions -- Boolean auth checks keep bearer tokens and emails out of failure output.
 import { expect, test } from "@playwright/test";
 
-import { accountEmail, signIn, submitSignUp } from "./account";
+import {
+  accountEmail,
+  oppositeEmailCase,
+  signIn,
+  submitSignUp,
+} from "./account";
+
+test.use({ trace: "off" });
+
+test("an invalid verification link offers sign-in recovery", async ({
+  page,
+}) => {
+  await page.goto(
+    "http://localhost:3000/api/auth/verify-email?token=invalid&callbackURL=http%3A%2F%2Flocalhost%3A3001%2Flogin"
+  );
+  await expect(page.getByRole("alert")).toHaveText(
+    "The verification link is invalid or expired. Sign in to request a new link."
+  );
+  await signIn(page, accountEmail());
+});
 
 // Failure modes this flow must catch:
 // - /login opens on sign-up instead of sign-in
@@ -29,16 +49,23 @@ test("sign-up accepts only SIGNUP_EMAIL, and that account signs in", async ({
   expect(rejected.status()).toBe(403);
   await expect(page.getByText("Sign-up is closed")).toBeVisible();
 
-  // The setup project already created the account, so passing the gate ends in "already exists".
-  const otherCase = await submitSignUp(page, email.toUpperCase());
+  const variedEmail = oppositeEmailCase(email);
+  expect(variedEmail !== email).toBe(true);
+  const otherCase = await submitSignUp(page, variedEmail);
 
-  expect(otherCase.status()).toBe(422);
+  expect(otherCase.status()).toBe(200);
+  const otherCaseBody = await otherCase.json();
+  expect(otherCaseBody.token === null).toBe(true);
   await expect(
-    page.getByText("User already exists. Use another email.")
+    page.getByRole("heading", { name: "Check your email" })
   ).toBeVisible();
 
-  await page
-    .getByRole("button", { name: "Already have an account? Sign In" })
-    .click();
+  const session = await page.request.get(
+    "http://localhost:3000/api/auth/get-session"
+  );
+
+  expect((await session.json()) === null).toBe(true);
+
+  await page.getByRole("button", { name: "Back to Sign In" }).click();
   await signIn(page, email);
 });

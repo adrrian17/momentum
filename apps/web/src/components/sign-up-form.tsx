@@ -2,7 +2,7 @@ import { Button } from "@momentum/ui/components/button";
 import { Input } from "@momentum/ui/components/input";
 import { Label } from "@momentum/ui/components/label";
 import { useForm } from "@tanstack/react-form";
-import { useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -15,9 +15,8 @@ export default function SignUpForm({
 }: {
   onSwitchToSignIn: () => void;
 }) {
-  const navigate = useNavigate({
-    from: "/",
-  });
+  const [verificationEmail, setVerificationEmail] = useState<string>();
+  const [isResending, setIsResending] = useState(false);
 
   const { isPending } = authClient.useSession();
 
@@ -33,13 +32,11 @@ export default function SignUpForm({
           email: value.email,
           password: value.password,
           name: value.name,
+          callbackURL: new URL("/login", window.location.origin).href,
         },
         {
           onSuccess: () => {
-            navigate({
-              to: "/",
-            });
-            toast.success("Sign up successful");
+            setVerificationEmail(value.email);
           },
           onError: (error) => {
             toast.error(error.error.message || error.error.statusText);
@@ -58,6 +55,52 @@ export default function SignUpForm({
 
   if (isPending) {
     return <Loader />;
+  }
+
+  if (verificationEmail) {
+    return (
+      <div className="mx-auto mt-10 w-full max-w-md space-y-4 p-6">
+        <h1 className="text-center text-3xl font-bold">Check your email</h1>
+        <output className="text-muted-foreground block">
+          If this is a new account, we sent a verification link. Confirm the
+          registration you initiated, then return here to sign in. If you
+          already have an account, sign in instead.
+        </output>
+        <Button
+          className="w-full"
+          disabled={isResending}
+          onClick={async () => {
+            setIsResending(true);
+
+            try {
+              const { error } = await authClient.sendVerificationEmail({
+                email: verificationEmail.toLowerCase(),
+                callbackURL: new URL("/login", window.location.origin).href,
+              });
+
+              if (error) {
+                toast.error(
+                  error.message || "Could not resend verification email."
+                );
+              } else {
+                toast.success(
+                  "If your account needs verification, a new link was sent."
+                );
+              }
+            } catch {
+              toast.error("Could not resend verification email. Try again.");
+            }
+
+            setIsResending(false);
+          }}
+        >
+          {isResending ? "Sending..." : "Resend verification email"}
+        </Button>
+        <Button variant="link" className="w-full" onClick={onSwitchToSignIn}>
+          Back to Sign In
+        </Button>
+      </div>
+    );
   }
 
   return (

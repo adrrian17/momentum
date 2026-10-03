@@ -16,6 +16,12 @@ export function accountEmail() {
   return ENV.SIGNUP_EMAIL;
 }
 
+export function oppositeEmailCase(email: string) {
+  return email === email.toUpperCase()
+    ? email.toLowerCase()
+    : email.toUpperCase();
+}
+
 export async function submitSignUp(page: Page, email: string) {
   await page.getByLabel("Name").fill("E2E User");
   await page.getByLabel("Email").fill(email);
