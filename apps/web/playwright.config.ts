@@ -37,6 +37,8 @@ export default defineConfig({
   webServer: [
     {
       command: `CORS_ORIGIN=${ENV.AUTH_TEST_BASE_URL} pnpm --dir ../../packages/infra dev:local --stage ${ENV.AUTH_TEST_STAGE}`,
+      // Resolve the infra schema without re-injecting the parent web env over CORS_ORIGIN.
+      env: { __VARLOCK_ENV: "" },
       url: ENV.AUTH_TEST_BASE_URL,
       reuseExistingServer: true,
       timeout: 180_000,
