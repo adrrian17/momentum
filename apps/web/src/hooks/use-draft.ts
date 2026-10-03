@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { z } from "zod";
 
-const draftSchema = z.object({ content: z.string(), tags: z.string() });
+const draftSchema = z.object({
+  content: z.string(),
+  tags: z.array(z.string()).default([]),
+});
 
 export type Draft = z.infer<typeof draftSchema>;
 

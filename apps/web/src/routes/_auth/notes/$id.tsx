@@ -1,3 +1,4 @@
+import { attachedTags } from "@momentum/api/tags";
 import { Button } from "@momentum/ui/components/button";
 import { useMutation } from "@tanstack/react-query";
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
@@ -71,7 +72,10 @@ function EditNote() {
         // The router can render cached loader data and reload in the background; remounting on a newer version restarts the form from it.
         key={`${note.id}:${note.updatedAt}`}
         draftKey={`draft:note:${note.id}`}
-        initial={{ content: note.content, tags: note.tags.join(", ") }}
+        initial={{
+          content: note.content,
+          tags: attachedTags(note.content, note.tags),
+        }}
         label="Note"
         pending={updateNote.isPending}
         onSave={(input, onSaved) =>

@@ -3,12 +3,18 @@ import type { Page } from "@playwright/test";
 
 // Failure modes this flow must catch:
 // - sign-up does not land on the notes home
+// - with no tags yet, the desktop layout collapses the notes column
 // - a saved note is not listed, or is lost on reload
-// - tags are not lowercased or deduplicated ("Deploy" and "deploy" must be one tag)
+// - inline #tags are not extracted, lowercased, or deduplicated ("#Deploy" and "#deploy" must be one tag)
+// - a #word inside Markdown code becomes a tag
+// - "Add tag" cannot create a tag, or the attached tag is not saved
+// - typing `#` does not suggest existing tags, or Enter does not complete one
+// - removing a chip on a saved note does not unlink it (inline tags lose their `#`)
+// - adding a tag from a note card does not reach the filter or the sidebar counts
 // - Markdown renders as raw text
 // - raw HTML or a javascript: link in a note becomes executable
 // - clicking a tag does not filter the list, or the filter cannot be cleared
-// - the editor does not load the saved note, or saving does not replace content and tags
+// - the editor does not load the saved note, or saving does not replace content and its tags
 // - an unsaved edit is lost on reload, or a saved draft resurrects later
 // - delete happens without confirmation, or the note survives deletion
 
@@ -29,9 +35,8 @@ async function signUp(page: Page, email: string) {
   await expect(page).toHaveURL(/\/$/u);
 }
 
-async function createNote(page: Page, content: string, tags: string) {
+async function createNote(page: Page, content: string) {
   await page.getByLabel("New note").fill(content);
-  await page.getByRole("textbox", { name: "Tags" }).fill(tags);
   await page.getByRole("button", { name: "Save", exact: true }).click();
   await expect(page.getByLabel("New note")).toHaveValue("");
 }
@@ -47,13 +52,33 @@ test("notes: create, render, filter, edit with draft, delete", async ({
 
   await signUp(page, `e2e-${runId}@example.com`);
 
+  if (testInfo.project.name === "desktop-chromium") {
+    const composerBox = await page.getByLabel("New note").boundingBox();
+    expect(composerBox?.width).toBeGreaterThan(500);
+  }
+
   await createNote(
     page,
-    "# Deploy log\n\nShipped **the fix** today.",
-    "Deploy, work, deploy"
+    "# Deploy log\n\nShipped **the fix** today. #Deploy #work #deploy"
   );
-  await createNote(page, "Unrelated thought", "personal");
-  await createNote(page, UNSAFE_CONTENT, "security");
+  const composer = page.getByLabel("New note");
+  const composerTags = page.locator("form").getByRole("list", { name: "Tags" });
+
+  await composer.fill("Unrelated thought about `#code`");
+  await page.locator("form").getByRole("combobox", { name: "Add tag" }).click();
+  await page.getByLabel("Search or create a tag").fill("Personal");
+  await page.getByRole("option", { name: "Create new tag: #personal" }).click();
+  await expect(composer).toHaveValue("Unrelated thought about `#code`");
+  await expect(composerTags).toHaveText("#personal");
+  await page.getByRole("button", { name: "Save", exact: true }).click();
+  await expect(composer).toHaveValue("");
+
+  await composer.fill(`${UNSAFE_CONTENT}\n\n#wo`);
+  await expect(page.getByRole("button", { name: "#work 1" })).toBeVisible();
+  await composer.press("Enter");
+  await expect(composer).toHaveValue(`${UNSAFE_CONTENT}\n\n#work `);
+  await page.getByRole("button", { name: "Save", exact: true }).click();
+  await expect(composer).toHaveValue("");
 
   const deployNote = noteCard(page, "Deploy log");
 
@@ -65,6 +90,34 @@ test("notes: create, render, filter, edit with draft, delete", async ({
     "#deploy",
     "#work",
   ]);
+
+  const unrelatedNote = noteCard(page, "Unrelated thought");
+
+  await expect(unrelatedNote.getByRole("link", { name: /^#/u })).toHaveText([
+    "#personal",
+  ]);
+  await expect(
+    noteCard(page, "click me").getByRole("link", { name: /^#/u })
+  ).toHaveText(["#work"]);
+
+  await deployNote.getByRole("button", { name: "Remove tag work" }).click();
+  await expect(deployNote.getByRole("link", { name: /^#/u })).toHaveText([
+    "#deploy",
+  ]);
+  await expect(deployNote).toContainText("today. #Deploy work #deploy");
+
+  await unrelatedNote.getByRole("combobox", { name: "Add tag" }).click();
+  await page.getByRole("option", { name: "#deploy 1" }).click();
+  await expect(unrelatedNote.getByRole("link", { name: /^#/u })).toHaveText([
+    "#deploy",
+    "#personal",
+  ]);
+
+  if (testInfo.project.name === "desktop-chromium") {
+    await expect(
+      page.getByRole("navigation", { name: "Tags" }).getByRole("link")
+    ).toHaveText(["#deploy2", "#personal1", "#work1"]);
+  }
 
   const unsafeNote = noteCard(page, "click me");
 
@@ -81,8 +134,8 @@ test("notes: create, render, filter, edit with draft, delete", async ({
   await expect(
     page.getByRole("heading", { name: "Notes tagged #deploy" })
   ).toBeVisible();
-  await expect(page.getByRole("article")).toHaveCount(1);
-  await expect(noteCard(page, "Unrelated thought")).toHaveCount(0);
+  await expect(page.getByRole("article")).toHaveCount(2);
+  await expect(noteCard(page, "click me")).toHaveCount(0);
 
   await page.getByRole("link", { name: "Clear filter" }).click();
   await expect(page.getByRole("article")).toHaveCount(3);
@@ -90,20 +143,18 @@ test("notes: create, render, filter, edit with draft, delete", async ({
   await deployNote.getByRole("link", { name: "Edit note" }).click();
 
   const editor = page.getByLabel("Note", { exact: true });
-  const tagsInput = page.getByRole("textbox", { name: "Tags" });
 
   await expect(editor).toHaveValue(
-    "# Deploy log\n\nShipped **the fix** today."
+    "# Deploy log\n\nShipped **the fix** today. #Deploy work #deploy"
   );
-  await expect(tagsInput).toHaveValue("deploy, work");
 
-  await editor.fill("# Deploy log\n\nRolled back, then shipped _again_.");
-  await tagsInput.fill("Release");
+  await editor.fill(
+    "# Deploy log\n\nRolled back, then shipped _again_. #Release"
+  );
   await page.reload();
   await expect(editor).toHaveValue(
-    "# Deploy log\n\nRolled back, then shipped _again_."
+    "# Deploy log\n\nRolled back, then shipped _again_. #Release"
   );
-  await expect(tagsInput).toHaveValue("Release");
 
   await page.getByRole("button", { name: "Save", exact: true }).click();
   await expect(page).toHaveURL(/\/$/u);
@@ -114,7 +165,7 @@ test("notes: create, render, filter, edit with draft, delete", async ({
 
   await deployNote.getByRole("link", { name: "Edit note" }).click();
   await expect(editor).toHaveValue(
-    "# Deploy log\n\nRolled back, then shipped _again_."
+    "# Deploy log\n\nRolled back, then shipped _again_. #Release"
   );
   const noteUrl = page.url();
 
