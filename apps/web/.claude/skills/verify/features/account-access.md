@@ -28,11 +28,11 @@ Run `pnpm --filter web exec playwright test sign-up.spec.ts --project=desktop-ch
 
 - Sign-in uses `getByLabel("Email")`, `getByLabel("Password")`, and the form's **Sign In** button. Require **New note** and URL `/`.
 - Public signup tests use Node fetch to submit existing, case-varied and new emails. Require the exact built-in 400 code/message, unchanged database counts, no extra simulator messages and no session. The login UI must have zero **Create account** buttons.
-- Fresh setup calls the real private CLI with stdin before any sign-in, then asserts sign-in 403, null session and notes API 401. `e2e/verification.ts` reads new actual simulator text and confirms via Node fetch. Require 302 without session cookies before normal sign-in succeeds.
+- Fresh setup calls the real private CLI with stdin before any sign-in, then asserts sign-in 403, null session and notes API 401. `e2e/verification.ts` reads new actual simulator text and confirms via Node fetch. Require the verification URL and callback on the web origin, and 302 without session cookies before normal sign-in succeeds.
 - Setup attempts a second bootstrap with another email and password. Require nonzero exit and unchanged counts. Sign in with the original password afterward.
 - The invalid-link test visits the real verification endpoint with an invalid token. Require the recovery alert and successful subsequent sign-in.
 - Header sign-in and sign-out need an additional browser check. Click the current user's menu, choose **Sign Out**, and require `/login`; revisit `/` and confirm no private notes appear.
-- The separate real D1 probe in the testing guide verifies rollback, two-process distinct-email concurrency and record preservation. It is additional evidence outside the 8 Playwright tests.
+- The separate real D1 probe in the testing guide verifies rollback, two-process distinct-email concurrency and record preservation. It is additional evidence outside the 10 Playwright tests.
 
 ## Gotchas
 

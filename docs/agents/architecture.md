@@ -6,7 +6,7 @@ Read this guide when changing application code or package boundaries. All Moment
 
 | Location | Responsibility |
 | --- | --- |
-| `apps/web` | React and Vite client, TanStack Router and Query |
+| `apps/web` | React and Vite client, TanStack Router and Query, public Worker forwarding `/api` through its native service binding |
 | `apps/server` | Hono Worker, HTTP handlers, auth endpoints, tRPC mounting, runtime bindings |
 | `packages/api` | tRPC procedures and shared API types |
 | `packages/auth` | Better Auth configuration |
@@ -28,3 +28,7 @@ Reuse existing packages, platform features, and installed dependencies before ad
 - Use semantic HTML, labeled controls, and keyboard-accessible interactions.
 
 Update affected guides when package responsibilities change. See [runtime](runtime.md) for configuration and [testing](testing.md) before writing code.
+
+## Public request flow
+
+The browser uses one public web origin. The web Worker forwards `/api` and `/api/*` to the private server Worker with the original Request and Response. Other paths use static assets and SPA fallback. Auth and tRPC clients use relative paths; database and EMAIL bindings remain on the server. See the [single-origin decision](../adr/0001-single-origin-for-web-and-api.md).

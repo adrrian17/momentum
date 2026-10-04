@@ -1,10 +1,10 @@
 # Momentum verification map
 
-Use this index as the maintained inventory of user-facing paths, not as a claim that every path already has automated coverage. The web UI is primary. The auth and tRPC APIs are supporting surfaces. A private operator bootstrap CLI supports account creation. No native app, activity log, or reports UI exists.
+Use this index as the maintained inventory of user-facing paths, not as a claim that every path already has automated coverage. The web UI is primary. The auth and tRPC APIs use the web Worker origin through a native service binding. A private operator bootstrap CLI supports account creation. No native app, activity log, or reports UI exists.
 
 ## Baseline preconditions
 
-- Read [Launch and ownership](../references/runbook.md). The dev web and API run at `http://localhost:3001` and `http://localhost:3000`; the production preview uses `http://localhost:4173`.
+- Read [Launch and ownership](../references/runbook.md). The browser and API use `http://localhost:3001`; Alchemy has a separate internal local server listener on 3000; the production preview uses `http://localhost:4173`.
 - Require Doctor exit 0 and permission to use the synthetic account before mutating data.
 - Use the fixed account from `e2e/account.ts`. Setup handles creation, verification, and storage state. Do not expose credentials or reuse a human browser profile.
 - Use new identifiers per run and project. The existing notes spec uses `crypto.randomUUID()`.
@@ -25,6 +25,7 @@ Do not upload private reports, traces, screenshots, email text, or storage state
 
 ## Features
 
+- [One public origin](single-origin.md) covers native API forwarding, cookie attributes, API boundaries, deep links and origin protection.
 - [Account access](account-access.md) covers sign-in, closed public registration, private bootstrap, verification, recovery, and sign-out.
 - [Capture and render notes](capture-notes.md) covers Markdown, persistence, drafts, and loading more notes.
 - [Organize notes with tags](tags.md) covers inline tags, attached tags, autocomplete, filters, and the desktop sidebar.
