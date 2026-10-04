@@ -36,6 +36,9 @@ export async function submitSignIn(page: Page, email: string) {
 export async function signIn(page: Page, email: string) {
   const response = await submitSignIn(page, email);
   expect(response.ok()).toBe(true);
+  expect(!/\bdomain=/iu.test(response.headers()["set-cookie"] ?? "")).toBe(
+    true
+  );
   await expect(page.getByLabel("New note")).toBeVisible();
   await expect(page).toHaveURL(/\/$/u);
 }

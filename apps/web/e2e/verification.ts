@@ -45,7 +45,7 @@ export async function confirmSimulatedEmail(
 
         for (const text of texts) {
           const link = text.match(
-            /http:\/\/localhost:3000\/api\/auth\/verify-email\?[^\s]+/u
+            /https?:\/\/[^\s]+\/api\/auth\/verify-email\?[^\s]+/u
           )?.[0];
 
           if (!link) {
@@ -79,6 +79,10 @@ export async function confirmSimulatedEmail(
   if (!verificationURL) {
     throw new Error("No local verification email found");
   }
+
+  expect(
+    verificationURL.origin === new URL(ENV.AUTH_TEST_BASE_URL).origin
+  ).toBe(true);
 
   expect(
     verificationURL.searchParams.get("callbackURL") ===

@@ -7,6 +7,11 @@ import { VitePWA } from "vite-plugin-pwa";
 export default defineConfig({
   server: {
     port: 3001,
+    // Alchemy supplies the real service binding; only bare Vite needs a proxy.
+    proxy:
+      process.env.ALCHEMY_CLOUDFLARE_VITE_INJECTED === "1"
+        ? undefined
+        : { "^/api(?:[/?]|$)": "http://localhost:3000" },
   },
   resolve: {
     tsconfigPaths: true,

@@ -134,11 +134,11 @@ async function main() {
     const authURL = new URL(z.url().parse(values["auth-url"]));
 
     if (
-      target.remote
+      authURL.href !== `${authURL.origin}/` ||
+      (target.remote
         ? authURL.protocol !== "https:"
         : authURL.protocol !== "http:" ||
-          authURL.hostname !== "localhost" ||
-          authURL.port !== "3000"
+          !["localhost", "127.0.0.1", "[::1]"].includes(authURL.hostname))
     ) {
       throw new Error(REFUSED);
     }

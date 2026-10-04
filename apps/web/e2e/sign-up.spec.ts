@@ -13,7 +13,7 @@ test("an invalid verification link offers sign-in recovery", async ({
   page,
 }) => {
   await page.goto(
-    `http://localhost:3000/api/auth/verify-email?token=invalid&callbackURL=${encodeURIComponent(new URL("/login", ENV.AUTH_TEST_BASE_URL).href)}`
+    `/api/auth/verify-email?token=invalid&callbackURL=${encodeURIComponent(new URL("/login", ENV.AUTH_TEST_BASE_URL).href)}`
   );
   await expect(page.getByRole("alert")).toHaveText(
     "The verification link is invalid or expired. Sign in to request a new link."
@@ -44,7 +44,7 @@ test("public registration uniformly rejects every candidate without mutation or 
       "old-policy@example.com",
     ].map(async (candidate) => {
       const response = await fetch(
-        "http://localhost:3000/api/auth/sign-up/email",
+        new URL("/api/auth/sign-up/email", ENV.AUTH_TEST_BASE_URL),
         {
           method: "POST",
           headers: {
@@ -76,9 +76,7 @@ test("public registration uniformly rejects every candidate without mutation or 
   const afterMessages = await verificationMessages();
   expect(afterMessages.size).toBe(messages.size);
 
-  const session = await page.request.get(
-    "http://localhost:3000/api/auth/get-session"
-  );
+  const session = await page.request.get("/api/auth/get-session");
 
   expect((await session.json()) === null).toBe(true);
   await signIn(page, email);

@@ -10,6 +10,7 @@ export default defineConfig({
     ["list"],
     ["html", { outputFolder: "./e2e-results/report", open: "never" }],
   ],
+  workers: 4,
   use: {
     baseURL: ENV.AUTH_TEST_BASE_URL,
     trace: "on",
