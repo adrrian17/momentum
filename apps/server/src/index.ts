@@ -5,10 +5,8 @@ import { createAuthMiddleware } from "evlog/better-auth";
 import { evlog } from "evlog/hono";
 import type { EvlogVariables } from "evlog/hono";
 import { Hono } from "hono";
-import { cors } from "hono/cors";
 
 import { createContext } from "./context";
-import { ENV } from "./env.server";
 import { createAuth } from "./services";
 
 initLogger({
@@ -29,16 +27,6 @@ app.use("*", async (c, next) => {
 
   return next();
 });
-
-app.use(
-  "/*",
-  cors({
-    origin: ENV.CORS_ORIGIN,
-    allowMethods: ["GET", "POST", "OPTIONS"],
-    allowHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
-  })
-);
 
 app.on(["POST", "GET"], "/api/auth/*", async (c) => {
   const auth = await createAuth();

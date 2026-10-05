@@ -6,7 +6,9 @@
     "check-types": "tsc --noEmit",
     "dev": "alchemy dev",
     "deploy": "alchemy deploy",
-    "destroy": "alchemy destroy"
+    "destroy": "alchemy destroy",
+    "auth:bootstrap": "bun run scripts/bootstrap.ts",
+    "dev:local": "alchemy dev --config scripts/local.alchemy.ts"
   },
   "dependencies": {
     "zod": "catalog:"
@@ -14,7 +16,9 @@
   "devDependencies": {
     "@effect/platform-bun": "4.0.0",
     "@effect/platform-node": "4.0.0",
+    "@momentum/auth": "workspace:*",
     "@momentum/config": "workspace:*",
+    "@momentum/db": "workspace:*",
     "alchemy": "2.0.0-beta.80",
     "effect": "4.0.0",
     "typescript": "catalog:",

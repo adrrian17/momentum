@@ -21,7 +21,7 @@ The web app and server will run on Cloudflare. Offline access and editing can co
 These capabilities describe the product direction and are not implemented yet:
 
 - Activity entries with a date and a brief description of work performed. Tags can capture project context.
-- Configurable reminders to record work, initially within the app, with VAPID web push notifications planned for an installable PWA on phones.
+- Configurable reminders to record work, initially within the app, with VAPID web push notifications planned for the PWA on phones.
 - Tasks users can choose to add to the activity log. Completing a task does not automatically add it.
 - Related notes, activities, tasks, and meetings, with tags for organization and discovery.
 - Meeting recording and audio uploads, speech-to-text transcription, later analysis, and optional summaries.
@@ -30,7 +30,11 @@ These capabilities describe the product direction and are not implemented yet:
 
 ## Current state
 
-The repository currently provides authentication, Markdown notes with tags in the web app (create, filter by tag, edit, delete, and local drafts of unsaved input), shared UI components, and Cloudflare deployment infrastructure. The planned capabilities above still need to be built.
+The repository currently provides authentication, Markdown notes with tags in the web app (create, filter by tag, edit, delete, and local drafts of unsaved input), an installable PWA, shared UI components, and Cloudflare deployment infrastructure. The planned capabilities above still need to be built.
+
+The PWA caches static assets and updates its service worker automatically. Notes and authentication require a network connection; API responses are never cached. On iPhone, use Safari's **Add to Home Screen** to install it. Push notifications and offline notes are not implemented.
+
+The login page offers sign-in only. Public account registration is always disabled. The operator creates the single account through a private bootstrap command on an empty database. Accounts must verify their email before signing in. Confirmation returns to sign-in without creating a session; signing in while unverified requests another link. Existing verified accounts and notes are preserved. See the [bootstrap runbook](docs/agents/runtime.md#private-account-bootstrap).
 
 ## Product principles
 
@@ -84,7 +88,7 @@ Then, run the development server:
 pnpm run dev
 ```
 
-Open [http://localhost:3001](http://localhost:3001) in your browser to see the web application. The API is running at [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3001](http://localhost:3001) in your browser to see the web application. Browser API requests use the same web origin under `/api`. The separate local server listener on 3000 is for Alchemy development; the web Worker uses a native service binding.
 
 ## UI customization
 
@@ -118,11 +122,21 @@ Each app owns its environment schema in `.env.schema`. Varlock generates `src/en
 
 Import the generated `ENV` accessor in application code. Shared database and auth packages receive configuration or initialized clients from the application. See [Varlock's monorepo guide](https://varlock.dev/guides/monorepos/).
 
-For Cloudflare, Alchemy loads and validates deployment inputs with `varlock/auto-load` in its Node/Bun deployment process. Worker code reads native bindings; web clients use the framework's public env API through `src/env.public.ts` where needed. Alchemy supplies resource URLs and managed database credentials. In-Worker Varlock protections are deferred until an official Alchemy integration is available; see [the non-Wrangler deployment guidance](https://varlock.dev/integrations/cloudflare/#non-wrangler-deploy-tools-alchemy-sst-pulumi).
+For Cloudflare, Alchemy loads and validates deployment inputs with `varlock/auto-load` in its Node/Bun deployment process. Worker code reads native bindings; web clients call relative `/api` paths and need no browser server URL. Alchemy supplies managed database credentials and the private API service binding. In-Worker Varlock protections are deferred until an official Alchemy integration is available; see [the non-Wrangler deployment guidance](https://varlock.dev/integrations/cloudflare/#non-wrangler-deploy-tools-alchemy-sst-pulumi).
 
 Bun's automatic env loading is disabled in `bunfig.toml`; the framework integration or server bootstrap loads Varlock. Node deployments must include Varlock and its dependencies alongside the app schema.
 
 Run standalone Node/Bun tools that use Varlock from the owning app directory so they load that app's schema and env files. `env:generate` only generates TypeScript files; it does not initialize environment values in a subsequent command.
+
+Public auth has no registration allowlist or bootstrap environment switch. Legacy ignored `SIGNUP_EMAIL`, `VITE_SERVER_URL` and standalone `BETTER_AUTH_URL` values can stay in local files; they have no application effect.
+
+Verification uses the native Cloudflare `EMAIL` binding with `EMAIL_FROM=noreply@adrianayala.mx` by default. Local Alchemy development saves messages without delivering them. The operator has confirmed delivery to a verified destination on the current account. The deployed native binding still needs an isolated-stage check; see [runtime and deployment](docs/agents/runtime.md#email-verification).
+
+For E2E, configure a dedicated synthetic `AUTH_TEST_EMAIL` in `apps/web/.env`. This sensitive test setting is never exposed to the browser or imported into the public server. Copy the old synthetic email there when migrating; retain existing ignored values and secrets. The harness uses an isolated local stage and private bootstrap. See [testing and validation](docs/agents/testing.md).
+
+## Regenerate PWA icons
+
+Run `pnpm --filter web generate-pwa-assets` after editing `apps/web/public/logo.svg` or `apps/web/pwa-assets.config.ts`. The generator creates the manifest icons, maskable icon, Apple Touch icon, and favicon. Commit the SVG, config, and generated images together. The M uses the light theme's `--brand` color, with the glyph inside the maskable safe zone. The manifest and HTML theme color match the dark `--background` token in `packages/ui/src/styles/globals.css`.
 
 ## Deployment
 
@@ -144,7 +158,9 @@ cd packages/infra && pnpm exec alchemy deploy --stage production
 
 ### Production origins
 
-- Required after the first deploy: set `CORS_ORIGIN` in `apps/server/.env` to the exact deployed web origin, such as `https://app.example.com`, then deploy the server again.
+The browser, auth and notes API share the public web Worker URL. The server has no public workers.dev or preview URL. No DNS setup is required for this topology.
+
+Before a separately authorized production deploy, set `CORS_ORIGIN` in the server configuration to `https://momentum-production-web.<account-workers-subdomain>.workers.dev`. The subdomain must match the selected account profile. Alchemy binds this explicit origin to Better Auth; it does not infer it from requests. See the [origin runbook](docs/agents/runtime.md#public-origin-before-a-production-deployment) and [architecture decision](docs/adr/0001-single-origin-for-web-and-api.md). The approved isolated-stage mail check can use the account's verified destination. General-recipient sending and DNS changes remain separate decisions.
 
 ## Project structure
 
@@ -173,6 +189,8 @@ The Swift macOS app is planned and does not have a directory yet.
 - `pnpm run check`: Check formatting and lint rules
 - `pnpm run fix`: Apply formatting and lint fixes
 - `pnpm run env:generate`: Regenerate environment types
+- `pnpm --filter web e2e`: Verify private bootstrap, closed public registration, notes on Chromium and iPhone WebKit, and PWA installability
+- `pnpm --filter web generate-pwa-assets`: Regenerate PWA icons from the SVG
 - `pnpm run db:generate`: Generate Drizzle migration files
 - `pnpm run deploy`: Deploy Cloudflare resources with Alchemy
 - `pnpm run destroy`: Destroy resources in the selected Alchemy stage
