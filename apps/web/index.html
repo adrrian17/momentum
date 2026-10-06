@@ -12,6 +12,24 @@
     <link rel="icon" href="/logo.svg" sizes="any" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png" />
     <title>Momentum</title>
+    <script>
+      // next-themes only applies the theme once React mounts, so the first paint would be light.
+      // Keep the key and default in sync with ThemeProvider in src/routes/__root.tsx.
+      (() => {
+        let theme = "dark";
+        try {
+          theme = localStorage.getItem("vite-ui-theme") ?? theme;
+        } catch {}
+        if (theme === "system") {
+          theme = matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+        }
+        const dark = theme === "dark";
+        document.documentElement.classList.toggle("dark", dark);
+        document.documentElement.style.colorScheme = dark ? "dark" : "light";
+      })();
+    </script>
   </head>
 
   <body>
