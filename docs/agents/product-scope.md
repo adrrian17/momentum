@@ -1,26 +1,15 @@
 # Product scope
 
-Read this guide when planning features or changing product behavior. See the [README](../../README.md) for the product overview and current implementation status.
+The [README](../../README.md) lists what works today; everything else here is planned. Build a planned capability only when its stage is requested, within these constraints:
 
-## First milestone
-
-Build notes in the web app first:
-
-- Store Markdown without a separate title.
-- Allow multiple tags per note and use tags to find related content.
-- Use tags for project context. Do not introduce a separate project entity.
-- Defer offline access and editing.
-
-## Later stages
-
-These constraints apply when the corresponding feature is requested:
-
+- Notes are Markdown without a title and carry multiple tags. Tags carry project context; never add a project entity.
+- Offline access and editing stay deferred.
 - An activity records a date and a brief description of work performed.
-- Users choose which tasks become activity entries. Task completion must not automatically create an activity.
-- Notes, activities, tasks, and meetings should be relatable. Tags remain the organizational vocabulary.
-- Reminder intervals are configurable. The web app is intended to become an installable PWA with VAPID push notifications on phones.
-- Meetings support both recording and audio uploads, with transcription, later analysis, and optional summaries.
-- A planned Swift macOS app handles local transcription and text generation using local models or Apple tools. Do not create its directory or shared abstractions until that work is requested.
-- Reports use the existing PDF template. Obtain that template when implementing reports instead of inventing a replacement. Delivery is planned, and actual external sending requires authorization under the [root privacy rule](../../AGENTS.md).
+- Notes, activities, tasks and meetings are relatable. Tags remain the organizational vocabulary.
+- Reminder intervals are configurable. Push uses VAPID on the installed PWA.
+- Meetings support recording and audio upload, with transcription, later analysis and optional summaries.
+- A Swift macOS app will handle local transcription and text generation. Do not create its directory or shared abstractions until requested.
+- Reports use the existing PDF template. Obtain it when implementing reports; do not invent a replacement.
+- Account recovery and credential reset are out of scope.
 
-Describe implemented behavior separately from planned capabilities. Update the README and affected agent guides when scope changes.
+Describe implemented behavior separately from planned capabilities. When a capability ships, add it to the README's list.

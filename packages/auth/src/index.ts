@@ -26,6 +26,7 @@ export function createAuth(
     trustedOrigins: [env.CORS_ORIGIN, ...desktopOrigins],
     emailAndPassword: {
       enabled: true,
+      // Accounts come only from the private bootstrap CLI; add no allowlist, env toggle or admin route.
       disableSignUp: true,
       requireEmailVerification: true,
     },
@@ -35,6 +36,7 @@ export function createAuth(
       autoSignInAfterVerification: false,
       sendVerificationEmail,
     },
+    // Better Auth logs can include emails and verification URLs.
     logger: { disabled: true },
     secret: env.BETTER_AUTH_SECRET,
     baseURL: env.BETTER_AUTH_URL,

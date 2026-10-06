@@ -14,7 +14,7 @@ Defaults below use 3001. For another free web port, export `AUTH_TEST_BASE_URL=h
 
 The selected isolated local stage shares one D1, auth-state file, and email outbox. Serialize all Playwright runs. Browser projects within one run use serial setup plus unique notes and tags. Fixed ports prevent side-by-side dev stacks without changing configuration; a separate stage alone does not change ports.
 
-For fresh bootstrap, follow [the testing guide](../../../../../../docs/agents/testing.md). Use a new local stage only on an agent-owned stack. Preserve the original stage, env files, and all data. The local entrypoint uses a file state store. No deploy, remote binding, `db:push`, or database reset is part of verification.
+For fresh bootstrap, follow [the E2E guide](../../../../e2e/AGENTS.md#fresh-bootstrap-proof). Use a new local stage only on an agent-owned stack. Preserve the original stage, env files, and all data. The local entrypoint uses a file state store. No deploy, remote binding, `db:push`, or database reset is part of verification.
 
 ## Create a private evidence directory
 

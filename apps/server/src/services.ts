@@ -28,6 +28,7 @@ export async function createAuth(database?: Database) {
           text: `Confirm your email to finish the Momentum registration you initiated:\n\n${verificationURL.href}\n\nThis link expires in one hour. Only confirm if you created this account and chose its password. If you did not request this, do not open the link.`,
         });
       } catch {
+        // Never log the URL or provider error; the URL is a bearer token.
         throw new APIError("SERVICE_UNAVAILABLE", {
           code: "VERIFICATION_EMAIL_SEND_FAILED",
           message:
