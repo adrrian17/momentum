@@ -6,6 +6,7 @@
 
 - `CORS_ORIGIN` is the only origin setting and is also bound as `BETTER_AUTH_URL`. Do not add `APP_ORIGIN`, a server URL or a server self-URL. See the [single-origin decision](../../docs/adr/0001-single-origin-for-web-and-api.md).
 - After editing `src/web-settings.ts`, run `pnpm -F @momentum/infra exec bun run scripts/verify-web-settings.ts`. It is offline and loads no credentials; it does not prove DNS, TLS, zone ownership or routing.
+- Run standalone Bun or Node tools that use Varlock from the owning package (`pnpm -F <package> exec`) so they load its schema and env files. `env:generate` writes types only; it sets no values for later commands.
 - Workers reach D1 only through the `DB` binding. A local `DATABASE_URL` is for database tooling only.
 - If `.alchemy/local/d1` was deleted, Alchemy still records migrations as applied. Recreate it with `pnpm -F @momentum/infra exec alchemy dev --force`.
 
