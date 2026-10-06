@@ -58,3 +58,13 @@ Use pnpm from the repository root:
 | `pnpm -r check-types` | Check every package, including private CLI scripts |
 
 Before committing, run Ultracite fix, inspect the diff, and run relevant type and real behavior checks.
+
+## Web origin settings probe
+
+The infrastructure package has an offline probe for local, stage-specific `workers.dev`, and production custom origins. It imports only the pure settings resolver and does not load Alchemy or Cloudflare credentials. Run it from the repository root:
+
+```bash
+pnpm -F @momentum/infra exec bun run scripts/verify-web-settings.ts
+```
+
+The probe checks both approved production hostnames, origin syntax rejection, stage restrictions, and mutually exclusive custom-domain and `workers.dev` settings. It does not prove DNS, TLS, account-zone ownership, or live Worker routing.

@@ -5,32 +5,14 @@ import * as Config from "effect/Config";
 import * as Effect from "effect/Effect";
 import "varlock/auto-load";
 
+import { resolveWebSettings } from "./src/web-settings";
+
 const webSettings = Effect.gen(function* configuredWeb() {
-  const origin = new URL(yield* Config.String("CORS_ORIGIN"));
+  const rawOrigin = yield* Config.String("CORS_ORIGIN");
   const { dev } = yield* Alchemy.AlchemyContext;
   const stage = yield* Stage;
-  const name = `momentum-${stage}-web`.toLowerCase().replaceAll("_", "-");
 
-  const localOrigin =
-    origin.protocol === "http:" &&
-    ["localhost", "127.0.0.1", "[::1]"].includes(origin.hostname);
-
-  const cloudOrigin =
-    origin.protocol === "https:" &&
-    origin.port === "" &&
-    origin.hostname === `${name}.${origin.hostname.split(".")[1]}.workers.dev`;
-
-  if (
-    origin.href !== `${origin.origin}/` ||
-    !/^[a-z0-9-]{1,63}$/u.test(name) ||
-    !(dev ? localOrigin : cloudOrigin)
-  ) {
-    return yield* Effect.die(
-      "CORS_ORIGIN must be the local web origin or the selected stage's public workers.dev origin"
-    );
-  }
-
-  return { origin: origin.origin, port: Number(origin.port) || 80, name };
+  return resolveWebSettings({ origin: rawOrigin, stage, dev });
 }).pipe(Effect.orDie);
 
 const publicOrigin = webSettings.pipe(
@@ -75,7 +57,7 @@ export const web = Cloudflare.Website.Vite(
 
     return {
       name: settings.name,
-      workersDev: { enabled: true, previewsEnabled: false },
+      ...settings.exposure,
       rootDir: "../../apps/web",
       main: "src/worker.ts",
       assets: {
