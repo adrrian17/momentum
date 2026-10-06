@@ -2,6 +2,7 @@ import { Button } from "@momentum/ui/components/button";
 import { Markdown } from "@tanstack/markdown/react";
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 import { Link, createFileRoute } from "@tanstack/react-router";
+import { useEffect, useId, useRef, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -108,7 +109,7 @@ function NotesHome() {
 
         {days.map((day) => (
           <section key={day.key} aria-labelledby={`day-${day.key}`}>
-            <header className="bg-background/90 sticky top-14 z-10 flex items-baseline gap-3 border-b py-3 backdrop-blur lg:top-0">
+            <header className="bg-background sticky top-14 z-10 flex items-baseline gap-3 border-b py-3 lg:top-0">
               <h3 id={`day-${day.key}`} className="text-lg font-semibold">
                 {day.label}
               </h3>
@@ -135,9 +136,7 @@ function NotesHome() {
                         Edit<span className="sr-only"> note</span>
                       </Link>
                     </div>
-                    <div className={MARKDOWN_CLASSES}>
-                      <Markdown>{note.content}</Markdown>
-                    </div>
+                    <NoteBody content={note.content} />
                     <NoteCardTags note={note} />
                   </article>
                 </li>
@@ -158,5 +157,56 @@ function NotesHome() {
         ) : null}
       </section>
     </main>
+  );
+}
+
+function NoteBody({ content }: { content: string }) {
+  const id = useId();
+  const ref = useRef<HTMLDivElement>(null);
+  const [expanded, setExpanded] = useState(false);
+  const [overflowing, setOverflowing] = useState(false);
+
+  useEffect(() => {
+    const element = ref.current;
+
+    if (!element) {
+      return;
+    }
+
+    // Collapsed height is set in CSS, so overflow is only known after layout.
+    const observer = new ResizeObserver(() => {
+      setOverflowing(element.scrollHeight > element.clientHeight + 1);
+    });
+
+    observer.observe(element);
+
+    return () => observer.disconnect();
+  }, []);
+
+  const collapsed = !expanded;
+
+  return (
+    <div className="grid gap-2">
+      <div
+        ref={ref}
+        id={id}
+        data-collapsed={collapsed ? "" : undefined}
+        data-overflowing={overflowing ? "" : undefined}
+        className={`${MARKDOWN_CLASSES} data-collapsed:max-h-80 data-collapsed:overflow-hidden data-collapsed:data-overflowing:mask-b-from-60%`}
+      >
+        <Markdown>{content}</Markdown>
+      </div>
+      {overflowing || expanded ? (
+        <button
+          type="button"
+          aria-expanded={expanded}
+          aria-controls={id}
+          onClick={() => setExpanded(!expanded)}
+          className="text-muted-foreground hover:text-foreground -mx-3 inline-flex min-h-11 w-fit items-center rounded-md px-3 font-mono text-xs underline-offset-4 hover:underline"
+        >
+          {expanded ? "Show less" : "Show more"}
+        </button>
+      ) : null}
+    </div>
   );
 }
