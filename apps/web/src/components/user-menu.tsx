@@ -10,6 +10,7 @@ import {
 } from "@momentum/ui/components/dropdown-menu";
 import { Skeleton } from "@momentum/ui/components/skeleton";
 import { useNavigate } from "@tanstack/react-router";
+import { LogOut } from "lucide-react";
 
 import { authClient } from "@/lib/auth-client";
 
@@ -64,11 +65,14 @@ export default function UserMenu() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-56">
         <DropdownMenuGroup>
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuLabel className="grid">
+            <span className="text-foreground truncate">{name}</span>
+            <span className="truncate font-mono font-normal">{email}</span>
+          </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>{email}</DropdownMenuItem>
           <DropdownMenuItem
             variant="destructive"
+            className="min-h-11"
             onClick={() => {
               authClient.signOut({
                 fetchOptions: {
@@ -81,6 +85,7 @@ export default function UserMenu() {
               });
             }}
           >
+            <LogOut aria-hidden="true" />
             Sign Out
           </DropdownMenuItem>
         </DropdownMenuGroup>

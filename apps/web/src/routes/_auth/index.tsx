@@ -1,7 +1,16 @@
 import { Button } from "@momentum/ui/components/button";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@momentum/ui/components/empty";
+import { Skeleton } from "@momentum/ui/components/skeleton";
 import { Markdown } from "@tanstack/markdown/react";
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 import { Link, createFileRoute } from "@tanstack/react-router";
+import { NotebookPen } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -96,15 +105,39 @@ function NotesHome() {
           </h2>
         )}
 
-        {notes.isPending ? (
-          <p className="text-muted-foreground font-mono text-sm">
-            Loading notes...
-          </p>
+        {notes.isPending ? <NotesSkeleton /> : null}
+        {notes.isError ? (
+          <div
+            role="alert"
+            className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-dashed px-4 py-3"
+          >
+            <p className="text-sm">Notes could not be loaded.</p>
+            <Button
+              variant="outline"
+              className="h-11"
+              disabled={notes.isFetching}
+              onClick={() => notes.refetch()}
+            >
+              {notes.isFetching ? "Retrying..." : "Try again"}
+            </Button>
+          </div>
         ) : null}
         {notes.isSuccess && items.length === 0 ? (
-          <p className="text-muted-foreground font-mono text-sm">
-            No notes yet.
-          </p>
+          <Empty>
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <NotebookPen aria-hidden="true" />
+              </EmptyMedia>
+              <EmptyTitle>
+                {tag ? `No notes tagged #${tag}` : "No notes yet"}
+              </EmptyTitle>
+              <EmptyDescription>
+                {tag
+                  ? "Notes with this tag appear here."
+                  : "Write your first note above. Add #tags to group work by project."}
+              </EmptyDescription>
+            </EmptyHeader>
+          </Empty>
         ) : null}
 
         {days.map((day) => (
@@ -157,6 +190,22 @@ function NotesHome() {
         ) : null}
       </section>
     </main>
+  );
+}
+
+function NotesSkeleton() {
+  return (
+    <div aria-busy="true" className="grid gap-5">
+      <output className="sr-only">Loading notes</output>
+      <Skeleton className="h-6 w-32" />
+      {[0, 1, 2].map((row) => (
+        <div key={row} className="grid gap-3 border-b pb-5">
+          <Skeleton className="h-3 w-12" />
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-2/3" />
+        </div>
+      ))}
+    </div>
   );
 }
 
