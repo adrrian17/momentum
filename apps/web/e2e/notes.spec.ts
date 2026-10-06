@@ -181,7 +181,8 @@ test("notes: create, render, filter, edit with draft, delete", async ({
   await expect(editor).toHaveValue(editedContent);
   const noteUrl = page.url();
 
-  await page.getByRole("button", { name: "Delete", exact: true }).click();
+  await page.getByRole("button", { name: "Note actions" }).click();
+  await page.getByRole("menuitem", { name: "Delete note" }).click();
   await expect(page).toHaveURL(noteUrl);
   await page.getByRole("button", { name: "Delete permanently" }).click();
   await expect(page).toHaveURL(/\/$/u);

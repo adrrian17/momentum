@@ -8,7 +8,7 @@ import { Button } from "@momentum/ui/components/button";
 import { Label } from "@momentum/ui/components/label";
 import { Textarea } from "@momentum/ui/components/textarea";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowUp } from "lucide-react";
+import { ArrowUp, Undo2 } from "lucide-react";
 import { useId, useRef, useState } from "react";
 import type { KeyboardEvent, ReactNode, SyntheticEvent } from "react";
 
@@ -50,6 +50,7 @@ export default function NoteForm({
 }: NoteFormProps) {
   const id = useId();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const tagsRowRef = useRef<HTMLDivElement>(null);
   const { draft, updateDraft, clearDraft } = useDraft(draftKey, initial);
   const [caret, setCaret] = useState<number | null>(null);
   const [highlighted, setHighlighted] = useState(0);
@@ -57,6 +58,13 @@ export default function NoteForm({
   const workspaceTags = useQuery(trpc.notes.tags.queryOptions());
 
   const isEmpty = draft.content.trim().length === 0;
+
+  // Only saved notes can be reverted; the composer's empty start needs no discard.
+  const revertible =
+    initial.content !== "" &&
+    (draft.content !== initial.content ||
+      draft.tags.join(",") !== initial.tags.join(","));
+
   const inline = inlineTags(draft.content);
   const attached = attachedTags(draft.content, draft.tags);
   const allTags = [...inline, ...attached];
@@ -142,12 +150,17 @@ export default function NoteForm({
   function addTag(tag: string) {
     if (!allTags.includes(tag)) {
       updateDraft({ ...draft, tags: [...draft.tags, tag] });
+      // The new chip lands at the end of the scrolling row; bring it into view.
+      requestAnimationFrame(() => {
+        const row = tagsRowRef.current;
+        row?.scrollTo({ left: row.scrollWidth, behavior: "smooth" });
+      });
     }
   }
 
   return (
     <form
-      className="bg-card has-[textarea:focus-visible]:border-ring grid gap-3 rounded-xl border px-4 pt-3 pb-2 shadow-sm transition-colors"
+      className="bg-card has-[textarea:focus-visible]:border-ring grid gap-3 rounded-xl border px-4 pt-3 shadow-sm transition-colors"
       onSubmit={(event) => {
         event.preventDefault();
         onSave({ content: draft.content, tags: attached }, clearDraft);
@@ -210,10 +223,31 @@ export default function NoteForm({
           </ul>
         ) : null}
       </div>
-      <div className="flex flex-wrap items-center gap-2 border-t pt-2">
-        <TagChips tags={allTags} onRemove={removeTag} />
-        <TagPicker current={allTags} onAdd={addTag} />
+      {/* Sticks to the viewport bottom so actions stay reachable while a long note scrolls. */}
+      <div className="bg-card sticky bottom-0 -mx-4 flex flex-wrap items-center gap-2 rounded-b-xl border-t px-4 pt-2 pb-2">
+        <div className="flex min-w-0 flex-1 basis-48 items-center gap-2">
+          {/* Padding keeps focus rings inside the scroll clip. */}
+          <div
+            ref={tagsRowRef}
+            className="-m-1 min-w-0 [scrollbar-width:thin] overflow-x-auto p-1"
+          >
+            <TagChips tags={allTags} nowrap onRemove={removeTag} />
+          </div>
+          <TagPicker current={allTags} onAdd={addTag} />
+        </div>
         <div className="ml-auto flex flex-wrap items-center gap-2">
+          {revertible ? (
+            <Button
+              type="button"
+              variant="ghost"
+              className="h-11"
+              disabled={pending}
+              onClick={clearDraft}
+            >
+              <Undo2 aria-hidden="true" />
+              Discard changes
+            </Button>
+          ) : null}
           {children}
           <span
             aria-hidden="true"
