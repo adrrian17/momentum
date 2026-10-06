@@ -1,6 +1,6 @@
 # Product scope
 
-The [README](../../README.md) lists what is implemented and planned. Build a planned capability only when its stage is requested, within these constraints:
+The [README](../../README.md) lists what works today; everything else here is planned. Build a planned capability only when its stage is requested, within these constraints:
 
 - Notes are Markdown without a title and carry multiple tags. Tags carry project context; never add a project entity.
 - Offline access and editing stay deferred.
@@ -12,4 +12,4 @@ The [README](../../README.md) lists what is implemented and planned. Build a pla
 - Reports use the existing PDF template. Obtain it when implementing reports; do not invent a replacement.
 - Account recovery and credential reset are out of scope.
 
-Describe implemented behavior separately from planned capabilities. Update the README when scope changes.
+Describe implemented behavior separately from planned capabilities. When a capability ships, add it to the README's list.

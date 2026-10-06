@@ -1,6 +1,6 @@
 # Momentum
 
-Personal work journal. Use pnpm from the repository root. The [README](README.md) has setup and implementation status; [CONTEXT.md](CONTEXT.md) defines domain terms.
+Personal work journal. Use pnpm from the repository root. The [README](README.md) has setup and what works today; [CONTEXT.md](CONTEXT.md) defines domain terms.
 
 ## Always
 

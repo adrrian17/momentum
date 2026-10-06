@@ -5,7 +5,7 @@ Ultracite (Oxlint + Oxfmt) enforces lint and formatting; fix what it reports ins
 ## Code
 
 - Reuse existing packages, platform features and installed dependencies before adding an abstraction or dependency. Do not scaffold interfaces, factories or wrappers for unrequested capabilities.
-- Keep UI primitives in `packages/ui` and application behavior in `apps/web`. Shared packages receive configuration or initialized clients from the application.
+- Keep UI primitives in `packages/ui` and application behavior in `apps/web`. Add one with `npx shadcn@latest add <component> -c packages/ui` and import it from `@momentum/ui/components/<component>`. Shared packages receive configuration or initialized clients from the application.
 - After editing an `.env.schema`, run `pnpm run env:generate`; `src/env.ts` is generated and ignored. Workers read native bindings; Varlock configures operator and test tooling only.
 
 ## User content
