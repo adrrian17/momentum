@@ -32,8 +32,8 @@ export default defineConfig({
         description: "Personal work journal",
         display: "standalone",
         start_url: "/",
-        theme_color: "#0a0a0a",
-        background_color: "#0a0a0a",
+        theme_color: "#1f1f1f",
+        background_color: "#1f1f1f",
         icons: [
           { src: "pwa-64x64.png", sizes: "64x64", type: "image/png" },
           { src: "pwa-192x192.png", sizes: "192x192", type: "image/png" },

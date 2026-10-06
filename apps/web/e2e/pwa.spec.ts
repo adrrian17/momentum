@@ -60,7 +60,7 @@ test("installable PWA whose service worker skips /api", async ({
     short_name: "Momentum",
     display: "standalone",
     start_url: "/",
-    theme_color: "#0a0a0a",
+    theme_color: "#1f1f1f",
     icons: expect.arrayContaining([
       expect.objectContaining({ purpose: "maskable" }),
     ]),
