@@ -22,12 +22,9 @@ function Brand() {
     <Link
       to="/"
       search={{}}
-      className="grid min-h-11 content-center rounded-md px-2 font-mono"
+      className="inline-flex min-h-11 items-center rounded-md px-2 font-mono font-semibold"
     >
-      <span className="font-semibold">Momentum</span>
-      <span className="text-muted-foreground text-xs max-lg:sr-only">
-        Private Journal
-      </span>
+      Momentum
     </Link>
   );
 }
