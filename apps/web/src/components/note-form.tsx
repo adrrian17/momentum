@@ -110,6 +110,11 @@ export default function NoteForm({
 
   function handleKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
     if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
+      // An IME uses Enter to confirm composed text, not to submit.
+      if (event.nativeEvent.isComposing) {
+        return;
+      }
+
       event.preventDefault();
 
       if (!pending && !isEmpty) {
