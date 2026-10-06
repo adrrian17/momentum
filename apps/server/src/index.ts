@@ -20,6 +20,7 @@ const identifyUser = createAuthMiddleware(await createAuth(), {
 
 const app = new Hono<EvlogVariables>();
 
+// Logs the path only; never add the query string, which carries verification tokens.
 app.use(evlog());
 
 app.use("*", async (c, next) => {

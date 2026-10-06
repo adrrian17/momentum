@@ -28,6 +28,7 @@ export const server = Cloudflare.Worker("server", {
   compatibility: {
     flags: ["nodejs_compat"],
   },
+  // The server stays private; browsers reach it only through the web Worker's API binding.
   workersDev: false,
   env: {
     DB: db,

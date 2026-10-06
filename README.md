@@ -6,16 +6,6 @@ Momentum will bring capture, organization, and reporting into one application, r
 
 This monorepo will contain all Momentum applications and shared components. Momentum is built for personal use.
 
-## First milestone: notes
-
-Build the notes experience in the web app first:
-
-- Write notes in Markdown without a separate title.
-- Assign multiple tags to a note and use tags to find related content.
-- Organize work through tags without a separate project entity.
-
-The web app and server will run on Cloudflare. Offline access and editing can come later.
-
 ## Planned capabilities
 
 These capabilities describe the product direction and are not implemented yet:
@@ -36,13 +26,11 @@ The PWA caches static assets and updates its service worker automatically. Notes
 
 The login page offers sign-in only. Public account registration is always disabled. The operator creates the single account through a private bootstrap command on an empty database. Accounts must verify their email before signing in. Confirmation returns to sign-in without creating a session; signing in while unverified requests another link. Existing verified accounts and notes are preserved. See the [bootstrap runbook](docs/runbooks/account-bootstrap.md).
 
-## Product principles
-
-Keep the experience simple and the code efficient, readable, and maintainable. Build one useful workflow at a time and reuse existing packages before adding new machinery.
+## Privacy
 
 Notes, activity records, tasks, and meeting content are private. Cloudflare is the chosen hosting platform. Sending that content to other external services for processing or delivery requires the developer's explicit authorization. Local processing is the intended direction for the macOS app.
 
-See [AGENTS.md](AGENTS.md) for guidance when changing this repository.
+Agent instructions start in [AGENTS.md](AGENTS.md).
 
 ## Stack
 
@@ -130,9 +118,9 @@ Run standalone Node/Bun tools that use Varlock from the owning app directory so 
 
 Public auth has no registration allowlist or bootstrap environment switch. Legacy ignored `SIGNUP_EMAIL`, `VITE_SERVER_URL` and standalone `BETTER_AUTH_URL` values can stay in local files; they have no application effect.
 
-Verification uses the native Cloudflare `EMAIL` binding with `EMAIL_FROM=noreply@adrianayala.mx` by default. Local Alchemy development saves messages without delivering them. The operator has confirmed delivery to a verified destination on the current account. The deployed native binding still needs an isolated-stage check; see [runtime and deployment](docs/agents/runtime.md#email-verification).
+Verification uses the native Cloudflare `EMAIL` binding with `EMAIL_FROM=noreply@adrianayala.mx` by default. Local Alchemy development saves messages without delivering them. The deployed binding was verified on an isolated cloud stage on 2026-10-04, delivering to the account's verified destination; arbitrary recipients and a sender domain are not set up. See the [isolated cloud stage runbook](docs/runbooks/cloud-stage.md).
 
-For E2E, configure a dedicated synthetic `AUTH_TEST_EMAIL` in `apps/web/.env`. This sensitive test setting is never exposed to the browser or imported into the public server. Copy the old synthetic email there when migrating; retain existing ignored values and secrets. The harness uses an isolated local stage and private bootstrap. See [testing and validation](docs/agents/testing.md).
+For E2E, configure a dedicated synthetic `AUTH_TEST_EMAIL` in `apps/web/.env`. This sensitive test setting is never exposed to the browser or imported into the public server. Copy the old synthetic email there when migrating; retain existing ignored values and secrets. The harness uses an isolated local stage and private bootstrap. See the [E2E guide](apps/web/e2e/AGENTS.md).
 
 ## Regenerate PWA icons
 

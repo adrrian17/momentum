@@ -60,6 +60,7 @@ export async function bootstrapAccount(
       requireEmailVerification: true,
     },
     emailVerification: { sendOnSignUp: false },
+    // Better Auth logs can include the bootstrap email.
     logger: { disabled: true },
   });
 

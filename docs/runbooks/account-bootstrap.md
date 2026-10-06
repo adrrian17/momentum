@@ -1,6 +1,6 @@
 # Private account bootstrap
 
-Read this before running `auth:bootstrap` or editing `packages/infra/scripts/bootstrap*.ts`.
+Read this before running `auth:bootstrap`. Implementation invariants for the CLI live in [packages/infra/AGENTS.md](../../packages/infra/AGENTS.md#bootstrap-cli).
 
 ## Rules
 
@@ -41,25 +41,3 @@ pnpm -F @momentum/infra auth:bootstrap --remote --stage production --database da
 - Pass the public web origin of the same stage and database: `https://momentum.adrianayala.mx` in production, `https://next.momentum.adrianayala.mx` during a hostname rehearsal, or an HTTP loopback origin on the selected web port locally. Remote mode requires HTTPS. Credentials, paths, queries and fragments are rejected.
 - After saving the account, the command POSTs `send-verification-email` to that origin. Exit 2 means the account was saved but the request failed; signing in resends the link. A 200 acknowledges the request, not delivery. Resend can report success for an unknown account, so a mismatched origin fails silently.
 - Confirm only a verification you initiated.
-
-## Implementation invariants
-
-Keep these when editing the CLI:
-
-- Never provision resources, apply migrations, replace users or delete data. Reject local IDs in remote mode and never fall back from local to Cloudflare.
-- Only the private, unserved Better Auth instance enables signup. Use `auth.api.signUpEmail` with the official memory adapter for password validation, email normalization and the default hash. No plaintext credential, no custom hashing.
-- Validate records with the Drizzle-generated Zod schemas, then write them in one native D1 batch: the user conditional on an empty user table, the credential conditional on that invocation's user ID. Do not assume an interactive transaction.
-- Never mark an email verified or create a session.
-- Repeated runs exit nonzero with a generic refusal and change nothing.
-- Use the installed Alchemy D1 APIs and the existing `createDb`. No custom emulator or database type casts. `dev:local` uses the file state store; leave the normal deploy entrypoint and its state store unchanged.
-
-After a change, run the bootstrap probe on a new empty stage:
-
-```bash
-ALCHEMY_DEV_ONCE=1 pnpm -F @momentum/infra exec alchemy dev \
-  --config scripts/local.alchemy.ts --stage e2e-bootstrap-probe-<unique-run-id> --include database
-pnpm -F @momentum/infra exec bun run scripts/verify-bootstrap.ts \
-  --stage e2e-bootstrap-probe-<same-run-id>
-```
-
-The probe requires zero users. It forces a credential-insert failure with its own temporary trigger to prove rollback, races two distinct-email processes, then checks refusal and record preservation. It keeps the winning account and all stage data, so use a new stage for each run. Exit 0 is success. It sends no email and issues no session.

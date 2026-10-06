@@ -49,6 +49,7 @@ export default defineConfig({
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
         navigateFallbackDenylist: [/^\/api(?:[/?]|$)/u],
+        // Notes and auth stay online-only: never cache API responses.
         runtimeCaching: [],
       },
     }),
