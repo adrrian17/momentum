@@ -10,7 +10,7 @@ import { Skeleton } from "@momentum/ui/components/skeleton";
 import { Markdown } from "@tanstack/markdown/react";
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { NotebookPen } from "lucide-react";
+import { NotebookPen, X } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -86,16 +86,16 @@ function NotesHome() {
 
       <section aria-labelledby="notes-heading" className="grid gap-8">
         {tag ? (
-          <div className="flex min-h-11 flex-wrap items-center justify-between gap-2">
+          <div className="flex min-h-11 flex-wrap items-center gap-2">
             <h2 id="notes-heading" className="font-mono text-sm">
               Notes tagged <span className="text-brand">#{tag}</span>
             </h2>
-            {/* The desktop sidebar carries its own clear link. */}
             <Link
               to="/"
               search={{}}
-              className="text-muted-foreground hover:text-foreground inline-flex min-h-11 items-center rounded-md px-3 text-sm underline-offset-4 hover:underline lg:hidden"
+              className="text-muted-foreground hover:text-foreground hover:bg-muted inline-flex min-h-11 items-center gap-1.5 rounded-md px-3 text-sm"
             >
+              <X aria-hidden="true" className="size-4" />
               Clear filter
             </Link>
           </div>

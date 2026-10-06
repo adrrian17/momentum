@@ -41,15 +41,6 @@ function TagsNav({ active }: { active: string | undefined }) {
         <h2 className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
           Tags
         </h2>
-        {active ? (
-          <Link
-            to="/"
-            search={{}}
-            className="text-muted-foreground hover:text-foreground inline-flex min-h-9 items-center text-xs underline-offset-4 hover:underline"
-          >
-            Clear filter
-          </Link>
-        ) : null}
       </div>
       {tags.isError ? (
         <div role="alert" className="grid justify-items-start gap-2 px-2">
