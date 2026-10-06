@@ -24,7 +24,7 @@ const LEADING_SPACE = /^\s/u;
 
 const APPLE_PLATFORM = /Mac|iPhone|iPad/u;
 
-const SAVE_SHORTCUT = APPLE_PLATFORM.test(navigator.platform) ? "⌘↵" : "Ctrl↵";
+const MODIFIER_KEY = APPLE_PLATFORM.test(navigator.platform) ? "⌘" : "Ctrl";
 
 export interface NoteInput {
   content: string;
@@ -215,16 +215,25 @@ export default function NoteForm({
         <TagPicker current={allTags} onAdd={addTag} />
         <div className="ml-auto flex flex-wrap items-center gap-2">
           {children}
-          <kbd
+          <span
             aria-hidden="true"
-            className="text-muted-foreground font-mono text-xs max-sm:hidden"
+            className="text-muted-foreground flex items-center gap-1 text-xs max-sm:hidden"
           >
-            {SAVE_SHORTCUT} save
-          </kbd>
+            {[MODIFIER_KEY, "Enter"].map((key) => (
+              <kbd
+                key={key}
+                className="bg-muted text-foreground/80 border-border inline-flex h-6 min-w-6 items-center justify-center rounded-md border border-b-2 px-1.5 font-mono text-xs leading-none"
+              >
+                {key}
+              </kbd>
+            ))}
+            <span className="ml-0.5">to save</span>
+          </span>
           <Button
             type="submit"
             variant="brand"
-            className="h-11"
+            // Keyboards save with the shortcut; touch screens have no such key.
+            className="h-11 sm:hidden"
             disabled={pending || isEmpty}
           >
             {pending ? "Saving..." : "Save"}

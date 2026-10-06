@@ -24,7 +24,7 @@ test.use({ storageState: AUTH_STATE });
 
 async function createNote(page: Page, content: string) {
   await page.getByLabel("New note").fill(content);
-  await page.getByRole("button", { name: "Save", exact: true }).click();
+  await page.getByLabel("New note").press("ControlOrMeta+Enter");
   await expect(page.getByLabel("New note")).toHaveValue("");
 }
 
@@ -77,7 +77,7 @@ test("notes: create, render, filter, edit with draft, delete", async ({
   await expect(page.getByRole("button", { name: `#${work} 1` })).toBeVisible();
   await composer.press("Enter");
   await expect(composer).toHaveValue(`${unsafeContent}\n\n#${work} `);
-  await page.getByRole("button", { name: "Save", exact: true }).click();
+  await composer.press("ControlOrMeta+Enter");
   await expect(composer).toHaveValue("");
 
   const deployNote = noteCard(page, `Deploy log ${id}`);
@@ -170,7 +170,7 @@ test("notes: create, render, filter, edit with draft, delete", async ({
   await page.reload();
   await expect(editor).toHaveValue(editedContent);
 
-  await page.getByRole("button", { name: "Save", exact: true }).click();
+  await editor.press("ControlOrMeta+Enter");
   await expect(page).toHaveURL(/\/$/u);
   await expect(deployNote.locator("em")).toHaveText("again");
   await expect(deployNote.getByRole("link", { name: /^#/u })).toHaveText([
