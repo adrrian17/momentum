@@ -19,19 +19,19 @@ export default defineConfig({
     { name: "setup", testMatch: /auth\.setup\.ts/u },
     {
       name: "pwa-chromium",
-      testMatch: /pwa\.spec\.ts/u,
+      testMatch: /(?:pwa|theme)\.spec\.ts/u,
       use: { ...devices["Desktop Chrome"], baseURL: "http://localhost:4173" },
     },
     {
       name: "desktop-chromium",
       use: { ...devices["Desktop Chrome"] },
-      testIgnore: /pwa\.spec\.ts/u,
+      testIgnore: /(?:pwa|theme)\.spec\.ts/u,
       dependencies: ["setup"],
     },
     {
       name: "iphone-webkit",
       use: { ...devices["iPhone 15"] },
-      testIgnore: /pwa\.spec\.ts/u,
+      testIgnore: /(?:pwa|theme)\.spec\.ts/u,
       dependencies: ["setup"],
     },
   ],
