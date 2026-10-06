@@ -2,9 +2,7 @@
 
 Momentum is a personal work journal for capturing notes and activities and turning them into monthly reports.
 
-Momentum will bring capture, organization, and reporting into one application, replacing a workflow of collecting scattered notes into a text file and asking an agent to produce a PDF using an existing report template. This includes PDF generation and eventual delivery.
-
-This monorepo will contain all Momentum applications and shared components. Momentum is built for personal use.
+It replaces a workflow of collecting scattered notes into a text file and asking an agent to produce a PDF from an existing report template.
 
 ## Planned capabilities
 
@@ -28,7 +26,7 @@ The login page offers sign-in only. Public account registration is always disabl
 
 ## Privacy
 
-Notes, activity records, tasks, and meeting content are private. Cloudflare is the chosen hosting platform. Sending that content to other external services for processing or delivery requires the developer's explicit authorization. Local processing is the intended direction for the macOS app.
+Notes, activity records, tasks, and meeting content are private. Cloudflare hosts them; sending them to any other external service requires the developer's explicit authorization. The macOS app is meant to process locally.
 
 Agent instructions start in [AGENTS.md](AGENTS.md).
 
@@ -36,47 +34,32 @@ Agent instructions start in [AGENTS.md](AGENTS.md).
 
 The initial stack was generated with [Better-T-Stack](https://github.com/AmanVarshney01/create-better-t-stack).
 
-- **TypeScript** - For type safety and improved developer experience
-- **TanStack Router** - File-based routing with full type safety
-- **TailwindCSS** - Utility-first CSS for rapid UI development
+- **TypeScript**
+- **TanStack Router** - File-based routing
+- **TailwindCSS**
 - **Shared UI package** - shadcn/ui primitives live in `packages/ui`
-- **Hono** - Lightweight, performant server framework
-- **tRPC** - End-to-end type-safe APIs
+- **Hono** - Server framework
+- **tRPC**
 - **Cloudflare Workers** - Server runtime
-- **Drizzle** - TypeScript-first ORM
+- **Drizzle** - ORM
 - **Cloudflare D1** - Database engine
 - **Authentication** - Better-Auth
-- **Turborepo** - Optimized monorepo build system
+- **Turborepo** - Monorepo build system
 
 ## Getting started
 
-First, install the dependencies:
-
 ```bash
 pnpm install
-```
-
-## Database setup
-
-This project uses Cloudflare D1 (SQLite) with Drizzle ORM.
-
-Runtime database access uses the Cloudflare `DB` binding from `packages/infra/alchemy.run.ts`. If a local `DATABASE_URL` is present, it is only for database tooling.
-
-Alchemy provisions the D1 database and applies migrations during `deploy`.
-
-1. Generate migration files:
-
-```bash
-pnpm run db:generate
-```
-
-Then, run the development server:
-
-```bash
 pnpm run dev
 ```
 
-Open [http://localhost:3001](http://localhost:3001) in your browser to see the web application. Browser API requests use the same web origin under `/api`. The separate local server listener on 3000 is for Alchemy development; the web Worker uses a native service binding.
+Open [http://localhost:3001](http://localhost:3001). Browser API requests use the same web origin under `/api`. The separate local server listener on 3000 is for Alchemy development; the web Worker uses a native service binding.
+
+## Database setup
+
+The database is Cloudflare D1 (SQLite) with Drizzle ORM. Runtime access uses the Cloudflare `DB` binding from `packages/infra/alchemy.run.ts`; a local `DATABASE_URL`, if present, is only for database tooling.
+
+After changing the schema, run `pnpm run db:generate`. Alchemy provisions the D1 database and applies migrations during `dev` and `deploy`.
 
 ## UI customization
 
@@ -86,23 +69,7 @@ React web apps in this stack share shadcn/ui primitives through `packages/ui`.
 - Update shared primitives in `packages/ui/src/components/*`
 - Adjust shadcn aliases or style config in `packages/ui/components.json` and `apps/web/components.json`
 
-### Add more shared components
-
-Run this from the project root to add more primitives to the shared UI package:
-
-```bash
-npx shadcn@latest add accordion dialog popover sheet table -c packages/ui
-```
-
-Import shared components like this:
-
-```tsx
-import { Button } from "@momentum/ui/components/button";
-```
-
-### Add app-specific blocks
-
-If you want to add app-specific blocks instead of shared primitives, run the shadcn CLI from `apps/web`.
+Add shared primitives from the project root with `npx shadcn@latest add <component> -c packages/ui` and import them as `@momentum/ui/components/<component>`. Run the shadcn CLI from `apps/web` for app-specific blocks.
 
 ## Environment configuration
 
@@ -116,11 +83,9 @@ Bun's automatic env loading is disabled in `bunfig.toml`; the framework integrat
 
 Run standalone Node/Bun tools that use Varlock from the owning app directory so they load that app's schema and env files. `env:generate` only generates TypeScript files; it does not initialize environment values in a subsequent command.
 
-Public auth has no registration allowlist or bootstrap environment switch. Legacy ignored `SIGNUP_EMAIL`, `VITE_SERVER_URL` and standalone `BETTER_AUTH_URL` values can stay in local files; they have no application effect.
+Verification uses the native Cloudflare `EMAIL` binding with `EMAIL_FROM=noreply@adrianayala.mx` by default. Local Alchemy development saves messages without delivering them. Deployed, it delivers only to the account's verified destination; arbitrary recipients and a sender domain are not set up. See the [isolated cloud stage runbook](docs/runbooks/cloud-stage.md).
 
-Verification uses the native Cloudflare `EMAIL` binding with `EMAIL_FROM=noreply@adrianayala.mx` by default. Local Alchemy development saves messages without delivering them. The deployed binding was verified on an isolated cloud stage on 2026-10-04, delivering to the account's verified destination; arbitrary recipients and a sender domain are not set up. See the [isolated cloud stage runbook](docs/runbooks/cloud-stage.md).
-
-For E2E, configure a dedicated synthetic `AUTH_TEST_EMAIL` in `apps/web/.env`. This sensitive test setting is never exposed to the browser or imported into the public server. Copy the old synthetic email there when migrating; retain existing ignored values and secrets. The harness uses an isolated local stage and private bootstrap. See the [E2E guide](apps/web/e2e/AGENTS.md).
+For E2E, configure a dedicated synthetic `AUTH_TEST_EMAIL` in `apps/web/.env`. This sensitive test setting is never exposed to the browser or imported into the public server. The harness uses an isolated local stage and private bootstrap. See the [E2E guide](apps/web/e2e/AGENTS.md).
 
 ## Regenerate PWA icons
 
@@ -130,13 +95,7 @@ Run `pnpm --filter web generate-pwa-assets` after editing `apps/web/public/logo.
 
 ### Alchemy
 
-- Target: web on Cloudflare + server on Cloudflare
-- Configure provider accounts: `cd packages/infra && pnpm exec alchemy profile edit`
-- Dev: pnpm run dev
-- Deploy: pnpm run deploy
-- Destroy: pnpm run destroy
-
-Provider profiles are stored under `~/.alchemy`. This project uses Cloudflare.
+Configure the Cloudflare provider profile (stored under `~/.alchemy`) with `cd packages/infra && pnpm exec alchemy profile edit`.
 
 Deploys are staged and default to a personal `dev_<username>` stage. For production, run the deploy with an explicit stage from `packages/infra`:
 
@@ -146,7 +105,7 @@ cd packages/infra && pnpm exec alchemy deploy --stage production
 
 ### Production origins
 
-The browser, auth, and notes API share one public web Worker origin. The server has no public hostname. Remote stages can use their stage-derived `workers.dev` origin. Production also accepts `https://momentum.adrianayala.mx` or the temporary `https://next.momentum.adrianayala.mx` hostname. A production custom origin attaches that hostname to the web Worker and disables its `workers.dev` URLs. See the [origin runbook](docs/runbooks/production-domains.md) and [single-origin decision](docs/adr/0001-single-origin-for-web-and-api.md). Code support does not establish DNS ownership or perform a deployment.
+The browser, auth, and notes API share one public web Worker origin. The server has no public hostname. Remote stages can use their stage-derived `workers.dev` origin. Production also accepts `https://momentum.adrianayala.mx` or the temporary `https://next.momentum.adrianayala.mx` hostname. A production custom origin attaches that hostname to the web Worker and disables its `workers.dev` URLs. See the [origin runbook](docs/runbooks/production-domains.md) and [single-origin decision](docs/adr/0001-single-origin-for-web-and-api.md).
 
 ## Project structure
 
@@ -156,12 +115,12 @@ momentum/
 │   ├── web/         # Frontend application (React + TanStack Router)
 │   └── server/      # Cloudflare Worker API (Hono, tRPC)
 └── packages/
-│   ├── ui/          # Shared shadcn/ui components and styles
-│   ├── api/         # API layer / business logic
-│   ├── auth/        # Authentication configuration & logic
-│   ├── db/          # Database schema, queries, and migrations
-│   ├── infra/       # Cloudflare resources and Alchemy deployment
-│   └── config/      # Shared tooling configuration
+    ├── ui/          # Shared shadcn/ui components and styles
+    ├── api/         # API layer / business logic
+    ├── auth/        # Authentication configuration & logic
+    ├── db/          # Database schema, queries, and migrations
+    ├── infra/       # Cloudflare resources and Alchemy deployment
+    └── config/      # Shared tooling configuration
 ```
 
 The Swift macOS app is planned and does not have a directory yet.
