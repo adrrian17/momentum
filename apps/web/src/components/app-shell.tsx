@@ -51,6 +51,21 @@ function TagsNav({ active }: { active: string | undefined }) {
           </Link>
         ) : null}
       </div>
+      {tags.isError ? (
+        <div role="alert" className="grid justify-items-start gap-2 px-2">
+          <p className="text-muted-foreground text-xs">
+            Tags could not be loaded.
+          </p>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={tags.isFetching}
+            onClick={() => tags.refetch()}
+          >
+            {tags.isFetching ? "Retrying..." : "Try again"}
+          </Button>
+        </div>
+      ) : null}
       {tags.data?.length ? (
         <ul className="grid gap-0.5">
           {tags.data.map((entry) => (
@@ -69,11 +84,12 @@ function TagsNav({ active }: { active: string | undefined }) {
             </li>
           ))}
         </ul>
-      ) : (
+      ) : null}
+      {!tags.isError && !tags.data?.length ? (
         <p className="text-muted-foreground px-2 text-xs">
           {tags.isPending ? "Loading tags..." : "Write a #tag in a note."}
         </p>
-      )}
+      ) : null}
     </nav>
   );
 }
@@ -102,6 +118,19 @@ function TagsMenu({ active }: { active: string | undefined }) {
             All notes
           </DropdownMenuItem>
           <DropdownMenuSeparator />
+          {tags.isError ? (
+            <DropdownMenuItem
+              className="min-h-11"
+              // Stay open so the refetched tags replace this item in place.
+              closeOnClick={false}
+              disabled={tags.isFetching}
+              onClick={() => tags.refetch()}
+            >
+              {tags.isFetching
+                ? "Retrying..."
+                : "Tags could not be loaded. Try again"}
+            </DropdownMenuItem>
+          ) : null}
           {tags.data?.map((entry) => (
             <DropdownMenuItem
               key={entry.tag}
