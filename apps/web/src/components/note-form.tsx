@@ -22,6 +22,10 @@ const MAX_SUGGESTIONS = 5;
 
 const LEADING_SPACE = /^\s/u;
 
+const APPLE_PLATFORM = /Mac|iPhone|iPad/u;
+
+const SAVE_SHORTCUT = APPLE_PLATFORM.test(navigator.platform) ? "⌘↵" : "Ctrl↵";
+
 export interface NoteInput {
   content: string;
   tags: string[];
@@ -97,6 +101,16 @@ export default function NoteForm({
   }
 
   function handleKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
+    if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
+      event.preventDefault();
+
+      if (!pending && !isEmpty) {
+        event.currentTarget.form?.requestSubmit();
+      }
+
+      return;
+    }
+
     if (!suggesting) {
       return;
     }
@@ -133,7 +147,7 @@ export default function NoteForm({
 
   return (
     <form
-      className="bg-card grid gap-4 rounded-xl border p-4 shadow-sm"
+      className="bg-card has-[textarea:focus-visible]:border-ring grid gap-3 rounded-xl border px-4 pt-3 pb-2 shadow-sm transition-colors"
       onSubmit={(event) => {
         event.preventDefault();
         onSave({ content: draft.content, tags: attached }, clearDraft);
@@ -146,11 +160,13 @@ export default function NoteForm({
         <Textarea
           ref={textareaRef}
           id={`${id}-content`}
-          className="min-h-24"
+          variant="bare"
+          className="min-h-28 resize-none"
           required
           maxLength={100_000}
           placeholder="What are you thinking or working on today?"
           aria-describedby={`${id}-suggestions-status`}
+          aria-keyshortcuts="Meta+Enter Control+Enter"
           value={draft.content}
           onChange={(event) => {
             updateDraft({ ...draft, content: event.target.value });
@@ -194,11 +210,17 @@ export default function NoteForm({
           </ul>
         ) : null}
       </div>
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2 border-t pt-2">
         <TagChips tags={allTags} onRemove={removeTag} />
         <TagPicker current={allTags} onAdd={addTag} />
         <div className="ml-auto flex flex-wrap items-center gap-2">
           {children}
+          <kbd
+            aria-hidden="true"
+            className="text-muted-foreground font-mono text-xs max-sm:hidden"
+          >
+            {SAVE_SHORTCUT} save
+          </kbd>
           <Button
             type="submit"
             variant="brand"

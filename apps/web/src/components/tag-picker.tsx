@@ -88,8 +88,10 @@ export default function TagPicker({ current, onAdd }: TagPickerProps) {
         aria-label="Add tag"
         render={<Button variant="ghost" className="h-11" />}
       >
-        <Plus aria-hidden="true" />
-        tag
+        <span className="text-muted-foreground inline-flex items-center gap-1 font-mono text-xs">
+          <Plus aria-hidden="true" className="size-3.5" />
+          tag
+        </span>
       </ComboboxTrigger>
       <ComboboxContent className="w-64">
         <ComboboxInput
