@@ -1,26 +1,18 @@
 import { Link } from "@tanstack/react-router";
 
 import { ModeToggle } from "./mode-toggle";
-import UserMenu from "./user-menu";
 
+// Signed-out pages only; the authenticated shell has its own sidebar and top bar.
 export default function Header() {
   return (
-    <div>
-      <div className="flex flex-row items-center justify-between px-2 py-1">
-        <nav aria-label="Main">
-          <Link
-            to="/"
-            className="inline-flex min-h-11 items-center px-2 text-lg font-medium"
-          >
-            Momentum
-          </Link>
-        </nav>
-        <div className="flex items-center gap-2">
-          <ModeToggle />
-          <UserMenu />
-        </div>
-      </div>
-      <hr />
-    </div>
+    <header className="flex items-center justify-between border-b px-2 py-1">
+      <Link
+        to="/"
+        className="inline-flex min-h-11 items-center px-2 font-mono font-semibold"
+      >
+        Momentum
+      </Link>
+      <ModeToggle />
+    </header>
   );
 }

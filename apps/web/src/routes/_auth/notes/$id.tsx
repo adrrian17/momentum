@@ -31,7 +31,7 @@ function BackLink() {
 
 function NoteError({ error }: ErrorComponentProps) {
   return (
-    <main className="mx-auto grid w-full max-w-2xl content-start gap-4 px-4 py-6">
+    <main className="mx-auto grid w-full max-w-3xl content-start gap-4 px-4 py-6 lg:px-8 lg:py-12">
       <BackLink />
       <p role="alert">
         {error instanceof Error
@@ -65,7 +65,7 @@ function EditNote() {
   );
 
   return (
-    <main className="mx-auto grid w-full max-w-2xl content-start gap-4 px-4 py-6">
+    <main className="mx-auto grid w-full max-w-3xl content-start gap-4 px-4 py-6 lg:px-8 lg:py-12">
       <BackLink />
       <h1 className="text-lg font-medium">Edit note</h1>
       <NoteForm

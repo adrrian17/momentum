@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
+import Header from "@/components/header";
 import SignInForm from "@/components/sign-in-form";
 
 export const Route = createFileRoute("/login")({
@@ -12,7 +13,8 @@ function RouteComponent() {
   const { error } = Route.useSearch();
 
   return (
-    <>
+    <div className="grid min-h-svh content-start">
+      <Header />
       {error && (
         <p role="alert" className="text-destructive mx-auto mt-4 max-w-md px-6">
           The verification link is invalid or expired. Sign in to request a new
@@ -20,6 +22,6 @@ function RouteComponent() {
         </p>
       )}
       <SignInForm />
-    </>
+    </div>
   );
 }

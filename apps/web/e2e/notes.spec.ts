@@ -6,6 +6,7 @@ import { AUTH_STATE } from "./account";
 // Failure modes this flow must catch:
 // - the desktop layout collapses the notes column
 // - a saved note is not listed, or is lost on reload
+// - Cmd/Ctrl+Enter does not save, or a new note is not grouped under "Today"
 // - inline #tags are not extracted, lowercased, or deduplicated ("#Deploy" and "#deploy" must be one tag)
 // - a #word inside Markdown code becomes a tag
 // - "Add tag" cannot create a tag, or the attached tag is not saved
@@ -69,7 +70,7 @@ test("notes: create, render, filter, edit with draft, delete", async ({
     .click();
   await expect(composer).toHaveValue(`Unrelated thought ${id} about \`#code\``);
   await expect(composerTags).toHaveText(`#${personal}`);
-  await page.getByRole("button", { name: "Save", exact: true }).click();
+  await composer.press("ControlOrMeta+Enter");
   await expect(composer).toHaveValue("");
 
   await composer.fill(`${unsafeContent}\n\n#${work.slice(0, -1)}`);
@@ -82,6 +83,13 @@ test("notes: create, render, filter, edit with draft, delete", async ({
   const deployNote = noteCard(page, `Deploy log ${id}`);
   const unrelatedNote = noteCard(page, `Unrelated thought ${id}`);
   const unsafeNote = noteCard(page, `click me ${id}`);
+
+  const today = page.getByRole("region", { name: "Today" });
+  await expect(today.getByRole("article")).toContainText([
+    `click me ${id}`,
+    `Unrelated thought ${id}`,
+    `Deploy log ${id}`,
+  ]);
 
   await expect(
     deployNote.getByRole("heading", { name: `Deploy log ${id}` })
