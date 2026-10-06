@@ -17,6 +17,7 @@ Personal work journal. Use pnpm from the repository root. The [README](README.md
 
 - Planning or changing product behavior: [product scope](docs/agents/product-scope.md).
 - Writing code, tests or commits: [coding standards](CODING_STANDARDS.md).
+- Editing `packages/infra` (origins, bindings, email, bootstrap CLI): [infra guide](packages/infra/AGENTS.md).
 - Running E2E or starting a local stack: [E2E guide](apps/web/e2e/AGENTS.md).
 - Verifying a change in the real web app: [verify skill](apps/web/.claude/skills/verify/SKILL.md).
 - Running `auth:bootstrap`: [account bootstrap runbook](docs/runbooks/account-bootstrap.md).
