@@ -1,8 +1,6 @@
 # Momentum
 
-Momentum is a personal work journal for capturing notes and activities and generating monthly PDF reports.
-
-Momentum brings capture, organization, and reporting into one application, replacing a workflow of collecting scattered notes and asking an agent to generate a PDF from them. All of its applications and shared components belong in this monorepo.
+Momentum is a personal work journal for capturing notes and activities and generating monthly PDF reports. All of its applications and shared components belong in this monorepo.
 
 ## What matters about Momentum
 
@@ -24,21 +22,17 @@ Cloudflare hosting for the web app, server, and database is approved. Local tran
 
 Build only the requested stage. Reminders, meeting processing, reports, and the macOS app are product direction, not permission to implement or scaffold them now. See the [product scope](docs/agents/product-scope.md) for their constraints.
 
-## A note on how to build
-
-Follow the current capture-to-report workflow before adding structure. Reuse the packages and tools already here, and add abstractions when the requested behavior needs them. Future features should not make today's notes milestone harder to build or use.
-
 ## A small glossary
 
 - **Developer** means the person directing changes to Momentum.
 - **User** means the person using Momentum to record their work.
-- **Agent** means the coding agent reading these instructions and changing Momentum.
-- **Activity** means a dated description of work performed. A note or completed task does not automatically become an activity.
 
 ## Where to go next
 
 Read the applicable guides before starting the corresponding work:
 
+- [Domain glossary](CONTEXT.md): Note, Tag, Inline Tag, Attached Tag, Activity.
+- [Coding standards](CODING_STANDARDS.md): before writing or committing code.
 - [Product scope](docs/agents/product-scope.md): feature planning and product behavior.
 - [Architecture and data handling](docs/agents/architecture.md): application code and package boundaries.
 - [Runtime and deployment](docs/agents/runtime.md): server, database, environment, and infrastructure changes.

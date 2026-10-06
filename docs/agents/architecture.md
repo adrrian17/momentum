@@ -17,15 +17,7 @@ Read this guide when changing application code or package boundaries. All Moment
 
 Keep UI primitives in `packages/ui` and application-specific behavior in `apps/web`. Shared packages receive configuration or initialized clients from the application.
 
-Reuse existing packages, platform features, and installed dependencies before adding another abstraction or dependency. Avoid scaffolding interfaces, factories, and wrappers for unrequested capabilities.
-
-## User content
-
-- Treat Markdown as untrusted input when rendering it. Do not allow executable HTML or unsafe links.
-- Protect personal data behind authentication and enforce ownership in database operations. Personal use does not make public endpoints safe.
-- Validate input at trust boundaries.
-- Handle errors without silently losing user content. Avoid logging private content or secrets.
-- Use semantic HTML, labeled controls, and keyboard-accessible interactions.
+Follow [coding standards](../../CODING_STANDARDS.md) for reuse and user-content handling.
 
 Update affected guides when package responsibilities change. See [runtime](runtime.md) for configuration and [testing](testing.md) before writing code.
 

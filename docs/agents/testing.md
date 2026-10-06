@@ -49,15 +49,7 @@ The probe first requires zero users. It creates its own temporary rejection trig
 
 ## Code checks
 
-Use pnpm from the repository root:
-
-| Command | Purpose |
-| --- | --- |
-| `pnpm exec ultracite check` | Check lint and formatting |
-| `pnpm exec ultracite fix` | Apply lint and formatting fixes |
-| `pnpm -r check-types` | Check every package, including private CLI scripts |
-
-Before committing, run Ultracite fix, inspect the diff, and run relevant type and real behavior checks.
+Lint, format, and typecheck commands live in [coding standards](../../CODING_STANDARDS.md#checks).
 
 ## Web origin settings probe
 
