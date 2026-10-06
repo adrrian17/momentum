@@ -6,6 +6,7 @@ import { AUTH_STATE } from "./account";
 // Failure modes this flow must catch:
 // - the desktop layout collapses the notes column
 // - a saved note is not listed, or is lost on reload
+// - Cmd/Ctrl+Enter does not save, or a new note is not grouped under "Today"
 // - inline #tags are not extracted, lowercased, or deduplicated ("#Deploy" and "#deploy" must be one tag)
 // - a #word inside Markdown code becomes a tag
 // - "Add tag" cannot create a tag, or the attached tag is not saved
@@ -23,7 +24,7 @@ test.use({ storageState: AUTH_STATE });
 
 async function createNote(page: Page, content: string) {
   await page.getByLabel("New note").fill(content);
-  await page.getByRole("button", { name: "Save", exact: true }).click();
+  await page.getByLabel("New note").press("ControlOrMeta+Enter");
   await expect(page.getByLabel("New note")).toHaveValue("");
 }
 
@@ -69,19 +70,26 @@ test("notes: create, render, filter, edit with draft, delete", async ({
     .click();
   await expect(composer).toHaveValue(`Unrelated thought ${id} about \`#code\``);
   await expect(composerTags).toHaveText(`#${personal}`);
-  await page.getByRole("button", { name: "Save", exact: true }).click();
+  await composer.press("ControlOrMeta+Enter");
   await expect(composer).toHaveValue("");
 
   await composer.fill(`${unsafeContent}\n\n#${work.slice(0, -1)}`);
   await expect(page.getByRole("button", { name: `#${work} 1` })).toBeVisible();
   await composer.press("Enter");
   await expect(composer).toHaveValue(`${unsafeContent}\n\n#${work} `);
-  await page.getByRole("button", { name: "Save", exact: true }).click();
+  await composer.press("ControlOrMeta+Enter");
   await expect(composer).toHaveValue("");
 
   const deployNote = noteCard(page, `Deploy log ${id}`);
   const unrelatedNote = noteCard(page, `Unrelated thought ${id}`);
   const unsafeNote = noteCard(page, `click me ${id}`);
+
+  const today = page.getByRole("region", { name: "Today" });
+  await expect(today.getByRole("article")).toContainText([
+    `click me ${id}`,
+    `Unrelated thought ${id}`,
+    `Deploy log ${id}`,
+  ]);
 
   await expect(
     deployNote.getByRole("heading", { name: `Deploy log ${id}` })
@@ -162,7 +170,7 @@ test("notes: create, render, filter, edit with draft, delete", async ({
   await page.reload();
   await expect(editor).toHaveValue(editedContent);
 
-  await page.getByRole("button", { name: "Save", exact: true }).click();
+  await editor.press("ControlOrMeta+Enter");
   await expect(page).toHaveURL(/\/$/u);
   await expect(deployNote.locator("em")).toHaveText("again");
   await expect(deployNote.getByRole("link", { name: /^#/u })).toHaveText([
@@ -173,7 +181,8 @@ test("notes: create, render, filter, edit with draft, delete", async ({
   await expect(editor).toHaveValue(editedContent);
   const noteUrl = page.url();
 
-  await page.getByRole("button", { name: "Delete", exact: true }).click();
+  await page.getByRole("button", { name: "Note actions" }).click();
+  await page.getByRole("menuitem", { name: "Delete note" }).click();
   await expect(page).toHaveURL(noteUrl);
   await page.getByRole("button", { name: "Delete permanently" }).click();
   await expect(page).toHaveURL(/\/$/u);

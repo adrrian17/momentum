@@ -11,6 +11,7 @@
     "dev:bare": "vite dev",
     "env:generate": "varlock codegen",
     "e2e": "playwright test",
+    "test": "bun run scripts/verify-group-by-day.ts",
     "generate-pwa-assets": "pwa-assets-generator"
   },
   "dependencies": {

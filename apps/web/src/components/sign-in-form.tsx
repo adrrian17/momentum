@@ -3,6 +3,7 @@ import { Input } from "@momentum/ui/components/input";
 import { Label } from "@momentum/ui/components/label";
 import { useForm } from "@tanstack/react-form";
 import { useNavigate } from "@tanstack/react-router";
+import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -58,8 +59,13 @@ export default function SignInForm() {
   }
 
   return (
-    <div className="mx-auto mt-10 w-full max-w-md p-6">
-      <h1 className="mb-6 text-center text-3xl font-bold">Welcome Back</h1>
+    <div className="mx-auto mt-10 grid w-full max-w-sm gap-6 p-6">
+      <div className="grid gap-1 text-center">
+        <h1 className="text-2xl font-semibold tracking-tight">Welcome Back</h1>
+        <p className="text-muted-foreground text-sm">
+          Sign in to your private work journal.
+        </p>
+      </div>
 
       <form
         onSubmit={(e) => {
@@ -67,26 +73,32 @@ export default function SignInForm() {
           e.stopPropagation();
           form.handleSubmit();
         }}
-        className="space-y-4"
+        className="grid gap-4"
       >
         <div>
           <form.Field name="email">
             {(field) => (
-              <div className="space-y-2">
+              <div className="grid gap-2">
                 <Label htmlFor={field.name}>Email</Label>
                 <Input
                   id={field.name}
                   name={field.name}
                   type="email"
+                  autoComplete="email"
+                  autoCapitalize="none"
+                  spellCheck={false}
+                  aria-invalid={field.state.meta.errors.length > 0}
+                  aria-describedby={`${field.name}-error`}
                   value={field.state.value}
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
                 />
-                {field.state.meta.errors.map((error) => (
-                  <p key={error?.message} className="text-destructive">
-                    {error?.message}
-                  </p>
-                ))}
+                <p
+                  id={`${field.name}-error`}
+                  className="text-destructive text-sm empty:hidden"
+                >
+                  {field.state.meta.errors[0]?.message}
+                </p>
               </div>
             )}
           </form.Field>
@@ -95,21 +107,25 @@ export default function SignInForm() {
         <div>
           <form.Field name="password">
             {(field) => (
-              <div className="space-y-2">
+              <div className="grid gap-2">
                 <Label htmlFor={field.name}>Password</Label>
                 <Input
                   id={field.name}
                   name={field.name}
                   type="password"
+                  autoComplete="current-password"
+                  aria-invalid={field.state.meta.errors.length > 0}
+                  aria-describedby={`${field.name}-error`}
                   value={field.state.value}
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
                 />
-                {field.state.meta.errors.map((error) => (
-                  <p key={error?.message} className="text-destructive">
-                    {error?.message}
-                  </p>
-                ))}
+                <p
+                  id={`${field.name}-error`}
+                  className="text-destructive text-sm empty:hidden"
+                >
+                  {field.state.meta.errors[0]?.message}
+                </p>
               </div>
             )}
           </form.Field>
@@ -124,10 +140,13 @@ export default function SignInForm() {
           {({ canSubmit, isSubmitting }) => (
             <Button
               type="submit"
-              className="w-full"
+              className="h-11 w-full"
               disabled={!canSubmit || isSubmitting}
             >
-              {isSubmitting ? "Submitting..." : "Sign In"}
+              {isSubmitting ? (
+                <Loader2 aria-hidden="true" className="animate-spin" />
+              ) : null}
+              Sign In
             </Button>
           )}
         </form.Subscribe>

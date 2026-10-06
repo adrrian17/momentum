@@ -11,7 +11,8 @@ export const queryClient = new QueryClient({
         action: {
           label: "retry",
           onClick: () => {
-            query.invalidate();
+            // query.invalidate() only marks the query stale; this also refetches it.
+            queryClient.invalidateQueries({ queryKey: query.queryKey });
           },
         },
       });

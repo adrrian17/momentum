@@ -7,6 +7,8 @@ interface TagChipsProps {
   // Saved notes link each chip to the filtered list; the composer's chips are plain labels.
   linked?: boolean;
   disabled?: boolean;
+  // Keep chips on one line so a scrolling parent can hold any number of them.
+  nowrap?: boolean;
 }
 
 export default function TagChips({
@@ -14,17 +16,21 @@ export default function TagChips({
   onRemove,
   linked = false,
   disabled = false,
+  nowrap = false,
 }: TagChipsProps) {
   if (tags.length === 0) {
     return null;
   }
 
   return (
-    <ul className="flex flex-wrap items-center gap-2 py-2" aria-label="Tags">
+    <ul
+      className={`flex items-center gap-2 py-2 ${nowrap ? "w-max" : "flex-wrap"}`}
+      aria-label="Tags"
+    >
       {tags.map((tag) => (
         <li
           key={tag}
-          className="group/chip bg-brand/10 text-brand inline-flex h-7 items-center gap-0.5 rounded-sm pl-1.5 font-mono text-xs"
+          className="group/chip bg-brand/10 text-brand inline-flex h-7 shrink-0 items-center gap-0.5 rounded-sm pl-1.5 font-mono text-xs"
         >
           {linked ? (
             <Link

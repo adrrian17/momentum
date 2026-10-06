@@ -10,6 +10,7 @@ A user can install Momentum as a standalone app. Its static shell can load offli
 - `pwa-api-online` excludes API fetches and navigations from caching and app-shell fallback.
 - `pwa-install` installs and reopens the standalone app.
 - `pwa-update` replaces the service worker automatically after a new build.
+- `first-paint-theme` applies the stored or system theme from `index.html` before the bundle runs, so a refresh never flashes the other theme.
 
 ## How to get to it (user POV)
 
@@ -35,6 +36,7 @@ Run the exact PWA recipe in [the runbook](../references/runbook.md). It selects 
 - Require API fetch and navigation to fail offline for `/api/auth/get-session`, `/api`, and `/api?probe=pwa`.
 - Save and read the `installability.json` attachment and trace. The report must survive preview cleanup.
 - Actual installation and reopen need an authorized browser or real iPhone on the production origin. Mark them skipped in a local CDP-only run.
+- `theme.spec.ts` runs in the same project. It aborts the app bundle, then requires the `dark` class and `color-scheme` on `html` to match each stored theme and OS preference.
 - Auto-update needs two controlled builds served on the same origin and an observed new worker taking control. The current spec checks installability and caching, not this update sequence.
 
 ## Gotchas
