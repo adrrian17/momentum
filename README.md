@@ -34,7 +34,7 @@ The repository currently provides authentication, Markdown notes with tags in th
 
 The PWA caches static assets and updates its service worker automatically. Notes and authentication require a network connection; API responses are never cached. On iPhone, use Safari's **Add to Home Screen** to install it. Push notifications and offline notes are not implemented.
 
-The login page offers sign-in only. Public account registration is always disabled. The operator creates the single account through a private bootstrap command on an empty database. Accounts must verify their email before signing in. Confirmation returns to sign-in without creating a session; signing in while unverified requests another link. Existing verified accounts and notes are preserved. See the [bootstrap runbook](docs/agents/runtime.md#private-account-bootstrap).
+The login page offers sign-in only. Public account registration is always disabled. The operator creates the single account through a private bootstrap command on an empty database. Accounts must verify their email before signing in. Confirmation returns to sign-in without creating a session; signing in while unverified requests another link. Existing verified accounts and notes are preserved. See the [bootstrap runbook](docs/runbooks/account-bootstrap.md).
 
 ## Product principles
 
@@ -158,7 +158,7 @@ cd packages/infra && pnpm exec alchemy deploy --stage production
 
 ### Production origins
 
-The browser, auth, and notes API share one public web Worker origin. The server has no public hostname. Remote stages can use their stage-derived `workers.dev` origin. Production also accepts `https://momentum.adrianayala.mx` or the temporary `https://next.momentum.adrianayala.mx` hostname. A production custom origin attaches that hostname to the web Worker and disables its `workers.dev` URLs. See the [origin runbook](docs/agents/runtime.md#public-origin-and-production-custom-domains) and [single-origin decision](docs/adr/0001-single-origin-for-web-and-api.md). Code support does not establish DNS ownership or perform a deployment.
+The browser, auth, and notes API share one public web Worker origin. The server has no public hostname. Remote stages can use their stage-derived `workers.dev` origin. Production also accepts `https://momentum.adrianayala.mx` or the temporary `https://next.momentum.adrianayala.mx` hostname. A production custom origin attaches that hostname to the web Worker and disables its `workers.dev` URLs. See the [origin runbook](docs/runbooks/production-domains.md) and [single-origin decision](docs/adr/0001-single-origin-for-web-and-api.md). Code support does not establish DNS ownership or perform a deployment.
 
 ## Project structure
 

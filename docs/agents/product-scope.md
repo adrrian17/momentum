@@ -1,26 +1,23 @@
 # Product scope
 
-Read this guide when planning features or changing product behavior. See the [README](../../README.md) for the product overview and current implementation status.
+Read this before planning a feature or changing product behavior. The [README](../../README.md) states what is implemented.
 
-## First milestone
+## Notes (shipped)
 
-Build notes in the web app first:
-
-- Store Markdown without a separate title.
-- Allow multiple tags per note and use tags to find related content.
-- Use tags for project context. Do not introduce a separate project entity.
-- Defer offline access and editing.
+- Notes are Markdown without a separate title.
+- Notes carry multiple tags; tags find related content and carry project context. Do not add a project entity.
+- Offline access and editing stay deferred.
 
 ## Later stages
 
-These constraints apply when the corresponding feature is requested:
+Apply these only when the stage is requested:
 
 - An activity records a date and a brief description of work performed.
-- Users choose which tasks become activity entries. Task completion must not automatically create an activity.
-- Notes, activities, tasks, and meetings should be relatable. Tags remain the organizational vocabulary.
-- Reminder intervals are configurable. The web app is intended to become an installable PWA with VAPID push notifications on phones.
-- Meetings support both recording and audio uploads, with transcription, later analysis, and optional summaries.
-- A planned Swift macOS app handles local transcription and text generation using local models or Apple tools. Do not create its directory or shared abstractions until that work is requested.
-- Reports use the existing PDF template. Obtain that template when implementing reports instead of inventing a replacement. Delivery is planned, and actual external sending requires authorization under the [root privacy rule](../../AGENTS.md).
+- Users choose which tasks become activities. Task completion never creates one.
+- Notes, activities, tasks and meetings are relatable. Tags remain the organizational vocabulary.
+- Reminder intervals are configurable. Push uses VAPID on the installed PWA.
+- Meetings support recording and audio upload, with transcription, later analysis and optional summaries.
+- A Swift macOS app will handle local transcription and text generation. Do not create its directory or shared abstractions until requested.
+- Reports use the existing PDF template. Obtain it when implementing reports; do not invent a replacement. Sending a report externally requires authorization under the [privacy rule](../../AGENTS.md#always).
 
-Describe implemented behavior separately from planned capabilities. Update the README and affected agent guides when scope changes.
+Describe implemented behavior separately from planned capabilities. Update the README and affected guides when scope changes.

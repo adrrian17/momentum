@@ -14,6 +14,10 @@ Personal work journal: capture notes, record activities, produce monthly reports
 
 **Activity**: A dated description of work performed. A **Note** never becomes an **Activity** automatically. _Avoid_: note, log entry
 
+**Developer**: The person directing changes to Momentum and the only one who can authorize external processing, deploys or real email.
+
+**User**: The person using Momentum to record their work.
+
 ## Relationships
 
 - A **Note** has zero or more **Tags**; a **Tag** belongs to one or more **Notes**.

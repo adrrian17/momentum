@@ -18,7 +18,7 @@ Users sign in to access private notes. The operator creates the single account w
 - Open `/login` and fill **Email** and **Password**. Account creation is absent.
 - Open the verification link after authorized bootstrap. Attempt sign-in again to resend a pending link.
 - Open the signed-in user's header menu and choose **Sign Out**.
-- The operator follows the private [bootstrap runbook](../../../../../../docs/agents/runtime.md#private-account-bootstrap). This is a CLI operation, not a web entry point.
+- The operator follows the private [bootstrap runbook](../../../../../../docs/runbooks/account-bootstrap.md). This is a CLI operation, not a web entry point.
 
 ## Driving it with Playwright
 

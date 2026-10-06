@@ -1,51 +1,27 @@
 # Momentum
 
-Momentum is a personal work journal for capturing notes and activities and generating monthly PDF reports. All of its applications and shared components belong in this monorepo.
+Personal work journal: notes, activities, monthly PDF reports. Use pnpm from the repository root. Read the [README](README.md) for setup and implementation status.
 
-## What matters about Momentum
+## Always
 
-### 1. Capture comes first
+- Never send private work content (notes, activities, tasks, audio, transcripts, summaries, reports) to an external service for AI processing, analytics, logging or delivery without the developer's explicit authorization for that use. Only Cloudflare hosting of the web app, server and database is approved.
+- Never let task completion create an activity. The user chooses which tasks become activities.
+- Build only the requested stage. Do not implement or scaffold planned features.
+- Never print or log credentials, secrets or private content.
+- Get separate explicit authorization for each deploy, remote write, cloud operation or real email send.
+- When a change crosses packages, trace the flow through client, API and database.
 
-The first milestone is untitled Markdown notes with multiple tags in the web app. Tags also represent project context. A separate project system and offline editing are outside this milestone.
+## Before you act
 
-### 2. Keep control over the work record
-
-Completing a task must not automatically add it to the activity log. Users choose which tasks to add. Monthly reports will use the existing PDF template.
-
-### 3. Work content stays private
-
-Never send private work content to external services without the developer's explicit authorization for that use. This includes notes, activities, tasks, audio, transcripts, summaries, and reports, whether sent for AI processing, analytics, logging, or delivery.
-
-Cloudflare hosting for the web app, server, and database is approved. Local transcription and text generation are planned for the Swift macOS app. Neither direction authorizes unrelated external processing or automatic report delivery.
-
-### 4. Build one useful stage at a time
-
-Build only the requested stage. Reminders, meeting processing, reports, and the macOS app are product direction, not permission to implement or scaffold them now. See the [product scope](docs/agents/product-scope.md) for their constraints.
-
-## A small glossary
-
-- **Developer** means the person directing changes to Momentum.
-- **User** means the person using Momentum to record their work.
-
-## Where to go next
-
-Read the applicable guides before starting the corresponding work:
-
-- [Domain glossary](CONTEXT.md): Note, Tag, Inline Tag, Attached Tag, Activity.
-- [Coding standards](CODING_STANDARDS.md): before writing or committing code.
-- [Product scope](docs/agents/product-scope.md): feature planning and product behavior.
-- [Architecture and data handling](docs/agents/architecture.md): application code and package boundaries.
-- [Runtime and deployment](docs/agents/runtime.md): server, database, environment, and infrastructure changes.
-- [Testing and validation](docs/agents/testing.md): before writing code or choosing a testing approach.
-- [Web verification skill](apps/web/.claude/skills/verify/SKILL.md): drive the real web app and preserve private local evidence. Read its feature map before selecting checks.
-
-Read the [README](README.md) for setup and current implementation status. When a change crosses packages, follow the affected flow through the client, API, and database rather than checking only the edited file.
-
-## Development commands
-
-Use **pnpm**, as pinned in `package.json`. Run commands from the repository root:
-
-- Build: `pnpm run build`
-- Typecheck: `pnpm run check-types`
-
-Other development, formatting, migration, and deployment commands live in the linked guides.
+| When you are about to | Read first |
+| --- | --- |
+| Plan a feature or change product behavior | [Product scope](docs/agents/product-scope.md) |
+| Name or rename a domain concept | [Domain glossary](CONTEXT.md) |
+| Write code, typecheck or commit | [Coding standards](CODING_STANDARDS.md) |
+| Add a package, move code between packages, or change the request flow | [Architecture](docs/agents/architecture.md) |
+| Edit `packages/db/**`, `packages/auth/**`, `packages/infra/**`, `apps/server/**`, any `.env.schema`, or PWA config | [Runtime](docs/agents/runtime.md) |
+| Write tests, start a local stack, or run E2E | [Testing](docs/agents/testing.md) |
+| Verify a change in the real web app | [Web verification skill](apps/web/.claude/skills/verify/SKILL.md) |
+| Run `auth:bootstrap` or edit the bootstrap CLI | [Account bootstrap runbook](docs/runbooks/account-bootstrap.md) |
+| Change a production origin or hostname | [Production domains runbook](docs/runbooks/production-domains.md) |
+| Deploy to test real Cloudflare bindings | [Isolated cloud stage runbook](docs/runbooks/cloud-stage.md) |

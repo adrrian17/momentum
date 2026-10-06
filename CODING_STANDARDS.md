@@ -10,7 +10,8 @@ Run from the repository root:
 | --- | --- |
 | `pnpm exec ultracite check` | Check lint and formatting |
 | `pnpm exec ultracite fix` | Apply lint and formatting fixes |
-| `pnpm -r check-types` | Check every package, including private CLI scripts |
+| `pnpm run check-types` | Typecheck every package through Turbo, including infra scripts |
+| `pnpm run build` | Build every package |
 
 Before committing, run `pnpm exec ultracite fix`, inspect the diff, and run relevant type and real behavior checks. The Lefthook pre-commit hook also runs `ultracite fix` on staged code files and restages them.
 
