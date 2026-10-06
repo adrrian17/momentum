@@ -6,7 +6,7 @@ Read this guide when changing the server runtime, database, environment schemas,
 
 - The web app and server target Cloudflare. Worker database access uses the native `DB` binding defined in `packages/infra/alchemy.run.ts`.
 - Use Drizzle migrations in `packages/db/src/migrations`, also in development: after a schema change run `pnpm run db:generate`, and Alchemy applies pending migrations on `deploy` and when `alchemy dev` starts. Deleting `packages/infra/.alchemy/local/d1` leaves an empty database, because Alchemy state still records the migrations as applied; recreate it with `pnpm -F @momentum/infra exec alchemy dev --force`. A local `DATABASE_URL` is for database tooling.
-- The public web Worker forwards `/api` and `/api/*` through the native `API` service binding. The server has `workersDev: false`, disabling stable and preview URLs. Web has a stable workers.dev URL with previews disabled. No DNS resources are configured.
+- The public web Worker forwards `/api` and `/api/*` through the native `API` service binding. The server has `workersDev: false`, disabling stable and preview URLs. Nonproduction web stages use a stable `workers.dev` URL with previews disabled. Production custom-domain behavior is documented below.
 - `CORS_ORIGIN` is the canonical web origin, also bound as `BETTER_AUTH_URL`. There is no server self-URL binding. Browser requests, verification links and callbacks use that origin. Verify the Alchemy stage before any separately authorized deployment.
 
 ## Environment configuration
@@ -39,7 +39,7 @@ Name, email, password and password confirmation are hidden terminal prompts. Not
 
 Only the private, unserved Better Auth 1.7.7 instance enables signup. Its supported `auth.api.signUpEmail` and official memory adapter validate the password, normalize email and generate the default credential hash. No plaintext credential is inserted and no custom hashing algorithm is used. Drizzle-generated Zod schemas validate the resulting records before insertion. The records exist only in process memory until one native D1 batch inserts the user conditional on an empty user table and inserts the credential conditional on that invocation's generated user ID. D1 executes the batch atomically. Concurrent operators with different emails can produce at most one account; a failed credential insert rolls back the user. No interactive D1 transaction or schema migration is assumed. Repeated invocation exits nonzero with a generic refusal and preserves all existing records.
 
-After persistence the command POSTs `send-verification-email` to the explicitly supplied auth origin. Use the public web origin attached to that same stage and database. Local mode accepts an explicit HTTP loopback origin on the selected web port; remote mode requires HTTPS. Credentials, paths, query strings and fragments are rejected in this origin argument. This goes through the public Better Auth verification callback and Cloudflare binding. The private instance never marks email verified or creates a session. Exit 2 means the account was saved but the verification request failed; signing in resends the link. A 200 acknowledges the request, not recipient delivery. Standard public resend can return a generic success for an unknown account, so the operator must align the backend with the selected database.
+After persistence the command POSTs `send-verification-email` to the explicitly supplied auth origin. Use the public web origin attached to that same stage and database. During a `next.momentum.adrianayala.mx` rehearsal, pass that temporary origin. After cutover, pass `https://momentum.adrianayala.mx`. Local mode accepts an explicit HTTP loopback origin on the selected web port; remote mode requires HTTPS. Credentials, paths, query strings and fragments are rejected in this origin argument. This goes through the public Better Auth verification callback and Cloudflare binding. The private instance never marks email verified or creates a session. Exit 2 means the account was saved but the verification request failed; signing in resends the link. A 200 acknowledges the request, not recipient delivery. Standard public resend can return a generic success for an unknown account, so the operator must align the backend with the selected database.
 
 Alchemy 2.0.0-beta.80 provides `D1.QueryDatabaseLocal`, its local workerd gateway, profile credentials, resource references and native HTTP D1 client. The CLI uses those installed APIs and the existing `createDb` without a custom emulator or database type casts. Local state is read from `packages/infra/.alchemy/state`; `dev:local` uses the file state store to avoid cloud state calls. The normal deployment entrypoint and its Cloudflare state store are unchanged.
 
@@ -49,20 +49,42 @@ For a separately authorized production operation, first prepare an empty migrate
 pnpm -F @momentum/infra auth:bootstrap --remote --stage production --database database --profile default --inspect
 pnpm -F @momentum/infra auth:bootstrap --remote --stage production --database database --profile default \
   --confirm 'remote:momentum/production/<resolved-physical-name>' \
-  --auth-url https://momentum-production-web.<account-workers-subdomain>.workers.dev
+  --auth-url https://momentum.adrianayala.mx
 ```
 
 The remote path was verified in a separately authorized isolated Cloudflare stage on 2026-10-04, including native email confirmation and browser sign-in. Production was not deployed or modified. These examples are operator instructions, not permission to run a remote write or send a real email. Resetting an existing account remains outside this command's scope.
 
-## Public origin before a production deployment
+## Public origin and production custom domains
 
-For stage `production`, the public Worker name is `momentum-production-web`. Before any separately authorized deploy, configure `CORS_ORIGIN=https://momentum-production-web.<account-workers-subdomain>.workers.dev` in the server environment or its intended process override. The account subdomain must be the one assigned to the chosen Cloudflare account. Configure the same account profile and confirm workers.dev is enabled on it. Do not print profile credentials.
+`CORS_ORIGIN` is the canonical public web origin and also sets `BETTER_AUTH_URL`. Local development accepts an HTTP loopback origin. Remote nonproduction stages require the exact stage-derived `workers.dev` Worker name. Production also accepts `https://momentum.adrianayala.mx` and `https://next.momentum.adrianayala.mx`. Its stage-derived `workers.dev` origin remains available for compatibility and rollback.
 
-Alchemy validates origin-only syntax, HTTPS and the stage-derived Worker hostname while resolving resource configuration. Its provider resolves the account subdomain during deployment; local checks cannot establish that the configured label belongs to the chosen account. The normal stack returns only the public web URL. No second deploy to discover an API URL is needed.
+A production custom origin attaches exactly that hostname to the existing `web` Worker in zone `adrianayala.mx`. It disables that Worker's stable and preview `workers.dev` URLs and custom-domain previews. The private `server` Worker remains private. The web Worker still forwards `/api` through its native `API` service binding. Resource IDs and the stage-selected D1 remain unchanged.
 
-Both stack entrypoints use the same `web` definition, custom `src/worker.ts`, `API` binding and `assets.runWorkerFirst: ["/api", "/api/*"]`. Static deep links use SPA fallback, while unknown API routes return the backend 404. The main forwards the original request without rewriting Host or origin headers and returns Set-Cookie and Location unchanged. Better Auth uses only the configured canonical origin. Host-only session cookies are Lax and HttpOnly, with Secure for HTTPS.
+A later authorized deploy with a local or `workers.dev` origin sets `domain: null`. Alchemy then removes custom domains managed on that Worker.
 
-An existing stage may have a previously generated public web Worker name. Review that rename before applying this deterministic name to an existing deployment. D1 and the server resource IDs do not change. The implementation has no deployment permission; stage, account profile, actual workers.dev subdomain, recipient verification and the actual native EMAIL delivery path still require an operator review.
+## Production hostname rehearsal and cutover
+
+A custom domain requires an active Cloudflare zone, and Cloudflare rejects a hostname with an existing CNAME record or a zone the account does not own. Review [Cloudflare Custom Domains](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/) and inspect both hostnames' current DNS and Worker mappings before any separately authorized operation.
+
+Alchemy reconciles the domains attached to Momentum's web Worker. It removes the old managed attachment before attaching the requested hostname. Cloudflare will reject a hostname already assigned elsewhere; Alchemy does not move an old application's mapping. If a conflict requires a separate operator-approved detach, record how to restore that mapping before proceeding. A failed attachment during the switch from `next` to the live hostname can leave Momentum's web Worker without a custom domain until rollback.
+
+Use stage `production`, the same account profile, the same web Worker, and the same D1 for the rehearsal. A separate stage would use different resources and data. First complete the preflight above and record the previous production origin and any conflicting application's restoration steps. Then, only after separately authorizing the rehearsal, run:
+
+```bash
+__VARLOCK_ENV='' CORS_ORIGIN='https://next.momentum.adrianayala.mx' \
+  pnpm -F @momentum/infra exec alchemy deploy --stage production --profile <selected-profile>
+```
+
+Verify the web app and API flow against the existing production data. After separately authorizing the live cutover, switch the origin on that same stage and profile:
+
+```bash
+__VARLOCK_ENV='' CORS_ORIGIN='https://momentum.adrianayala.mx' \
+  pnpm -F @momentum/infra exec alchemy deploy --stage production --profile <selected-profile>
+```
+
+To roll back, deploy the recorded previous origin to the same stage and profile. Restore any separately detached old application mapping as a separate operation. Do not reset D1, change stages or profiles, or delete resources during rollback. A later authorized deploy with a local or `workers.dev` origin sets `domain: null` and removes custom-domain attachments managed on this Worker.
+
+A hostname change creates a new browser origin. Host-only cookies, local drafts, and PWA installation state do not migrate automatically. Users may need to sign in again and install the PWA on the new hostname. Local checks cannot establish hostname ownership, certificate issuance, DNS state, or live routing. PR3 configures no DNS resource and performs no cloud operation.
 
 ## Isolated cloud-stage handoff
 

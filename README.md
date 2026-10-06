@@ -158,9 +158,7 @@ cd packages/infra && pnpm exec alchemy deploy --stage production
 
 ### Production origins
 
-The browser, auth and notes API share the public web Worker URL. The server has no public workers.dev or preview URL. No DNS setup is required for this topology.
-
-Before a separately authorized production deploy, set `CORS_ORIGIN` in the server configuration to `https://momentum-production-web.<account-workers-subdomain>.workers.dev`. The subdomain must match the selected account profile. Alchemy binds this explicit origin to Better Auth; it does not infer it from requests. See the [origin runbook](docs/agents/runtime.md#public-origin-before-a-production-deployment) and [architecture decision](docs/adr/0001-single-origin-for-web-and-api.md). The approved isolated-stage mail check can use the account's verified destination. General-recipient sending and DNS changes remain separate decisions.
+The browser, auth, and notes API share one public web Worker origin. The server has no public hostname. Remote stages can use their stage-derived `workers.dev` origin. Production also accepts `https://momentum.adrianayala.mx` or the temporary `https://next.momentum.adrianayala.mx` hostname. A production custom origin attaches that hostname to the web Worker and disables its `workers.dev` URLs. See the [origin runbook](docs/agents/runtime.md#public-origin-and-production-custom-domains) and [single-origin decision](docs/adr/0001-single-origin-for-web-and-api.md). Code support does not establish DNS ownership or perform a deployment.
 
 ## Project structure
 
